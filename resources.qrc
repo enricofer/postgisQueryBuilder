@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/plugins/postgisquerybuilder" >
+        <file>querybuilderlogo.png</file>
+    </qresource>
+</RCC>

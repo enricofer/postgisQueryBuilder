@@ -1,0 +1,188 @@
+from PyQt4.QtCore import *
+from PyQt4.QtGui import *
+from PyQt4.QtSql import *
+from qgis.core import *
+
+import os.path
+
+class PSQL:
+
+    def __init__(self,iface):
+        self.iface = iface
+
+    def getConnections(self):
+        s = QSettings() 
+        s.beginGroup("PostgreSQL/connections")
+        currentConnections = s.childGroups()
+        print "connections: ",currentConnections
+        s.endGroup()
+        return currentConnections
+
+    def setConnection(self,conn):
+        s = QSettings()
+        s.beginGroup("PostgreSQL/connections/"+conn)
+        currentKeys = s.childKeys()
+        #print "keys: ", currentKeys
+        self.PSQLDatabase=s.value("database", "" )
+        self.PSQLHost=s.value("host", "" )
+        self.PSQLUsername=s.value("username", "" )
+        self.PSQLPassword=s.value("password", "" )
+        self.PSQLPort=s.value("port", "" )
+        self.PSQLService=s.value("service", "" )
+        s.endGroup()
+        #print self.PSQLDatabase,self.PSQLService,self.PSQLHost,self.PSQLPort,self.PSQLUsername,self.PSQLPassword
+        self.db = QSqlDatabase.addDatabase("QPSQL")
+        self.db.setHostName(self.PSQLHost)
+        self.db.setDatabaseName(self.PSQLDatabase)
+        self.db.setUserName(self.PSQLUsername)
+        self.db.setPassword(self.PSQLPassword)
+        ok = self.db.open()
+        if not ok:
+            error = "Database Error: %s" % self.db.lastError().text()
+        else:
+            error=""
+        #print error
+        return error
+
+    def getLayers(self):
+        
+        sql="select table_name from information_schema.tables where table_schema='public';"
+        query = self.db.exec_(sql)
+        layers=[]
+        while (query.next()):
+            layers.append(str(query.value(0)))
+        sql="SELECT matviewname FROM pg_matviews where schemaname='public';"
+        query = self.db.exec_(sql)
+        while (query.next()):
+            layers.append(str(query.value(0)))
+        layers.sort()
+        return layers
+
+    def testIfFidExist(self,layer):
+        fields=self.getFieldsContent(layer)
+        test = None
+        for f in fields:
+            if (f == "ogc_fid"):
+                test = True
+        return test
+
+    def getFieldsContent(self,layer):
+        sql="SELECT column_name FROM information_schema.columns WHERE table_name='%s';" % layer
+        query = self.db.exec_(sql)
+        fields=[]
+        while (query.next()):
+            fields.append(str(query.value(0)))
+        if fields==[]:
+            sql="SELECT attname, typname ,relname FROM pg_attribute a JOIN pg_class c on a.attrelid = c.oid JOIN pg_type t on a.atttypid = t.oid WHERE relname = '%s' and attnum >= 1;" % layer
+            #print sql
+            query = self.db.exec_(sql)
+            while (query.next()):
+                fields.append(str(query.value(0)))
+            #print fields
+        return fields
+
+    def getFieldsType(self,layer,field):
+        sql="SELECT data_type FROM information_schema.columns WHERE table_name='%s' AND column_name = '%s';" % (layer,field)
+        #print sql
+        query = self.db.exec_(sql)
+        query.next()
+        res = str(query.value(0))
+        if res == "":
+            sql = "SELECT typname FROM pg_attribute a JOIN pg_class c on a.attrelid = c.oid JOIN pg_type t on a.atttypid = t.oid WHERE relname = '%s' and attname = '%s' and attnum >= 1;" % (layer,field)
+            query = self.db.exec_(sql)
+            query.next()
+            res = str(query.value(0))
+        #print res
+        return res
+
+    def getUniqeValues(self,layer,field,range):
+        sql = 'SELECT DISTINCT %s FROM "%s"' % (field,layer)
+        query = self.db.exec_(sql)
+        values = []
+        conta = 0
+        while (query.next()):
+            values.append(str(query.value(0)))
+            if conta == range:
+                return values
+                pass
+            conta = conta+1
+        return values
+
+    def submitQuery(self,sql):
+        #sql = "SELECT * FROM cat_particelle_selection WHERE id <100"
+        query = QSqlQuery(self.db)
+        query.exec_(sql)
+        result={}
+        if not query:
+            result["error"] = "Database Error: %s" % db.lastError().text()
+            result["result"] = []
+            QMessageBox.information(None, "SQL ERROR:", resultQuery) 
+        else:
+            result["error"] = ""
+            rows=[[]]
+            #void=[]
+            #rows.append[void]
+            while (query.next()):
+                fields=[]
+                count = 0
+                query.value(count)
+                for k in range(0,query.record().count()-1):
+                    fields.append(query.value(k))
+                    if rows[0] == []:
+                        fieldNames=[]
+                        for n in range(0,query.record().count()-1):
+                            fieldNames.append(query.record().fieldName(n))
+                        rows[0]=fieldNames
+                #print rows
+                rows += [fields]
+            result["result"] = rows
+        return result
+
+    def submitCommand(self,sql):
+        query = QSqlQuery(self.db)
+        query.exec_(sql)
+        if query.lastError().text() != " ":
+            self.queryLogger(sql)
+        return query.lastError().text()
+    
+    def loadView(self,layer,GeomField):
+        uri = QgsDataSourceURI()
+        uri.setConnection(self.PSQLHost,self.PSQLPort,self.PSQLDatabase,self.PSQLUsername,self.PSQLPassword)
+        uri.setDataSource("public",layer,GeomField,"","ogc_fid")
+        vlayer = QgsVectorLayer(uri.uri(), layer, "postgres")
+        if vlayer.isValid():
+            QgsMapLayerRegistry.instance().addMapLayer(vlayer,True)
+        else:
+            QMessageBox.information(None, "LAYER ERROR:", "The layer %s is not valid" % layer)
+    
+    def loadSql(self,layerName,sql,GeomField):
+        uri = QgsDataSourceURI()
+        uri.setConnection(self.PSQLHost,self.PSQLPort,self.PSQLDatabase,self.PSQLUsername,self.PSQLPassword)
+        uri.setDataSource("","("+sql+")",GeomField,"","ogc_fid")
+        vlayer = QgsVectorLayer(uri.uri(), layerName, "postgres")
+        if vlayer.isValid():
+            QgsMapLayerRegistry.instance().addMapLayer(vlayer,True)
+            self.queryLogger(sql)
+        else:
+            QMessageBox.information(None, "LAYER ERROR:", "The layer %s is not valid" % layerName)
+    
+    def queryLogger (self,sql):
+        out_file = open(os.path.join(os.path.dirname(__file__),"validSql.log"),"a")
+        out_file.write(sql+"\n")
+        out_file.close()
+    
+    def tableResultGen(self,sql,tableSlot):
+        #fieldNames=QHeaderView(Qt.Horizontal,tableSlot)
+        res=self.submitQuery(sql)
+        if res["result"] != []:
+            tab=res["result"]
+            print tab[0]
+            print len(tab[0])
+            tableSlot.setColumnCount(len(tab[0]))
+            tableSlot.setRowCount(len(tab)-1)
+            tableSlot.setHorizontalHeaderLabels(tab[0])
+            for column in range(0,len(tab[0])):
+                for row in range(1,len(tab)):
+                    item = str(tab[row][column])
+                    if item != None:
+                        tableSlot.setItem(row-1, column, QTableWidgetItem(item))
