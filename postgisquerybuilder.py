@@ -52,8 +52,8 @@ class postgisQueryBuilder:
             self.translator.load(localePath)
             if qVersion() > '4.3.3':
                 QCoreApplication.installTranslator(self.translator)
-        self.dlg = postgisQueryBuilderDialog()
-        #self.dlg = uic.loadUi( os.path.join( os.path.dirname( os.path.abspath( __file__ ) ), "ui_postgisquerybuilder.ui" ) )
+        #self.dlg = postgisQueryBuilderDialog()
+        self.dlg = uic.loadUi( os.path.join( os.path.dirname( os.path.abspath( __file__ ) ), "ui_postgisquerybuilder.ui" ) )
         self.querySet = querySet()
         self.PSQL = PSQL(self.iface)
         self.eventsConnect()
@@ -103,7 +103,7 @@ class postgisQueryBuilder:
         self.action.triggered.connect(self.run)
         # Add toolbar button and menu item
         self.iface.addToolBarIcon(self.action)
-        self.iface.addPluginToMenu(u"&postgisQueryBuilder", self.action)
+        self.iface.addPluginToDatabaseMenu(u"&postgisQueryBuilder", self.action)
         self.getPSQLConnections()
         self.populateGui()
         #self.querySet.getDescription("")
@@ -115,29 +115,40 @@ class postgisQueryBuilder:
         self.populateComboBox(self.dlg.QueryType,self.querySet.getQueryLabels(),"Select query type",True)
         self.populateComboBox(self.dlg.OPERATOR,["=","<>",">","<","<=",">="],"Select",True)
         self.populateComboBox(self.dlg.SPATIALREL,self.querySet.getSpatialRelationships(),"Select spatial relationship",True)
+        self.dlg.tabWidget.setCurrentIndex(0)
 
     def disableDialogSlot(self,slot):
-        for child in self.dlg.children():
+        print "disable slot"
+        for child in self.dlg.tabWidget.children():
+            print child.objectName()
             if child.objectName() == slot:
                 child.setDisabled(True)
 
     def hideDialogSlot(self,slot):
-        for child in self.dlg.children():
+        print "hide slot"
+        for child in self.dlg.tabWidget.children():
+            print child.objectName()
             if child.objectName() == slot:
                 child.hide()
 
     def showDialogSlot(self,slot):
-        for child in self.dlg.children():
+        print "show slot"
+        for child in self.dlg.tabWidget.children():
+            print child.objectName()
             if child.objectName() == slot:
                 child.show()
 
     def enableDialogSlot(self,slot):
-        for child in self.dlg.children():
+        print "enable slot"
+        for child in self.dlg.tabWidget.children():
+            print child.objectName()
             if child.objectName() == slot:
                 child.setEnabled(True)
 
     def clearDialogSlot(self,slot):
-        for child in self.dlg.children():
+        print "clear slot"
+        for child in self.dlg.tabWidget.children():
+            print child.objectName()
             if child.objectName() == slot:
                 child.clear()
 
@@ -300,6 +311,7 @@ class postgisQueryBuilder:
         self.dlg.QueryResult.setPlainText(self.querySet.getQueryParsed(self.dlg.checkCreateView.checkState()))
         self.dlg.tabWidget.setCurrentIndex(0)
         self.dlg.QueryName.textChanged.connect(self.setQueryName)
+        self.dlg.tabWidget.setCurrentIndex(2)
 
     def setQueryType(self,line):
         theQ = self.dlg.QueryType.currentText()
@@ -317,6 +329,7 @@ class postgisQueryBuilder:
             self.showDialogSlot(slot+"Label")
         #print self.querySet.testQueryParametersCheckList()
         self.dlg.Helper.setText(self.querySet.getDescription())
+        
 
     def resetDialog(self):
         self.eventsDisconnect()
@@ -377,12 +390,13 @@ class postgisQueryBuilder:
         tables = self.PSQL.getLayers()
         self.populateComboBox(self.dlg.LAYERa,tables,"Select Layer",True)
         self.populateComboBox(self.dlg.LAYERb,tables,"Select Layer",True)
+        self.dlg.tabWidget.setCurrentIndex(1)
 
     def runQuery(self):
         #method to run generated query
         #resultQuery = self.PSQL.submitCommand(self.dlg.QueryResult.toPlainText())
         self.PSQL.tableResultGen(self.dlg.QueryResult.toPlainText(),self.dlg.TableResult)
-        self.dlg.tabWidget.setCurrentIndex(1)
+        self.dlg.tabWidget.setCurrentIndex(3)
 
         if self.dlg.AddToMap.checkState():
             if self.dlg.checkCreateView.checkState():

@@ -14,7 +14,7 @@ class PSQL:
         s = QSettings() 
         s.beginGroup("PostgreSQL/connections")
         currentConnections = s.childGroups()
-        print "connections: ",currentConnections
+        #print "connections: ",currentConnections
         s.endGroup()
         return currentConnections
 
