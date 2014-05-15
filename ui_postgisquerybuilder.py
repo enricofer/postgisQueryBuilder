@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_postgisquerybuilder.ui'
 #
-# Created: Thu May 15 12:10:24 2014
+# Created: Thu May 15 14:50:04 2014
 #      by: PyQt4 UI code generator 4.10.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -26,20 +26,20 @@ except AttributeError:
 class Ui_postgisQueryBuilder(object):
     def setupUi(self, postgisQueryBuilder):
         postgisQueryBuilder.setObjectName(_fromUtf8("postgisQueryBuilder"))
-        postgisQueryBuilder.resize(627, 361)
+        postgisQueryBuilder.resize(639, 361)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Ignored, QtGui.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(postgisQueryBuilder.sizePolicy().hasHeightForWidth())
         postgisQueryBuilder.setSizePolicy(sizePolicy)
         self.ButtonReset = QtGui.QPushButton(postgisQueryBuilder)
-        self.ButtonReset.setGeometry(QtCore.QRect(450, 330, 77, 25))
+        self.ButtonReset.setGeometry(QtCore.QRect(470, 330, 77, 25))
         self.ButtonReset.setObjectName(_fromUtf8("ButtonReset"))
         self.ButtonClose = QtGui.QPushButton(postgisQueryBuilder)
-        self.ButtonClose.setGeometry(QtCore.QRect(540, 330, 77, 25))
+        self.ButtonClose.setGeometry(QtCore.QRect(555, 330, 77, 25))
         self.ButtonClose.setObjectName(_fromUtf8("ButtonClose"))
         self.tabWidget = QtGui.QTabWidget(postgisQueryBuilder)
-        self.tabWidget.setGeometry(QtCore.QRect(0, 10, 621, 311))
+        self.tabWidget.setGeometry(QtCore.QRect(10, 10, 621, 311))
         self.tabWidget.setTabShape(QtGui.QTabWidget.Rounded)
         self.tabWidget.setElideMode(QtCore.Qt.ElideLeft)
         self.tabWidget.setObjectName(_fromUtf8("tabWidget"))
@@ -136,13 +136,13 @@ class Ui_postgisQueryBuilder(object):
         self.QueryType.setGeometry(QtCore.QRect(5, 29, 211, 20))
         self.QueryType.setObjectName(_fromUtf8("QueryType"))
         self.Helper = QtGui.QLabel(self.DefinitionTab)
-        self.Helper.setGeometry(QtCore.QRect(310, 10, 300, 61))
+        self.Helper.setGeometry(QtCore.QRect(229, 30, 381, 41))
         self.Helper.setText(_fromUtf8(""))
         self.Helper.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.Helper.setWordWrap(True)
         self.Helper.setObjectName(_fromUtf8("Helper"))
         self.ButtonHelp = QtGui.QPushButton(self.DefinitionTab)
-        self.ButtonHelp.setGeometry(QtCore.QRect(222, 29, 71, 20))
+        self.ButtonHelp.setGeometry(QtCore.QRect(540, 260, 71, 20))
         self.ButtonHelp.setObjectName(_fromUtf8("ButtonHelp"))
         self.label = QtGui.QLabel(self.DefinitionTab)
         self.label.setGeometry(QtCore.QRect(5, 10, 55, 16))
@@ -162,20 +162,20 @@ class Ui_postgisQueryBuilder(object):
         self.checkMaterialized.setGeometry(QtCore.QRect(70, 10, 81, 18))
         self.checkMaterialized.setObjectName(_fromUtf8("checkMaterialized"))
         self.QueryName = QtGui.QLineEdit(self.QueryTab)
-        self.QueryName.setGeometry(QtCore.QRect(149, 10, 471, 20))
+        self.QueryName.setGeometry(QtCore.QRect(149, 10, 461, 20))
         self.QueryName.setObjectName(_fromUtf8("QueryName"))
         self.checkCreateView = QtGui.QCheckBox(self.QueryTab)
         self.checkCreateView.setGeometry(QtCore.QRect(5, 10, 61, 18))
         self.checkCreateView.setObjectName(_fromUtf8("checkCreateView"))
         self.QueryResult = QtGui.QTextEdit(self.QueryTab)
-        self.QueryResult.setGeometry(QtCore.QRect(5, 40, 615, 201))
+        self.QueryResult.setGeometry(QtCore.QRect(5, 40, 605, 201))
         self.QueryResult.setObjectName(_fromUtf8("QueryResult"))
         self.tabWidget.addTab(self.QueryTab, _fromUtf8(""))
         self.TableTab = QtGui.QWidget()
         self.TableTab.setAccessibleName(_fromUtf8(""))
         self.TableTab.setObjectName(_fromUtf8("TableTab"))
         self.TableResult = QtGui.QTableWidget(self.TableTab)
-        self.TableResult.setGeometry(QtCore.QRect(0, 0, 631, 251))
+        self.TableResult.setGeometry(QtCore.QRect(5, 5, 605, 275))
         self.TableResult.setObjectName(_fromUtf8("TableResult"))
         self.TableResult.setColumnCount(0)
         self.TableResult.setRowCount(0)

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>627</width>
+    <width>639</width>
     <height>361</height>
    </rect>
   </property>
@@ -22,7 +22,7 @@
   <widget class="QPushButton" name="ButtonReset">
    <property name="geometry">
     <rect>
-     <x>450</x>
+     <x>470</x>
      <y>330</y>
      <width>77</width>
      <height>25</height>
@@ -35,7 +35,7 @@
   <widget class="QPushButton" name="ButtonClose">
    <property name="geometry">
     <rect>
-     <x>540</x>
+     <x>555</x>
      <y>330</y>
      <width>77</width>
      <height>25</height>
@@ -48,7 +48,7 @@
   <widget class="QTabWidget" name="tabWidget">
    <property name="geometry">
     <rect>
-     <x>0</x>
+     <x>10</x>
      <y>10</y>
      <width>621</width>
      <height>311</height>
@@ -387,10 +387,10 @@
     <widget class="QLabel" name="Helper">
      <property name="geometry">
       <rect>
-       <x>310</x>
-       <y>10</y>
-       <width>300</width>
-       <height>61</height>
+       <x>229</x>
+       <y>30</y>
+       <width>381</width>
+       <height>41</height>
       </rect>
      </property>
      <property name="text">
@@ -406,8 +406,8 @@
     <widget class="QPushButton" name="ButtonHelp">
      <property name="geometry">
       <rect>
-       <x>222</x>
-       <y>29</y>
+       <x>540</x>
+       <y>260</y>
        <width>71</width>
        <height>20</height>
       </rect>
@@ -484,7 +484,7 @@
       <rect>
        <x>149</x>
        <y>10</y>
-       <width>471</width>
+       <width>461</width>
        <height>20</height>
       </rect>
      </property>
@@ -507,7 +507,7 @@
       <rect>
        <x>5</x>
        <y>40</y>
-       <width>615</width>
+       <width>605</width>
        <height>201</height>
       </rect>
      </property>
@@ -523,10 +523,10 @@
     <widget class="QTableWidget" name="TableResult">
      <property name="geometry">
       <rect>
-       <x>0</x>
-       <y>0</y>
-       <width>631</width>
-       <height>251</height>
+       <x>5</x>
+       <y>5</y>
+       <width>605</width>
+       <height>275</height>
       </rect>
      </property>
      <attribute name="horizontalHeaderMinimumSectionSize">
