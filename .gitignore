@@ -4,3 +4,4 @@ Makefile
 help/
 i18n/
 .DS_Store
+plugin_upload.py

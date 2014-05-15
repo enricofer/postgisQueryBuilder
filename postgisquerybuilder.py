@@ -52,8 +52,8 @@ class postgisQueryBuilder:
             self.translator.load(localePath)
             if qVersion() > '4.3.3':
                 QCoreApplication.installTranslator(self.translator)
-        #self.dlg = postgisQueryBuilderDialog()
-        self.dlg = uic.loadUi( os.path.join( os.path.dirname( os.path.abspath( __file__ ) ), "ui_postgisquerybuilder.ui" ) )
+        self.dlg = postgisQueryBuilderDialog()
+        #self.dlg = uic.loadUi( os.path.join( os.path.dirname( os.path.abspath( __file__ ) ), "ui_postgisquerybuilder.ui" ) )
         self.querySet = querySet()
         self.PSQL = PSQL(self.iface)
         self.eventsConnect()
@@ -106,6 +106,7 @@ class postgisQueryBuilder:
         self.iface.addPluginToDatabaseMenu(u"&postgisQueryBuilder", self.action)
         self.getPSQLConnections()
         self.populateGui()
+
         #self.querySet.getDescription("")
 
     def populateGui(self):
@@ -116,39 +117,45 @@ class postgisQueryBuilder:
         self.populateComboBox(self.dlg.OPERATOR,["=","<>",">","<","<=",">="],"Select",True)
         self.populateComboBox(self.dlg.SPATIALREL,self.querySet.getSpatialRelationships(),"Select spatial relationship",True)
         self.dlg.tabWidget.setCurrentIndex(0)
+        #self.recurseChild(self.dlg,"")
+
+    def printChild(self):
+        for child in self.dlg.children():
+            print "|",child.objectName()
+            if child.children() != []:
+                for child2 in child.children():
+                    print "   |",child2.objectName()
+
+    def recurseChild(self,slot,tab):
+        for child in slot.children():
+            print tab,"|",child.objectName()
+            if child.children() != []:
+                self.recurseChild(child,tab + "   ")
 
     def disableDialogSlot(self,slot):
-        print "disable slot"
-        for child in self.dlg.tabWidget.children():
-            print child.objectName()
+        for child in self.dlg.tabWidget.widget(1).children():
             if child.objectName() == slot:
                 child.setDisabled(True)
 
     def hideDialogSlot(self,slot):
-        print "hide slot"
-        for child in self.dlg.tabWidget.children():
-            print child.objectName()
+        for child in self.dlg.tabWidget.widget(1).children():
             if child.objectName() == slot:
                 child.hide()
 
     def showDialogSlot(self,slot):
-        print "show slot"
-        for child in self.dlg.tabWidget.children():
-            print child.objectName()
+        for child in self.dlg.tabWidget.widget(1).children():
             if child.objectName() == slot:
                 child.show()
 
     def enableDialogSlot(self,slot):
-        print "enable slot"
-        for child in self.dlg.tabWidget.children():
-            print child.objectName()
+        print slot
+        for child in self.dlg.tabWidget.widget(1).children():
             if child.objectName() == slot:
+                print "Enabled"
                 child.setEnabled(True)
 
     def clearDialogSlot(self,slot):
-        print "clear slot"
-        for child in self.dlg.tabWidget.children():
-            print child.objectName()
+        for child in self.dlg.tabWidget.widget(1).children():
             if child.objectName() == slot:
                 child.clear()
 
@@ -173,6 +180,7 @@ class postgisQueryBuilder:
         self.queryGen()
 
     def populateComboBox(self,combo,list,predef,sort):
+        print combo.objectName()
         combo.clear()
         model=QStandardItemModel(combo)
         for elem in list:
@@ -184,6 +192,8 @@ class postgisQueryBuilder:
         if predef != "":
             combo.insertItem(0,predef)
             combo.setCurrentIndex(0)
+        #combo.setEnabled(True)
+        #combo.show()
 
 
     def setLAYERa(self):
@@ -272,7 +282,7 @@ class postgisQueryBuilder:
         self.querySet.setParameter("BUFFERRADIUS",self.dlg.BUFFERRADIUS.text())
         if self.querySet.testQueryParametersCheckList():
             self.queryGen()
-
+            
     def setCONDITION(self):
         self.querySet.setParameter("CONDITION",self.tDelimiter+self.dlg.CONDITION.currentText()+self.tDelimiter)
         if self.querySet.testQueryParametersCheckList():
@@ -309,9 +319,7 @@ class postgisQueryBuilder:
         self.dlg.QueryName.setText(qName)
         self.querySet.setParameter("VIEWNAME",qName)
         self.dlg.QueryResult.setPlainText(self.querySet.getQueryParsed(self.dlg.checkCreateView.checkState()))
-        self.dlg.tabWidget.setCurrentIndex(0)
         self.dlg.QueryName.textChanged.connect(self.setQueryName)
-        self.dlg.tabWidget.setCurrentIndex(2)
 
     def setQueryType(self,line):
         theQ = self.dlg.QueryType.currentText()
@@ -320,14 +328,14 @@ class postgisQueryBuilder:
         #self.querySet.resetParameters()
         self.resetDialog()
         self.querySet.setCurrentQuery(theQ)
-        self.hideQueryDefSlot()
+        #self.hideQueryDefSlot()
         #self.clearQueryDefSlot()
         for slot in self.querySet.getRequiredSlots():
             #print slot
             self.enableDialogSlot(slot)
             self.showDialogSlot(slot)
             self.showDialogSlot(slot+"Label")
-        #print self.querySet.testQueryParametersCheckList()
+        print self.querySet.testQueryParametersCheckList()
         self.dlg.Helper.setText(self.querySet.getDescription())
         
 
@@ -335,13 +343,13 @@ class postgisQueryBuilder:
         self.eventsDisconnect()
         self.clearAllDialogs()
         self.querySet.resetParameters()
-        self.dlg.tabWidget.setCurrentIndex(0)
         self.disableAllDialogs()
         self.hideQueryDefSlot()
+        self.loadPSQLLayers()
         self.eventsConnect()
 
     def hideQueryDefSlot(self):
-        toHide=["LAYERa","LAYERb","BUFFERRADIUS","FIELD","OPERATOR","CONDITION","SPATIALREL","SPATIALRELNOT","fieldsListA","fieldsListB","LAYERaLabel","LAYERbLabel","BUFFERRADIUSLabel","FIELDLabel","OPERATORLabel","CONDITIONLabel","SPATIALRELLabel","SPATIALRELNOTLabel","fieldsListALabel","fieldsListBLabel"]
+        toHide=["BUFFERRADIUS","FIELD","OPERATOR","CONDITION","SPATIALREL","SPATIALRELNOT","LAYERaLabel","BUFFERRADIUSLabel","FIELDLabel","OPERATORLabel","CONDITIONLabel","SPATIALRELLabel","SPATIALRELNOTLabel","fieldsListALabel","fieldsListBLabel"]
         for slot in toHide:
             self.hideDialogSlot(slot)
 
@@ -351,7 +359,7 @@ class postgisQueryBuilder:
             self.clearDialogSlot(slot)
 
     def disableAllDialogs(self):
-        toDisable=["LAYERa","LAYERb","BUFFERRADIUS","FIELD","OPERATOR","CONDITION","SPATIALREL","SPATIALRELNOT","QueryResult","QueryName","fieldsListA","fieldsListB","AddToMap","checkCreateView","checkMaterialized"]
+        toDisable=["LAYERa","LAYERb","BUFFERRADIUS","FIELD","OPERATOR","CONDITION","SPATIALREL","SPATIALRELNOT","fieldsListA","fieldsListB"]
         for slot in toDisable:
             self.disableDialogSlot(slot)
 
@@ -377,12 +385,12 @@ class postgisQueryBuilder:
 
     def closeDialog(self):
         self.resetDialog()
-        self.populateGui()
         self.dlg.hide()
 
     def resetForm(self):
         self.resetDialog()
         self.populateGui()
+        self.dlg.tabWidget.setCurrentIndex(1)
         
 
     def loadPSQLLayers(self):

@@ -1,4 +1,4 @@
-
+from sqlparse import format
 
 class querySet():
 
@@ -202,14 +202,14 @@ class querySet():
     def getQueryParsed(self,isView):
         if self.testIfQueryDefined():
             if isView:
-                viewDef = 'CREATE %s VIEW "%s" AS ' % (self.parameters["MATERIALIZED"],self.parameters["VIEWNAME"])
+                viewDef = 'CREATE VIEW "%s" AS ' % (self.parameters["MATERIALIZED"],self.parameters["VIEWNAME"])
             else:
                 viewDef = ''
             self.buildFIELDSET()
             q = self.querySet[self.currentQuery][3]
             q = q.replace("[[","%(")
             q = q.replace("]]",")s")
-            return viewDef + q % self.parameters
+            return format(viewDef + q % self.parameters,reindent=True)
             #print viewDef + q % self.parameters
         else:
             return ""
