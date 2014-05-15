@@ -51,7 +51,7 @@ class querySet():
             'http://postgis.refractions.net/documentation/manual-svn/ST_Difference.html',\
             ['LAYERa','LAYERb','fieldsListA','fieldsListB'],\
             'SELECT [[FIELDSET]],ST_Difference("[[LAYERa]]".[[GEOMETRYFIELD]],"[[LAYERb]]".[[GEOMETRYFIELD]]) AS [[GEOMETRYFIELD]] FROM "[[LAYERa]]","[[LAYERb]]"',\
-            '_Difference_between_[[LAYERa]]_and_[[LAYERb]]'\
+            '_Diff_between_[[LAYERa]]_and_[[LAYERb]]'\
             ],\
             'ST_Intersection':\
             [\
@@ -59,7 +59,7 @@ class querySet():
             'http://postgis.refractions.net/documentation/manual-svn/ST_Intersection.html',\
             ['LAYERa','LAYERb','fieldsListA','fieldsListB'],\
             'SELECT [[FIELDSET]],ST_Intersection("[[LAYERa]]".[[GEOMETRYFIELD]],"[[LAYERb]]".[[GEOMETRYFIELD]]) AS [[GEOMETRYFIELD]] FROM "[[LAYERa]]","[[LAYERb]]"',\
-            '_Intersection_between_[[LAYERa]]_and_[[LAYERb]]'\
+            '_Int_between_[[LAYERa]]_and_[[LAYERb]]'\
             ],\
             'ST_Buffer':\
             [\

@@ -107,8 +107,6 @@ class postgisQueryBuilder:
         self.getPSQLConnections()
         self.populateGui()
 
-        #self.querySet.getDescription("")
-
     def populateGui(self):
         self.dlg.GEOMETRYFIELD.setText("the_geom")
         self.dlg.KEYFIELD.setText("ogc_fid")
@@ -119,14 +117,8 @@ class postgisQueryBuilder:
         self.dlg.tabWidget.setCurrentIndex(0)
         #self.recurseChild(self.dlg,"")
 
-    def printChild(self):
-        for child in self.dlg.children():
-            print "|",child.objectName()
-            if child.children() != []:
-                for child2 in child.children():
-                    print "   |",child2.objectName()
-
     def recurseChild(self,slot,tab):
+        # for testing: prints qt object tree
         for child in slot.children():
             print tab,"|",child.objectName()
             if child.children() != []:
@@ -160,6 +152,7 @@ class postgisQueryBuilder:
                 child.clear()
 
     def checkCreateView(self):
+        #method called when checkbox createview is clicked
         if self.dlg.checkCreateView.checkState():
             self.dlg.QueryName.setEnabled(True)
             self.dlg.AddToMap.setEnabled(True)
@@ -173,13 +166,13 @@ class postgisQueryBuilder:
 
     def helpDialog(self):
         if self.dlg.QueryType.currentText() != "Select query type":
-            #print self.querySet.getHelp()
             webbrowser.open_new(self.querySet.getHelp())
 
     def setMaterialized(self):
         self.queryGen()
 
     def populateComboBox(self,combo,list,predef,sort):
+        #procedure to fill specified combobox with provided list
         print combo.objectName()
         combo.clear()
         model=QStandardItemModel(combo)
@@ -192,11 +185,10 @@ class postgisQueryBuilder:
         if predef != "":
             combo.insertItem(0,predef)
             combo.setCurrentIndex(0)
-        #combo.setEnabled(True)
-        #combo.show()
 
 
     def setLAYERa(self):
+        #called when LAYERa is activated
         if self.dlg.LAYERa.currentText()[:6] == "Select":
             return
         self.querySet.setParameter("LAYERa",self.dlg.LAYERa.currentText())
@@ -209,6 +201,7 @@ class postgisQueryBuilder:
         
 
     def setLAYERb(self):
+        #called when LAYERb is activated
         if self.dlg.LAYERb.currentText()[:6] == "Select":
             return
         self.querySet.setParameter("LAYERb",self.dlg.LAYERb.currentText())
@@ -217,24 +210,26 @@ class postgisQueryBuilder:
         self.addListToFieldTable("B",self.PSQL.getFieldsContent(self.dlg.LAYERb.currentText()))
 
     def addListToFieldTable(self,suff,fl):
+        #called to populate field list for WHERE statement
         if suff == 'A':
             wdgt=self.dlg.fieldsListA
         else:
             wdgt=self.dlg.fieldsListB
         wdgt.clear()
-        item=QListWidgetItem()
-        item.setFlags(item.flags() | Qt.ItemIsUserCheckable)
-        item.setCheckState(Qt.Unchecked)
-        item.setText("*")
-        wdgt.addItem(item)
         for row in fl:
             item=QListWidgetItem()
             item.setFlags(item.flags() | Qt.ItemIsUserCheckable)
             item.setCheckState(Qt.Unchecked)
             item.setText(row)
+            #exclude geometryfield from user options when postgis query
+            if self.geoQuery and row == self.querySet.getParameter("GEOMETRYFIELD"):
+                item.setFlags(item.flags() ^ Qt.ItemIsEnabled)
+            else:
+                item.setFlags(item.flags() | Qt.ItemIsEnabled)
             wdgt.addItem(item)
 
     def setFieldsList(self):
+        # procedure to resume selected fields to SELECT statements
         items = []
         for index in xrange(self.dlg.fieldsListA.count()):
              if self.dlg.fieldsListA.item(index).checkState() == Qt.Checked:
@@ -328,8 +323,10 @@ class postgisQueryBuilder:
         #self.querySet.resetParameters()
         self.resetDialog()
         self.querySet.setCurrentQuery(theQ)
-        #self.hideQueryDefSlot()
-        #self.clearQueryDefSlot()
+        if theQ[:2]=="ST":
+            self.geoQuery = True
+        else:
+            self.geoQuery = None
         for slot in self.querySet.getRequiredSlots():
             #print slot
             self.enableDialogSlot(slot)
@@ -343,7 +340,7 @@ class postgisQueryBuilder:
         self.eventsDisconnect()
         self.clearAllDialogs()
         self.querySet.resetParameters()
-        self.disableAllDialogs()
+        self.disableQueryDefSlot()
         self.hideQueryDefSlot()
         self.loadPSQLLayers()
         self.eventsConnect()
@@ -358,7 +355,7 @@ class postgisQueryBuilder:
         for slot in toClear:
             self.clearDialogSlot(slot)
 
-    def disableAllDialogs(self):
+    def disableQueryDefSlot(self):
         toDisable=["LAYERa","LAYERb","BUFFERRADIUS","FIELD","OPERATOR","CONDITION","SPATIALREL","SPATIALRELNOT","fieldsListA","fieldsListB"]
         for slot in toDisable:
             self.disableDialogSlot(slot)
@@ -377,6 +374,7 @@ class postgisQueryBuilder:
         #self.dlg.SPATIALREL.clear()
         self.dlg.fieldsListA.clear()
         self.dlg.fieldsListB.clear()
+        self.dlg.TableResult.clear()
 
     def getPSQLConnections(self):
         conn = self.PSQL.getConnections()
