@@ -202,7 +202,7 @@ class querySet():
     def getQueryParsed(self,isView):
         if self.testIfQueryDefined():
             if isView:
-                viewDef = 'CREATE VIEW "%s" AS ' % (self.parameters["MATERIALIZED"],self.parameters["VIEWNAME"])
+                viewDef = 'CREATE %s VIEW "%s" AS ' % (self.parameters["MATERIALIZED"],self.parameters["VIEWNAME"])
             else:
                 viewDef = ''
             self.buildFIELDSET()
