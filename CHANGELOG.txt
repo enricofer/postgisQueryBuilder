@@ -1,0 +1,10 @@
+CHANGELOG
+v1.0 
+Emission
+
+v1.1
+User Interface revision
+
+v1.2
+Fixed bug on views query parser 
+Fixed bug on spatial relationship not checkbox
