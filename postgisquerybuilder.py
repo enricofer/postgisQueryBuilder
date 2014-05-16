@@ -155,11 +155,9 @@ class postgisQueryBuilder:
         #method called when checkbox createview is clicked
         if self.dlg.checkCreateView.checkState():
             self.dlg.QueryName.setEnabled(True)
-            self.dlg.AddToMap.setEnabled(True)
             self.dlg.checkMaterialized.setEnabled(True)
         else:
             self.dlg.QueryName.setDisabled(True)
-            self.dlg.AddToMap.setDisabled(True)
             self.dlg.checkMaterialized.setDisabled(True)
         if self.querySet.testQueryParametersCheckList():
             self.queryGen()
@@ -289,7 +287,10 @@ class postgisQueryBuilder:
             self.queryGen()
 
     def setSPATIALRELNOT(self):
-        self.querySet.setParameter("SPATIALRELNOT",self.dlg.SPATIALRELNOT.isChecked())
+        if self.dlg.SPATIALRELNOT.isChecked():
+            self.querySet.setParameter("SPATIALRELNOT","NOT ")
+        else:
+            self.querySet.setParameter("SPATIALRELNOT"," ")
         if self.querySet.testQueryParametersCheckList():
             self.queryGen()
 
@@ -343,6 +344,7 @@ class postgisQueryBuilder:
         self.disableQueryDefSlot()
         self.hideQueryDefSlot()
         self.loadPSQLLayers()
+        self.dlg.SPATIALRELNOT.setCheckState(Qt.Unchecked)
         self.eventsConnect()
 
     def hideQueryDefSlot(self):

@@ -9,7 +9,7 @@ class querySet():
         
         self.fieldSet = []
         
-        self.spatialRel = {'ST_Within':'help tip','ST_Contains':'help tip','ST_Covers':'help tip','ST_Equals':'help tip','ST_Touches':'help tip','ST_Overlaps':'help tip','ST_Intersects':'help tip','ST_Crosses':'help tip',}
+        self.spatialRel = {'ST_Within':'help tip','ST_Contains':'help tip','ST_Covers':'help tip','ST_Equals':'help tip','ST_Touches':'help tip','ST_Overlaps':'help tip','ST_Intersects':'help tip','ST_Disjoint':'help tip','ST_Crosses':'help tip',}
         
         self.querySet=\
             {\
@@ -97,8 +97,8 @@ class querySet():
             [\
             'Returns features of geometry A that meet spatial condition respect geometry B',\
             'http://postgis.refractions.net/documentation/manual-svn/reference.html#Spatial_Relationships_Measurements',\
-            ['LAYERa','LAYERb','SPATIALREL','fieldsListA','fieldsListB'],\
-            'SELECT [[FIELDSET]] FROM "[[LAYERa]]","[[LAYERb]]" WHERE [[NOT]][[SPATIALREL]]("[[LAYERa]]".[[GEOMETRYFIELD]],"[[LAYERb]]".[[GEOMETRYFIELD]])',\
+            ['LAYERa','LAYERb','SPATIALREL','SPATIALRELNOT','fieldsListA','fieldsListB'],\
+            'SELECT [[FIELDSET]] FROM "[[LAYERa]]","[[LAYERb]]" WHERE [[SPATIALRELNOT]][[SPATIALREL]]("[[LAYERa]]".[[GEOMETRYFIELD]],"[[LAYERb]]".[[GEOMETRYFIELD]])',\
             '_Spatial_Relationship_between_[[LAYERa]]_and_[[LAYERb]]'\
             ]\
             }
@@ -119,7 +119,7 @@ class querySet():
         self.parameters = {"VIEWNAME":"","LAYERa":"","LAYERb":"",\
                            "GEOMETRYFIELD":"the_geom","KEYFIELD":"ogc_fid","BUFFERRADIUS":"","FIELD":"",\
                            "OPERATOR":"","CONDITION":"","SPATIALREL":None,\
-                           "NOT":"","FIDFIELD":"","FIELDSET":"", "MATERIALIZED":""}
+                           "SPATIALRELNOT":" ","FIDFIELD":"","FIELDSET":"", "MATERIALIZED":""}
         self.currentQuery = ""
         self.fieldSet = []
     
