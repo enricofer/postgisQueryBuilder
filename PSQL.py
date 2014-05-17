@@ -44,14 +44,16 @@ class PSQL:
         #print error
         return error
 
+    def setSchema(self,schema):
+        self.schema = schema
+
     def getLayers(self):
-        
-        sql="select table_name from information_schema.tables where table_schema='public';"
+        sql="select table_name from information_schema.tables where table_schema='%s';" % self.schema 
         query = self.db.exec_(sql)
         layers=[]
         while (query.next()):
             layers.append(str(query.value(0)))
-        sql="SELECT matviewname FROM pg_matviews where schemaname='public';"
+        sql="SELECT matviewname FROM pg_matviews where schemaname='%s';"  % self.schema
         query = self.db.exec_(sql)
         while (query.next()):
             layers.append(str(query.value(0)))
@@ -107,6 +109,17 @@ class PSQL:
                 pass
             conta = conta+1
         return values
+
+    def getSchemas(self):
+        sql="select schema_name from information_schema.schemata where schema_name <> 'information_schema' and schema_name !~ E'^pg_'"
+        query = self.db.exec_(sql)
+        print "schemaINIT",query.value(0)
+        schemas=[]
+        while (query.next()):
+            schemas.append(query.value(0))
+            print "schema",query.value(0)
+        return schemas
+
 
     def submitQuery(self,sql):
         #sql = "SELECT * FROM cat_particelle_selection WHERE id <100"

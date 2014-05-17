@@ -22,9 +22,9 @@
   <widget class="QPushButton" name="ButtonReset">
    <property name="geometry">
     <rect>
-     <x>470</x>
+     <x>440</x>
      <y>330</y>
-     <width>77</width>
+     <width>91</width>
      <height>25</height>
     </rect>
    </property>
@@ -35,9 +35,9 @@
   <widget class="QPushButton" name="ButtonClose">
    <property name="geometry">
     <rect>
-     <x>555</x>
+     <x>540</x>
      <y>330</y>
-     <width>77</width>
+     <width>90</width>
      <height>25</height>
     </rect>
    </property>
@@ -58,7 +58,7 @@
     <enum>QTabWidget::Rounded</enum>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>0</number>
    </property>
    <property name="elideMode">
     <enum>Qt::ElideLeft</enum>
@@ -70,9 +70,9 @@
     <widget class="QLabel" name="KEYFIELDLabel">
      <property name="geometry">
       <rect>
-       <x>280</x>
-       <y>10</y>
-       <width>41</width>
+       <x>5</x>
+       <y>145</y>
+       <width>81</width>
        <height>16</height>
       </rect>
      </property>
@@ -83,9 +83,9 @@
     <widget class="QLabel" name="GEOMETRYFIELDLabel">
      <property name="geometry">
       <rect>
-       <x>190</x>
-       <y>10</y>
-       <width>70</width>
+       <x>5</x>
+       <y>102</y>
+       <width>101</width>
        <height>16</height>
       </rect>
      </property>
@@ -96,9 +96,9 @@
     <widget class="QLineEdit" name="GEOMETRYFIELD">
      <property name="geometry">
       <rect>
-       <x>190</x>
-       <y>29</y>
-       <width>82</width>
+       <x>5</x>
+       <y>121</y>
+       <width>180</width>
        <height>20</height>
       </rect>
      </property>
@@ -106,9 +106,9 @@
     <widget class="QLineEdit" name="KEYFIELD">
      <property name="geometry">
       <rect>
-       <x>280</x>
-       <y>29</y>
-       <width>82</width>
+       <x>5</x>
+       <y>164</y>
+       <width>180</width>
        <height>20</height>
       </rect>
      </property>
@@ -131,9 +131,32 @@
       <rect>
        <x>5</x>
        <y>29</y>
-       <width>170</width>
+       <width>180</width>
        <height>20</height>
       </rect>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="DBSchema">
+     <property name="geometry">
+      <rect>
+       <x>5</x>
+       <y>74</y>
+       <width>180</width>
+       <height>22</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="DBSchemaLabel">
+     <property name="geometry">
+      <rect>
+       <x>5</x>
+       <y>55</y>
+       <width>181</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Schema</string>
      </property>
     </widget>
    </widget>
@@ -171,7 +194,7 @@
       <rect>
        <x>240</x>
        <y>241</y>
-       <width>45</width>
+       <width>101</width>
        <height>16</height>
       </rect>
      </property>
@@ -194,7 +217,7 @@
       <rect>
        <x>5</x>
        <y>241</y>
-       <width>62</width>
+       <width>281</width>
        <height>16</height>
       </rect>
      </property>
@@ -220,7 +243,7 @@
       <rect>
        <x>240</x>
        <y>260</y>
-       <width>111</width>
+       <width>151</width>
        <height>20</height>
       </rect>
      </property>
@@ -246,7 +269,7 @@
       <rect>
        <x>5</x>
        <y>241</y>
-       <width>121</width>
+       <width>141</width>
        <height>16</height>
       </rect>
      </property>
@@ -279,7 +302,7 @@
       <rect>
        <x>5</x>
        <y>260</y>
-       <width>281</width>
+       <width>300</width>
        <height>20</height>
       </rect>
      </property>
@@ -327,7 +350,7 @@
       <rect>
        <x>5</x>
        <y>75</y>
-       <width>37</width>
+       <width>151</width>
        <height>16</height>
       </rect>
      </property>
@@ -356,7 +379,7 @@
       <rect>
        <x>310</x>
        <y>75</y>
-       <width>36</width>
+       <width>161</width>
        <height>16</height>
       </rect>
      </property>
@@ -378,7 +401,7 @@
      <property name="geometry">
       <rect>
        <x>5</x>
-       <y>29</y>
+       <y>10</y>
        <width>211</width>
        <height>20</height>
       </rect>
@@ -388,10 +411,16 @@
      <property name="geometry">
       <rect>
        <x>229</x>
-       <y>30</y>
+       <y>10</y>
        <width>381</width>
-       <height>41</height>
+       <height>61</height>
       </rect>
+     </property>
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
      </property>
      <property name="text">
       <string/>
@@ -406,10 +435,10 @@
     <widget class="QPushButton" name="ButtonHelp">
      <property name="geometry">
       <rect>
-       <x>540</x>
-       <y>260</y>
-       <width>71</width>
-       <height>20</height>
+       <x>520</x>
+       <y>258</y>
+       <width>90</width>
+       <height>25</height>
       </rect>
      </property>
      <property name="text">
@@ -420,8 +449,8 @@
      <property name="geometry">
       <rect>
        <x>5</x>
-       <y>10</y>
-       <width>55</width>
+       <y>34</y>
+       <width>131</width>
        <height>16</height>
       </rect>
      </property>
@@ -440,7 +469,7 @@
     <widget class="QCheckBox" name="AddToMap">
      <property name="geometry">
       <rect>
-       <x>90</x>
+       <x>110</x>
        <y>253</y>
        <width>116</width>
        <height>18</height>
@@ -458,7 +487,7 @@
       <rect>
        <x>5</x>
        <y>250</y>
-       <width>77</width>
+       <width>90</width>
        <height>25</height>
       </rect>
      </property>
@@ -469,9 +498,9 @@
     <widget class="QCheckBox" name="checkMaterialized">
      <property name="geometry">
       <rect>
-       <x>70</x>
+       <x>90</x>
        <y>10</y>
-       <width>81</width>
+       <width>111</width>
        <height>18</height>
       </rect>
      </property>
@@ -482,9 +511,9 @@
     <widget class="QLineEdit" name="QueryName">
      <property name="geometry">
       <rect>
-       <x>149</x>
+       <x>199</x>
        <y>10</y>
-       <width>461</width>
+       <width>411</width>
        <height>20</height>
       </rect>
      </property>
@@ -494,7 +523,7 @@
       <rect>
        <x>5</x>
        <y>10</y>
-       <width>61</width>
+       <width>81</width>
        <height>18</height>
       </rect>
      </property>
