@@ -65,12 +65,14 @@ class postgisQueryBuilder:
         self.dlg.LAYERb.activated.connect(self.setLAYERb)
         self.dlg.FIELD.activated.connect(self.setFIELD)
         self.dlg.OPERATOR.activated.connect(self.setOPERATOR)
+        self.dlg.DISTANCEOP.activated.connect(self.setDISTANCEOP)
         self.dlg.SPATIALREL.activated.connect(self.setSPATIALREL)
         self.dlg.SPATIALRELNOT.clicked.connect(self.setSPATIALRELNOT)
         self.dlg.checkCreateView.clicked.connect(self.checkCreateView)
         self.dlg.BUFFERRADIUS.textChanged.connect(self.setBUFFERRADIUS)
         self.dlg.CONDITION.activated.connect(self.setCONDITION)
         self.dlg.CONDITION.editTextChanged.connect(self.setCONDITION)
+        self.dlg.DISTANCE.textChanged.connect(self.setDISTANCE)
         self.dlg.ButtonRun.clicked.connect(self.runQuery)
         self.dlg.ButtonReset.clicked.connect(self.resetForm)
         self.dlg.ButtonClose.clicked.connect(self.closeDialog)
@@ -84,12 +86,14 @@ class postgisQueryBuilder:
         self.dlg.LAYERb.activated.disconnect(self.setLAYERb)
         self.dlg.FIELD.activated.disconnect(self.setFIELD)
         self.dlg.OPERATOR.activated.disconnect(self.setOPERATOR)
+        self.dlg.DISTANCEOP.activated.disconnect(self.setDISTANCEOP)
         self.dlg.SPATIALREL.activated.disconnect(self.setSPATIALREL)
         self.dlg.SPATIALRELNOT.clicked.disconnect(self.setSPATIALRELNOT)
         self.dlg.checkCreateView.clicked.disconnect(self.checkCreateView)
         self.dlg.BUFFERRADIUS.textChanged.disconnect(self.setBUFFERRADIUS)
         self.dlg.CONDITION.activated.disconnect(self.setCONDITION)
         self.dlg.CONDITION.editTextChanged.disconnect(self.setCONDITION)
+        self.dlg.DISTANCE.textChanged.disconnect(self.setDISTANCE)
         self.dlg.ButtonRun.clicked.disconnect(self.runQuery)
         self.dlg.ButtonReset.clicked.disconnect(self.resetForm)
         self.dlg.ButtonClose.clicked.disconnect(self.closeDialog)
@@ -112,6 +116,7 @@ class postgisQueryBuilder:
         self.dlg.KEYFIELD.setText("ogc_fid")
         self.populateComboBox(self.dlg.QueryType,self.querySet.getQueryLabels(),"Select query type",True)
         self.populateComboBox(self.dlg.OPERATOR,["=","<>",">","<","<=",">="],"Select",True)
+        self.populateComboBox(self.dlg.DISTANCEOP,["=","<>",">","<","<=",">="],"Select",True)
         self.populateComboBox(self.dlg.SPATIALREL,self.querySet.getSpatialRelationships(),"Select spatial relationship",True)
         self.dlg.tabWidget.setCurrentIndex(0)
         #self.recurseChild(self.dlg,"")
@@ -256,6 +261,17 @@ class postgisQueryBuilder:
         if self.querySet.testQueryParametersCheckList():
             self.queryGen()
 
+    def setDISTANCEOP(self):
+        if self.dlg.DISTANCEOP.currentText()[:6] == "Select":
+            return
+        self.querySet.setParameter("DISTANCEOP",self.dlg.DISTANCEOP.currentText())
+        if self.querySet.testQueryParametersCheckList():
+            self.queryGen()
+
+    def setDISTANCE(self):
+        self.querySet.setParameter("DISTANCE",self.dlg.DISTANCE.text())
+        if self.querySet.testQueryParametersCheckList():
+            self.queryGen()
 
     def setOPERATOR(self):
         if self.dlg.OPERATOR.currentText()[:6] == "Select":
@@ -349,17 +365,26 @@ class postgisQueryBuilder:
         self.eventsConnect()
 
     def hideQueryDefSlot(self):
-        toHide=["BUFFERRADIUS","FIELD","OPERATOR","CONDITION","SPATIALREL","SPATIALRELNOT","LAYERaLabel","BUFFERRADIUSLabel","FIELDLabel","OPERATORLabel","CONDITIONLabel","SPATIALRELLabel","SPATIALRELNOTLabel","fieldsListALabel","fieldsListBLabel"]
+        toHide=["BUFFERRADIUS","FIELD","OPERATOR","CONDITION",\
+                "SPATIALREL","SPATIALRELNOT","LAYERaLabel","BUFFERRADIUSLabel",\
+                "FIELDLabel","OPERATORLabel","CONDITIONLabel","SPATIALRELLabel",
+                "SPATIALRELNOTLabel","fieldsListALabel","fieldsListBLabel",\
+                "DISTANCEOP","DISTANCE","DISTANCEOPLabel","DISTANCELabel"]
         for slot in toHide:
             self.hideDialogSlot(slot)
 
     def clearQueryDefSlot(self):
-        toClear=["LAYERa","LAYERb","BUFFERRADIUS","FIELD","OPERATOR","CONDITION","SPATIALREL","fieldsListA","fieldsListB","LAYERaLabel","LAYERbLabel","BUFFERRADIUSLabel","FIELDLabel","OPERATORLabel","CONDITIONLabel","SPATIALRELLabel","fieldsListALabel","fieldsListBLabel"]
+        toClear=["LAYERa","LAYERb","BUFFERRADIUS","FIELD",\
+                  "OPERATOR","CONDITION","SPATIALREL","fieldsListA","fieldsListB",\
+                  "DISTANCEOP","DISTANCE"]
         for slot in toClear:
             self.clearDialogSlot(slot)
 
     def disableQueryDefSlot(self):
-        toDisable=["LAYERa","LAYERb","BUFFERRADIUS","FIELD","OPERATOR","CONDITION","SPATIALREL","SPATIALRELNOT","fieldsListA","fieldsListB"]
+        toDisable=["LAYERa","LAYERb","BUFFERRADIUS","FIELD",\
+                    "OPERATOR","CONDITION","SPATIALREL",\
+                    "SPATIALRELNOT","fieldsListA","fieldsListB",
+                    "DISTANCEOP","DISTANCE"]
         for slot in toDisable:
             self.disableDialogSlot(slot)
 
@@ -369,16 +394,13 @@ class postgisQueryBuilder:
         self.dlg.BUFFERRADIUS.clear()
         self.dlg.FIELD.clear()
         self.dlg.CONDITION.clear()
-        #self.dlg.SPATIALRELNOT.setDisabled(True)
-        #self.dlg.QueryType.clear()
         self.dlg.QueryResult.clear()
         self.dlg.QueryName.clear()
-        #self.dlg.OPERATOR.clear()
-        #self.dlg.SPATIALREL.clear()
         self.dlg.fieldsListA.clear()
         self.dlg.fieldsListB.clear()
         self.dlg.TableResult.clear()
         self.dlg.SPATIALRELNOT.setCheckState(Qt.Unchecked)
+        self.dlg.DISTANCE.clear()
 
     def getPSQLConnections(self):
         conn = self.PSQL.getConnections()

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>639</width>
-    <height>361</height>
+    <height>395</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -464,6 +464,52 @@
       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
      </property>
     </widget>
+    <widget class="QLineEdit" name="DISTANCE">
+     <property name="geometry">
+      <rect>
+       <x>100</x>
+       <y>260</y>
+       <width>113</width>
+       <height>20</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="DISTANCELabel">
+     <property name="geometry">
+      <rect>
+       <x>100</x>
+       <y>241</y>
+       <width>151</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Condition</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="DISTANCEOPLabel">
+     <property name="geometry">
+      <rect>
+       <x>5</x>
+       <y>241</y>
+       <width>98</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Operator</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="DISTANCEOP">
+     <property name="geometry">
+      <rect>
+       <x>5</x>
+       <y>260</y>
+       <width>81</width>
+       <height>20</height>
+      </rect>
+     </property>
+    </widget>
     <zorder>SPATIALREL</zorder>
     <zorder>SPATIALRELNOT</zorder>
     <zorder>CONDITIONLabel</zorder>
@@ -485,6 +531,10 @@
     <zorder>Helper</zorder>
     <zorder>ButtonHelp</zorder>
     <zorder>label</zorder>
+    <zorder>DISTANCE</zorder>
+    <zorder>DISTANCELabel</zorder>
+    <zorder>DISTANCEOPLabel</zorder>
+    <zorder>DISTANCEOP</zorder>
    </widget>
    <widget class="QWidget" name="QueryTab">
     <attribute name="title">

@@ -100,7 +100,15 @@ class querySet():
             ['LAYERa','LAYERb','SPATIALREL','SPATIALRELNOT','fieldsListA','fieldsListB'],\
             'SELECT [[FIELDSET]] FROM "[[LAYERa]]","[[LAYERb]]" WHERE [[SPATIALRELNOT]][[SPATIALREL]]("[[LAYERa]]".[[GEOMETRYFIELD]],"[[LAYERb]]".[[GEOMETRYFIELD]])',\
             '_Spatial_Relationship_between_[[LAYERa]]_and_[[LAYERb]]'\
-            ]\
+            ],\
+            'SELECT BY DISTANCE':\
+            [\
+            'Returns features of geometry A that meet condition about distance respect geometry B',\
+            'http://www.postgis.org/docs/ST_Distance.html',\
+            ['LAYERa','LAYERb','DISTANCEOP','DISTANCE','fieldsListA','fieldsListB'],\
+            'SELECT [[FIELDSET]] FROM "[[LAYERa]]","[[LAYERb]]" WHERE ST_Distance("[[LAYERa]]".[[GEOMETRYFIELD]],"[[LAYERb]]".[[GEOMETRYFIELD]]) [[DISTANCEOP]] [[DISTANCE]]',\
+            '_Distance_selection_between_[[LAYERa]]_and_[[LAYERb]]'\
+            ],\
             }
 
     def setIsView(self,bool):
@@ -119,7 +127,7 @@ class querySet():
         self.parameters = {"VIEWNAME":"","LAYERa":"","LAYERb":"",\
                            "GEOMETRYFIELD":"the_geom","KEYFIELD":"ogc_fid","BUFFERRADIUS":"","FIELD":"",\
                            "OPERATOR":"","CONDITION":"","SPATIALREL":None,\
-                           "SPATIALRELNOT":" ","FIDFIELD":"","FIELDSET":"", "MATERIALIZED":""}
+                           "SPATIALRELNOT":" ","FIDFIELD":"","FIELDSET":"", "MATERIALIZED":"","DISTANCEOP":"","DISTANCE":""}
         self.currentQuery = ""
         self.fieldSet = []
     
