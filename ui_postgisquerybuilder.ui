@@ -58,7 +58,7 @@
     <enum>QTabWidget::Rounded</enum>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>1</number>
    </property>
    <property name="elideMode">
     <enum>Qt::ElideLeft</enum>
@@ -70,9 +70,9 @@
     <widget class="QLabel" name="KEYFIELDLabel">
      <property name="geometry">
       <rect>
-       <x>5</x>
-       <y>145</y>
-       <width>81</width>
+       <x>10</x>
+       <y>55</y>
+       <width>181</width>
        <height>16</height>
       </rect>
      </property>
@@ -83,9 +83,9 @@
     <widget class="QLabel" name="GEOMETRYFIELDLabel">
      <property name="geometry">
       <rect>
-       <x>5</x>
+       <x>10</x>
        <y>102</y>
-       <width>101</width>
+       <width>171</width>
        <height>16</height>
       </rect>
      </property>
@@ -96,7 +96,7 @@
     <widget class="QLineEdit" name="GEOMETRYFIELD">
      <property name="geometry">
       <rect>
-       <x>5</x>
+       <x>10</x>
        <y>121</y>
        <width>180</width>
        <height>20</height>
@@ -106,8 +106,8 @@
     <widget class="QLineEdit" name="KEYFIELD">
      <property name="geometry">
       <rect>
-       <x>5</x>
-       <y>164</y>
+       <x>10</x>
+       <y>74</y>
        <width>180</width>
        <height>20</height>
       </rect>
@@ -116,9 +116,9 @@
     <widget class="QLabel" name="PSQLConnectionLabel">
      <property name="geometry">
       <rect>
-       <x>5</x>
+       <x>10</x>
        <y>10</y>
-       <width>105</width>
+       <width>181</width>
        <height>16</height>
       </rect>
      </property>
@@ -129,7 +129,7 @@
     <widget class="QComboBox" name="PSQLConnection">
      <property name="geometry">
       <rect>
-       <x>5</x>
+       <x>10</x>
        <y>29</y>
        <width>180</width>
        <height>20</height>
@@ -139,8 +139,8 @@
     <widget class="QComboBox" name="DBSchema">
      <property name="geometry">
       <rect>
-       <x>5</x>
-       <y>74</y>
+       <x>10</x>
+       <y>164</y>
        <width>180</width>
        <height>22</height>
       </rect>
@@ -149,8 +149,8 @@
     <widget class="QLabel" name="DBSchemaLabel">
      <property name="geometry">
       <rect>
-       <x>5</x>
-       <y>55</y>
+       <x>10</x>
+       <y>145</y>
        <width>181</width>
        <height>16</height>
       </rect>
@@ -167,9 +167,9 @@
     <widget class="QCheckBox" name="SPATIALRELNOT">
      <property name="geometry">
       <rect>
-       <x>300</x>
+       <x>310</x>
        <y>260</y>
-       <width>45</width>
+       <width>50</width>
        <height>18</height>
       </rect>
      </property>
@@ -192,9 +192,9 @@
     <widget class="QLabel" name="CONDITIONLabel">
      <property name="geometry">
       <rect>
-       <x>240</x>
+       <x>310</x>
        <y>241</y>
-       <width>101</width>
+       <width>151</width>
        <height>16</height>
       </rect>
      </property>
@@ -205,9 +205,9 @@
     <widget class="QComboBox" name="OPERATOR">
      <property name="geometry">
       <rect>
-       <x>180</x>
+       <x>224</x>
        <y>260</y>
-       <width>55</width>
+       <width>81</width>
        <height>20</height>
       </rect>
      </property>
@@ -241,7 +241,7 @@
     <widget class="QComboBox" name="CONDITION">
      <property name="geometry">
       <rect>
-       <x>240</x>
+       <x>310</x>
        <y>260</y>
        <width>151</width>
        <height>20</height>
@@ -254,7 +254,7 @@
     <widget class="QLabel" name="OPERATORLabel">
      <property name="geometry">
       <rect>
-       <x>180</x>
+       <x>224</x>
        <y>241</y>
        <width>98</width>
        <height>16</height>
@@ -269,7 +269,7 @@
       <rect>
        <x>5</x>
        <y>241</y>
-       <width>141</width>
+       <width>201</width>
        <height>16</height>
       </rect>
      </property>
@@ -282,7 +282,7 @@
       <rect>
        <x>5</x>
        <y>260</y>
-       <width>170</width>
+       <width>214</width>
        <height>20</height>
       </rect>
      </property>
@@ -406,6 +406,9 @@
        <height>20</height>
       </rect>
      </property>
+     <property name="maxVisibleItems">
+      <number>20</number>
+     </property>
     </widget>
     <widget class="QLabel" name="Helper">
      <property name="geometry">
@@ -461,6 +464,27 @@
       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
      </property>
     </widget>
+    <zorder>SPATIALREL</zorder>
+    <zorder>SPATIALRELNOT</zorder>
+    <zorder>CONDITIONLabel</zorder>
+    <zorder>OPERATOR</zorder>
+    <zorder>BUFFERRADIUSLabel</zorder>
+    <zorder>SPATIALRELLabel</zorder>
+    <zorder>CONDITION</zorder>
+    <zorder>OPERATORLabel</zorder>
+    <zorder>FIELDLabel</zorder>
+    <zorder>FIELD</zorder>
+    <zorder>BUFFERRADIUS</zorder>
+    <zorder>LAYERb</zorder>
+    <zorder>fieldsListB</zorder>
+    <zorder>LAYERaLabel</zorder>
+    <zorder>fieldsListA</zorder>
+    <zorder>LAYERbLabel</zorder>
+    <zorder>LAYERa</zorder>
+    <zorder>QueryType</zorder>
+    <zorder>Helper</zorder>
+    <zorder>ButtonHelp</zorder>
+    <zorder>label</zorder>
    </widget>
    <widget class="QWidget" name="QueryTab">
     <attribute name="title">

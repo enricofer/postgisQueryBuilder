@@ -9,6 +9,7 @@ class PSQL:
 
     def __init__(self,iface):
         self.iface = iface
+        self.schema = ""
 
     def getConnections(self):
         s = QSettings() 
@@ -113,16 +114,13 @@ class PSQL:
     def getSchemas(self):
         sql="select schema_name from information_schema.schemata where schema_name <> 'information_schema' and schema_name !~ E'^pg_'"
         query = self.db.exec_(sql)
-        print "schemaINIT",query.value(0)
         schemas=[]
         while (query.next()):
             schemas.append(query.value(0))
-            print "schema",query.value(0)
         return schemas
 
 
     def submitQuery(self,sql):
-        #sql = "SELECT * FROM cat_particelle_selection WHERE id <100"
         query = QSqlQuery(self.db)
         query.exec_(sql)
         result={}
@@ -185,7 +183,6 @@ class PSQL:
         out_file.close()
     
     def tableResultGen(self,sql,tableSlot):
-        #fieldNames=QHeaderView(Qt.Horizontal,tableSlot)
         res=self.submitQuery(sql)
         if res["result"] != []:
             tab=res["result"]

@@ -56,7 +56,7 @@ class postgisQueryBuilder:
         self.dlg = uic.loadUi( os.path.join( os.path.dirname( os.path.abspath( __file__ ) ), "ui_postgisquerybuilder.ui" ) )
         self.querySet = querySet()
         self.PSQL = PSQL(self.iface)
-        self.eventsConnect()
+        
 
 
     def eventsConnect(self):
@@ -104,13 +104,12 @@ class postgisQueryBuilder:
         # Add toolbar button and menu item
         self.iface.addToolBarIcon(self.action)
         self.iface.addPluginToDatabaseMenu(u"&postgisQueryBuilder", self.action)
-        #self.getPSQLConnections()
-        #self.populateGui()
+        self.populateGui()
+        self.eventsConnect()
 
     def populateGui(self):
         self.dlg.GEOMETRYFIELD.setText("the_geom")
         self.dlg.KEYFIELD.setText("ogc_fid")
-        self.resetDialog()
         self.populateComboBox(self.dlg.QueryType,self.querySet.getQueryLabels(),"Select query type",True)
         self.populateComboBox(self.dlg.OPERATOR,["=","<>",">","<","<=",">="],"Select",True)
         self.populateComboBox(self.dlg.SPATIALREL,self.querySet.getSpatialRelationships(),"Select spatial relationship",True)
@@ -344,8 +343,9 @@ class postgisQueryBuilder:
         self.querySet.resetParameters()
         self.disableQueryDefSlot()
         self.hideQueryDefSlot()
-        self.loadPSQLLayers()
-        self.dlg.SPATIALRELNOT.setCheckState(Qt.Unchecked)
+        tables = self.PSQL.getLayers()
+        self.populateComboBox(self.dlg.LAYERa,tables,"Select Layer",True)
+        self.populateComboBox(self.dlg.LAYERb,tables,"Select Layer",True)
         self.eventsConnect()
 
     def hideQueryDefSlot(self):
@@ -378,6 +378,7 @@ class postgisQueryBuilder:
         self.dlg.fieldsListA.clear()
         self.dlg.fieldsListB.clear()
         self.dlg.TableResult.clear()
+        self.dlg.SPATIALRELNOT.setCheckState(Qt.Unchecked)
 
     def getPSQLConnections(self):
         conn = self.PSQL.getConnections()
@@ -396,6 +397,7 @@ class postgisQueryBuilder:
 
     def setConnection(self):
         self.PSQL.setConnection(self.dlg.PSQLConnection.currentText())
+        print "SCHEMAS",self.PSQL.getSchemas()
         self.populateComboBox(self.dlg.DBSchema,self.PSQL.getSchemas(),"Select schema",True)
         self.dlg.DBSchema.activated.connect(self.loadPSQLLayers)
 
@@ -404,14 +406,11 @@ class postgisQueryBuilder:
         if self.dlg.DBSchema.currentText() != "Select schema":
             self.PSQL.setSchema(self.dlg.DBSchema.currentText())
             self.populateGui()
-            tables = self.PSQL.getLayers()
-            self.populateComboBox(self.dlg.LAYERa,tables,"Select Layer",True)
-            self.populateComboBox(self.dlg.LAYERb,tables,"Select Layer",True)
+            self.resetDialog()
             self.dlg.tabWidget.setCurrentIndex(1)
 
     def runQuery(self):
         #method to run generated query
-        #resultQuery = self.PSQL.submitCommand(self.dlg.QueryResult.toPlainText())
         self.PSQL.tableResultGen(self.dlg.QueryResult.toPlainText(),self.dlg.TableResult)
         self.dlg.tabWidget.setCurrentIndex(3)
 

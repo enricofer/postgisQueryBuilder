@@ -8,3 +8,8 @@ User Interface revision
 v1.2
 Fixed bug on views query parser 
 Fixed bug on spatial relationship not checkbox
+
+v1.3 
+Dialog reformatted to optimize GUI for mac_os and linux desktop
+Added support for other schemas than 'public'. 
+Moved to Database menu.
