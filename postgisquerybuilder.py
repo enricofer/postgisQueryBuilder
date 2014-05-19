@@ -52,8 +52,8 @@ class postgisQueryBuilder:
             self.translator.load(localePath)
             if qVersion() > '4.3.3':
                 QCoreApplication.installTranslator(self.translator)
-        #self.dlg = postgisQueryBuilderDialog()
-        self.dlg = uic.loadUi( os.path.join( os.path.dirname( os.path.abspath( __file__ ) ), "ui_postgisquerybuilder.ui" ) )
+        self.dlg = postgisQueryBuilderDialog()
+        #self.dlg = uic.loadUi( os.path.join( os.path.dirname( os.path.abspath( __file__ ) ), "ui_postgisquerybuilder.ui" ) )
         self.querySet = querySet()
         self.PSQL = PSQL(self.iface)
         
@@ -144,10 +144,8 @@ class postgisQueryBuilder:
                 child.show()
 
     def enableDialogSlot(self,slot):
-        print slot
         for child in self.dlg.tabWidget.widget(1).children():
             if child.objectName() == slot:
-                print "Enabled"
                 child.setEnabled(True)
 
     def clearDialogSlot(self,slot):
@@ -175,7 +173,6 @@ class postgisQueryBuilder:
 
     def populateComboBox(self,combo,list,predef,sort):
         #procedure to fill specified combobox with provided list
-        print combo.objectName()
         combo.clear()
         model=QStandardItemModel(combo)
         for elem in list:
@@ -349,7 +346,7 @@ class postgisQueryBuilder:
             self.enableDialogSlot(slot)
             self.showDialogSlot(slot)
             self.showDialogSlot(slot+"Label")
-        print self.querySet.testQueryParametersCheckList()
+        #print self.querySet.testQueryParametersCheckList()
         self.dlg.Helper.setText(self.querySet.getDescription())
         
 
@@ -419,7 +416,7 @@ class postgisQueryBuilder:
 
     def setConnection(self):
         self.PSQL.setConnection(self.dlg.PSQLConnection.currentText())
-        print "SCHEMAS",self.PSQL.getSchemas()
+        #print "SCHEMAS",self.PSQL.getSchemas()
         self.populateComboBox(self.dlg.DBSchema,self.PSQL.getSchemas(),"Select schema",True)
         self.dlg.DBSchema.activated.connect(self.loadPSQLLayers)
 
