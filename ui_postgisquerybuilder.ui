@@ -58,7 +58,7 @@
     <enum>QTabWidget::Rounded</enum>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>0</number>
    </property>
    <property name="elideMode">
     <enum>Qt::ElideLeft</enum>
@@ -157,6 +157,16 @@
      </property>
      <property name="text">
       <string>Schema</string>
+     </property>
+    </widget>
+    <widget class="QListWidget" name="LayerList">
+     <property name="geometry">
+      <rect>
+       <x>210</x>
+       <y>30</y>
+       <width>391</width>
+       <height>241</height>
+      </rect>
      </property>
     </widget>
    </widget>

@@ -52,8 +52,8 @@ class postgisQueryBuilder:
             self.translator.load(localePath)
             if qVersion() > '4.3.3':
                 QCoreApplication.installTranslator(self.translator)
-        self.dlg = postgisQueryBuilderDialog()
-        #self.dlg = uic.loadUi( os.path.join( os.path.dirname( os.path.abspath( __file__ ) ), "ui_postgisquerybuilder.ui" ) )
+        #self.dlg = postgisQueryBuilderDialog()
+        self.dlg = uic.loadUi( os.path.join( os.path.dirname( os.path.abspath( __file__ ) ), "ui_postgisquerybuilder.ui" ) )
         self.querySet = querySet()
         self.PSQL = PSQL(self.iface)
         
@@ -197,7 +197,7 @@ class postgisQueryBuilder:
         self.populateComboBox(self.dlg.FIELD,self.PSQL.getFieldsContent(self.dlg.LAYERa.currentText()),"Select field",True)
         if not self.PSQL.testIfFidExist(self.PSQL.getFieldsContent(self.dlg.LAYERa.currentText())):
             self.querySet.setFIDFIELD()
-        self.addListToFieldTable("A",self.PSQL.getFieldsContent(self.dlg.LAYERa.currentText()))
+        self.addListToFieldTable(self.dlg.fieldsListA,self.PSQL.getFieldsContent(self.dlg.LAYERa.currentText()))
         
 
     def setLAYERb(self):
@@ -207,14 +207,11 @@ class postgisQueryBuilder:
         self.querySet.setParameter("LAYERb",self.dlg.LAYERb.currentText())
         if self.querySet.testQueryParametersCheckList():
             self.queryGen()
-        self.addListToFieldTable("B",self.PSQL.getFieldsContent(self.dlg.LAYERb.currentText()))
+        self.addListToFieldTable(self.dlg.fieldsListB,self.PSQL.getFieldsContent(self.dlg.LAYERb.currentText()))
 
-    def addListToFieldTable(self,suff,fl):
+    def addListToFieldTable(self,fieldSlot,fl):
         #called to populate field list for WHERE statement
-        if suff == 'A':
-            wdgt=self.dlg.fieldsListA
-        else:
-            wdgt=self.dlg.fieldsListB
+        wdgt=fieldSlot
         wdgt.clear()
         for row in fl:
             item=QListWidgetItem()
@@ -350,6 +347,7 @@ class postgisQueryBuilder:
         self.dlg.Helper.setText(self.querySet.getDescription())
         
 
+
     def resetDialog(self):
         self.eventsDisconnect()
         self.clearAllDialogs()
@@ -359,6 +357,7 @@ class postgisQueryBuilder:
         tables = self.PSQL.getLayers()
         self.populateComboBox(self.dlg.LAYERa,tables,"Select Layer",True)
         self.populateComboBox(self.dlg.LAYERb,tables,"Select Layer",True)
+        self.geoQuery = None
         self.eventsConnect()
 
     def hideQueryDefSlot(self):
@@ -426,7 +425,12 @@ class postgisQueryBuilder:
             self.PSQL.setSchema(self.dlg.DBSchema.currentText())
             self.populateGui()
             self.resetDialog()
-            self.dlg.tabWidget.setCurrentIndex(1)
+            #self.dlg.tabWidget.setCurrentIndex(1)
+            self.populateLayerMenu()
+
+
+    def populateLayerMenu(self):
+        self.addListToFieldTable(self.dlg.LayerList,self.PSQL.getLayers())
 
     def runQuery(self):
         #method to run generated query
