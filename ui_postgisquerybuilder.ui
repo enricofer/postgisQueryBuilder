@@ -165,8 +165,60 @@
        <x>210</x>
        <y>30</y>
        <width>391</width>
-       <height>241</height>
+       <height>221</height>
       </rect>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="RefreshButton">
+     <property name="geometry">
+      <rect>
+       <x>510</x>
+       <y>257</y>
+       <width>90</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Refresh</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="AddToMapButton">
+     <property name="geometry">
+      <rect>
+       <x>310</x>
+       <y>257</y>
+       <width>90</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Add to map</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="DeleteButton">
+     <property name="geometry">
+      <rect>
+       <x>410</x>
+       <y>257</y>
+       <width>90</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Delete</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="GetInfoButton">
+     <property name="geometry">
+      <rect>
+       <x>210</x>
+       <y>257</y>
+       <width>90</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Get info</string>
      </property>
     </widget>
    </widget>

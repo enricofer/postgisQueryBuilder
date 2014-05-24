@@ -79,6 +79,10 @@ class postgisQueryBuilder:
         self.dlg.ButtonHelp.clicked.connect(self.helpDialog)
         self.dlg.fieldsListA.clicked.connect(self.setFieldsList)
         self.dlg.checkMaterialized.clicked.connect(self.setMaterialized)
+        self.dlg.AddToMapButton.clicked.connect(self.layerAddToMap)
+        self.dlg.GetInfoButton.clicked.connect(self.layerGetInfo)
+        self.dlg.DeleteButton.clicked.connect(self.layerDelete)
+        self.dlg.RefreshButton.clicked.connect(self.layerRefresh)
 
     def eventsDisconnect(self):
         self.dlg.QueryType.activated.disconnect(self.setQueryType)
@@ -97,6 +101,10 @@ class postgisQueryBuilder:
         self.dlg.ButtonRun.clicked.disconnect(self.runQuery)
         self.dlg.ButtonReset.clicked.disconnect(self.resetForm)
         self.dlg.ButtonClose.clicked.disconnect(self.closeDialog)
+        self.dlg.AddToMapButton.clicked.disconnect(self.layerAddToMap)
+        self.dlg.GetInfoButton.clicked.disconnect(self.layerGetInfo)
+        self.dlg.DeleteButton.clicked.disconnect(self.layerDelete)
+        self.dlg.RefreshButton.clicked.disconnect(self.layerRefresh)
 
     def initGui(self):
         # Create action that will start plugin configuration
@@ -120,6 +128,18 @@ class postgisQueryBuilder:
         self.populateComboBox(self.dlg.SPATIALREL,self.querySet.getSpatialRelationships(),"Select spatial relationship",True)
         self.dlg.tabWidget.setCurrentIndex(0)
         #self.recurseChild(self.dlg,"")
+
+    def layerAddToMap(self):
+        pass
+      
+    def layerGetInfo(self):
+        pass
+
+    def layerDelete(self):
+        pass
+
+    def layerRefresh(self):
+        pass
 
     def recurseChild(self,slot,tab):
         # for testing: prints qt object tree
@@ -401,6 +421,7 @@ class postgisQueryBuilder:
     def getPSQLConnections(self):
         conn = self.PSQL.getConnections()
         self.populateComboBox(self.dlg.PSQLConnection,conn,"Select connection",True)
+        self.hideQueryDefSlot()
         self.dlg.PSQLConnection.activated.connect(self.setConnection)
 
     def closeDialog(self):
