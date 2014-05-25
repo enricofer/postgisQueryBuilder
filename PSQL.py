@@ -52,8 +52,9 @@ class PSQL:
         sql="select table_name from information_schema.tables where table_schema='%s';" % self.schema 
         query = self.db.exec_(sql)
         layers=[]
+        exclusionList = ["spatial_ref_sys","geography_columns","geometry_columns","raster_columns","raster_overviews"]
         while (query.next()):
-            layers.append(str(query.value(0)))
+            if not query.value(0) in exclusionList : layers.append(query.value(0))
         sql="SELECT matviewname FROM pg_matviews where schemaname='%s';"  % self.schema
         query = self.db.exec_(sql)
         while (query.next()):
@@ -68,6 +69,17 @@ class PSQL:
             if (f == "ogc_fid"):
                 test = True
         return test
+
+    def refreshMaterializedView(self,mView):
+        sql = "REFRESH MATERIALIZED VIEW '%s'" % mView
+        return self.submitCommand(sql)
+
+    def deleteLayer(self,layer):
+        if self.isTable(layer): sql = "DROP TABLE '%s'" % layer
+        elif self.isView (layer): sql = "DROP VIEW '%s'" % layer
+        elif self.isMaterializedView (layer): sql = "DROP MATERIALIZED VIEW '%s'" % layer
+        else: sql =""
+        return self.submitCommand(sql)
 
     def getFieldsContent(self,layer):
         sql="SELECT column_name FROM information_schema.columns WHERE table_name='%s';" % layer
@@ -155,7 +167,29 @@ class PSQL:
         if query.lastError().text() != " ":
             self.queryLogger(sql)
         return query.lastError().text()
-    
+
+    def isTable(self,tName):
+        sql = "SELECT tablename FROM pg_catalog.pg_tables where schemaname = '%s' and tablename = '%s'" % (self.schema,tName)
+        query = QSqlQuery(self.db)
+        query.exec_(sql)
+        query.first()
+        return query.isValid()
+
+    def isView(self,vName):
+        sql = "SELECT viewname FROM pg_catalog.pg_views where schemaname = '%s' and viewname = '%s'" % (self.schema,vName)
+        print sql
+        query = QSqlQuery(self.db)
+        query.exec_(sql)
+        query.first()
+        return query.isValid()
+
+    def isMaterializedView(self,vName):
+        sql = sql="SELECT matviewname FROM pg_matviews where schemaname='%s'  and matviewname = '%s'" % (self.schema,vName)
+        query = QSqlQuery(self.db)
+        query.exec_(sql)
+        query.first()
+        return query.isValid()
+
     def loadView(self,layer,GeomField):
         uri = QgsDataSourceURI()
         uri.setConnection(self.PSQLHost,self.PSQLPort,self.PSQLDatabase,self.PSQLUsername,self.PSQLPassword)

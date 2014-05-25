@@ -130,16 +130,34 @@ class postgisQueryBuilder:
         #self.recurseChild(self.dlg,"")
 
     def layerAddToMap(self):
-        pass
+        for rowList in range(0,self.dlg.LayerList.count()):
+            rowCheckbox = self.dlg.LayerList.item(rowList)
+            #take only selected attributes by checkbox
+            if rowCheckbox.checkState() == Qt.Checked:
+                self.PSQL.loadView(rowCheckbox.text(),self.querySet.getParameter("GEOMETRYFIELD"))
       
     def layerGetInfo(self):
         pass
 
     def layerDelete(self):
-        pass
+        for rowList in range(0,self.dlg.LayerList.count()):
+            rowCheckbox = self.dlg.LayerList.item(rowList)
+            #take only selected attributes by checkbox
+            if rowCheckbox.checkState() == Qt.Checked:
+                msg = "Are you sure you want to delete layer '%s' ?" % rowCheckbox.text()
+                reply = QMessageBox.question(self, 'Message', msg, QMessageBox.Yes, QMessageBox.No)
+                if reply == QMessageBox.Yes:
+                    print "DELETED", rowCheckbox.text()
+                    #self.PSQL.deleteLayer(rowCheckbox.text())
+
 
     def layerRefresh(self):
-        pass
+        for rowList in range(0,self.dlg.LayerList.count()):
+            rowCheckbox = self.dlg.LayerList.item(rowList)
+            #take only selected attributes by checkbox
+            if rowCheckbox.checkState() == Qt.Checked:
+                if self.PSQL.isMaterializedView(rowCheckbox.text()): 
+                    self.PSQL.refreshMaterializedView(rowCheckbox.text())
 
     def recurseChild(self,slot,tab):
         # for testing: prints qt object tree
