@@ -31,6 +31,7 @@ import resources_rc
 from postgisquerybuilderdialog import postgisQueryBuilderDialog
 from querySetbuilder import querySet
 from PSQL import PSQL
+from PyQt4 import QtGui
 
 import os.path
 import webbrowser
@@ -52,8 +53,8 @@ class postgisQueryBuilder:
             self.translator.load(localePath)
             if qVersion() > '4.3.3':
                 QCoreApplication.installTranslator(self.translator)
-        #self.dlg = postgisQueryBuilderDialog()
-        self.dlg = uic.loadUi( os.path.join( os.path.dirname( os.path.abspath( __file__ ) ), "ui_postgisquerybuilder.ui" ) )
+        self.dlg = postgisQueryBuilderDialog()
+        #self.dlg = uic.loadUi( os.path.join( os.path.dirname( os.path.abspath( __file__ ) ), "ui_postgisquerybuilder.ui" ) )
         self.querySet = querySet()
         self.PSQL = PSQL(self.iface)
         
@@ -145,10 +146,11 @@ class postgisQueryBuilder:
             #take only selected attributes by checkbox
             if rowCheckbox.checkState() == Qt.Checked:
                 msg = "Are you sure you want to delete layer '%s' ?" % rowCheckbox.text()
-                reply = QMessageBox.question(self, 'Message', msg, QMessageBox.Yes, QMessageBox.No)
+                reply = QMessageBox.question(None, 'Message', msg, QMessageBox.Yes, QMessageBox.No)
                 if reply == QMessageBox.Yes:
                     print "DELETED", rowCheckbox.text()
-                    #self.PSQL.deleteLayer(rowCheckbox.text())
+                    print self.PSQL.deleteLayer(rowCheckbox.text())
+        self.populateLayerMenu()
 
 
     def layerRefresh(self):
@@ -224,7 +226,6 @@ class postgisQueryBuilder:
             combo.setCurrentIndex(0)
 
 
-
     def setLAYERa(self):
         #called when LAYERa is activated
         if self.dlg.LAYERa.currentText()[:6] == "Select":
@@ -256,6 +257,9 @@ class postgisQueryBuilder:
             item.setFlags(item.flags() | Qt.ItemIsUserCheckable)
             item.setCheckState(Qt.Unchecked)
             item.setText(row)
+            if self.PSQL.isTable(row):item.setIcon(QIcon(":/plugins/postgisquerybuilder/iT.png"))
+            elif self.PSQL.isView(row):item.setIcon(QIcon(":/plugins/postgisquerybuilder/iV.png"))
+            elif self.PSQL.isMaterializedView(row):item.setIcon(QIcon(":/plugins/postgisquerybuilder/iM.png"))
             #exclude geometryfield from user options when postgis query
             if self.geoQuery and row == self.querySet.getParameter("GEOMETRYFIELD"):
                 item.setFlags(item.flags() ^ Qt.ItemIsEnabled)

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_postgisquerybuilder.ui'
 #
-# Created: Mon May 19 08:57:14 2014
+# Created: Mon May 26 13:37:26 2014
 #      by: PyQt4 UI code generator 4.10.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -69,6 +69,21 @@ class Ui_postgisQueryBuilder(object):
         self.DBSchemaLabel = QtGui.QLabel(self.ConnectionTab)
         self.DBSchemaLabel.setGeometry(QtCore.QRect(10, 145, 181, 16))
         self.DBSchemaLabel.setObjectName(_fromUtf8("DBSchemaLabel"))
+        self.LayerList = QtGui.QListWidget(self.ConnectionTab)
+        self.LayerList.setGeometry(QtCore.QRect(210, 30, 391, 221))
+        self.LayerList.setObjectName(_fromUtf8("LayerList"))
+        self.RefreshButton = QtGui.QPushButton(self.ConnectionTab)
+        self.RefreshButton.setGeometry(QtCore.QRect(510, 257, 90, 23))
+        self.RefreshButton.setObjectName(_fromUtf8("RefreshButton"))
+        self.AddToMapButton = QtGui.QPushButton(self.ConnectionTab)
+        self.AddToMapButton.setGeometry(QtCore.QRect(310, 257, 90, 23))
+        self.AddToMapButton.setObjectName(_fromUtf8("AddToMapButton"))
+        self.DeleteButton = QtGui.QPushButton(self.ConnectionTab)
+        self.DeleteButton.setGeometry(QtCore.QRect(410, 257, 90, 23))
+        self.DeleteButton.setObjectName(_fromUtf8("DeleteButton"))
+        self.GetInfoButton = QtGui.QPushButton(self.ConnectionTab)
+        self.GetInfoButton.setGeometry(QtCore.QRect(210, 257, 90, 23))
+        self.GetInfoButton.setObjectName(_fromUtf8("GetInfoButton"))
         self.tabWidget.addTab(self.ConnectionTab, _fromUtf8(""))
         self.DefinitionTab = QtGui.QWidget()
         self.DefinitionTab.setObjectName(_fromUtf8("DefinitionTab"))
@@ -205,7 +220,7 @@ class Ui_postgisQueryBuilder(object):
         self.tabWidget.addTab(self.TableTab, _fromUtf8(""))
 
         self.retranslateUi(postgisQueryBuilder)
-        self.tabWidget.setCurrentIndex(1)
+        self.tabWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(postgisQueryBuilder)
 
     def retranslateUi(self, postgisQueryBuilder):
@@ -216,6 +231,10 @@ class Ui_postgisQueryBuilder(object):
         self.GEOMETRYFIELDLabel.setText(_translate("postgisQueryBuilder", "Geometry field", None))
         self.PSQLConnectionLabel.setText(_translate("postgisQueryBuilder", "Postgresql connection", None))
         self.DBSchemaLabel.setText(_translate("postgisQueryBuilder", "Schema", None))
+        self.RefreshButton.setText(_translate("postgisQueryBuilder", "Refresh", None))
+        self.AddToMapButton.setText(_translate("postgisQueryBuilder", "Add to map", None))
+        self.DeleteButton.setText(_translate("postgisQueryBuilder", "Delete", None))
+        self.GetInfoButton.setText(_translate("postgisQueryBuilder", "Get info", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.ConnectionTab), _translate("postgisQueryBuilder", "Connection", None))
         self.SPATIALRELNOT.setText(_translate("postgisQueryBuilder", "NOT", None))
         self.CONDITIONLabel.setText(_translate("postgisQueryBuilder", "Condition", None))

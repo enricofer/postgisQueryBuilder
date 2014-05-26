@@ -75,9 +75,9 @@ class PSQL:
         return self.submitCommand(sql)
 
     def deleteLayer(self,layer):
-        if self.isTable(layer): sql = "DROP TABLE '%s'" % layer
-        elif self.isView (layer): sql = "DROP VIEW '%s'" % layer
-        elif self.isMaterializedView (layer): sql = "DROP MATERIALIZED VIEW '%s'" % layer
+        if self.isTable(layer): sql = 'DROP TABLE "%s"' % layer
+        elif self.isView (layer): sql = 'DROP VIEW "%s"' % layer
+        elif self.isMaterializedView (layer): sql = 'DROP MATERIALIZED VIEW "%s"' % layer
         else: sql =""
         return self.submitCommand(sql)
 
