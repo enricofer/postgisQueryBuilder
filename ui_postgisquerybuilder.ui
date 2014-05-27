@@ -58,7 +58,7 @@
     <enum>QTabWidget::Rounded</enum>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>1</number>
    </property>
    <property name="elideMode">
     <enum>Qt::ElideLeft</enum>
@@ -185,7 +185,7 @@
     <widget class="QPushButton" name="AddToMapButton">
      <property name="geometry">
       <rect>
-       <x>310</x>
+       <x>210</x>
        <y>257</y>
        <width>90</width>
        <height>23</height>
@@ -211,14 +211,27 @@
     <widget class="QPushButton" name="GetInfoButton">
      <property name="geometry">
       <rect>
-       <x>210</x>
+       <x>310</x>
        <y>257</y>
        <width>90</width>
        <height>23</height>
       </rect>
      </property>
      <property name="text">
-      <string>Get info</string>
+      <string>Get table</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_2">
+     <property name="geometry">
+      <rect>
+       <x>210</x>
+       <y>10</y>
+       <width>371</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Available relations list (T:table V:view M:materialized view)</string>
      </property>
     </widget>
    </widget>
@@ -572,6 +585,52 @@
       </rect>
      </property>
     </widget>
+    <widget class="QLabel" name="FIELDbLabel">
+     <property name="geometry">
+      <rect>
+       <x>300</x>
+       <y>241</y>
+       <width>201</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Select Field of Layer B</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="FIELDb">
+     <property name="geometry">
+      <rect>
+       <x>300</x>
+       <y>260</y>
+       <width>214</width>
+       <height>20</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="JOIN">
+     <property name="geometry">
+      <rect>
+       <x>220</x>
+       <y>260</y>
+       <width>74</width>
+       <height>20</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="JOINLabel">
+     <property name="geometry">
+      <rect>
+       <x>220</x>
+       <y>241</y>
+       <width>71</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Join type</string>
+     </property>
+    </widget>
     <zorder>SPATIALREL</zorder>
     <zorder>SPATIALRELNOT</zorder>
     <zorder>CONDITIONLabel</zorder>
@@ -597,6 +656,10 @@
     <zorder>DISTANCELabel</zorder>
     <zorder>DISTANCEOPLabel</zorder>
     <zorder>DISTANCEOP</zorder>
+    <zorder>FIELDbLabel</zorder>
+    <zorder>FIELDb</zorder>
+    <zorder>JOIN</zorder>
+    <zorder>JOINLabel</zorder>
    </widget>
    <widget class="QWidget" name="QueryTab">
     <attribute name="title">

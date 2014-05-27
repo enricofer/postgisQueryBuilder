@@ -13,3 +13,6 @@ v1.3
 Dialog reformatted to optimize GUI for mac_os and linux desktop
 Added support for other schemas than 'public'. 
 Moved to Database menu.
+Added Layer operation panel
+Added Spatial join query type
+Added Analytical join query type

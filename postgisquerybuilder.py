@@ -79,11 +79,14 @@ class postgisQueryBuilder:
         self.dlg.ButtonClose.clicked.connect(self.closeDialog)
         self.dlg.ButtonHelp.clicked.connect(self.helpDialog)
         self.dlg.fieldsListA.clicked.connect(self.setFieldsList)
+        self.dlg.fieldsListB.clicked.connect(self.setFieldsList)
         self.dlg.checkMaterialized.clicked.connect(self.setMaterialized)
         self.dlg.AddToMapButton.clicked.connect(self.layerAddToMap)
-        self.dlg.GetInfoButton.clicked.connect(self.layerGetInfo)
+        self.dlg.GetInfoButton.clicked.connect(self.layerGetTable)
         self.dlg.DeleteButton.clicked.connect(self.layerDelete)
         self.dlg.RefreshButton.clicked.connect(self.layerRefresh)
+        self.dlg.JOIN.activated.connect(self.setJOIN)
+        self.dlg.FIELDb.activated.connect(self.setFIELDb)
 
     def eventsDisconnect(self):
         self.dlg.QueryType.activated.disconnect(self.setQueryType)
@@ -103,9 +106,13 @@ class postgisQueryBuilder:
         self.dlg.ButtonReset.clicked.disconnect(self.resetForm)
         self.dlg.ButtonClose.clicked.disconnect(self.closeDialog)
         self.dlg.AddToMapButton.clicked.disconnect(self.layerAddToMap)
-        self.dlg.GetInfoButton.clicked.disconnect(self.layerGetInfo)
+        self.dlg.GetInfoButton.clicked.disconnect(self.layerGetTable)
         self.dlg.DeleteButton.clicked.disconnect(self.layerDelete)
         self.dlg.RefreshButton.clicked.disconnect(self.layerRefresh)
+        self.dlg.JOIN.activated.disconnect(self.setJOIN)
+        self.dlg.FIELDb.activated.disconnect(self.setFIELDb)
+        self.dlg.fieldsListA.clicked.disconnect(self.setFieldsList)
+        self.dlg.fieldsListB.clicked.disconnect(self.setFieldsList)
 
     def initGui(self):
         # Create action that will start plugin configuration
@@ -126,6 +133,7 @@ class postgisQueryBuilder:
         self.populateComboBox(self.dlg.QueryType,self.querySet.getQueryLabels(),"Select query type",True)
         self.populateComboBox(self.dlg.OPERATOR,["=","<>",">","<","<=",">="],"Select",True)
         self.populateComboBox(self.dlg.DISTANCEOP,["=","<>",">","<","<=",">="],"Select",True)
+        self.populateComboBox(self.dlg.JOIN,["INNER JOIN","CROSS JOIN","RIGHT OUTER JOIN","LEFT OUTER JOIN","FULL OUTER JOIN"],"Select",True)
         self.populateComboBox(self.dlg.SPATIALREL,self.querySet.getSpatialRelationships(),"Select spatial relationship",True)
         self.dlg.tabWidget.setCurrentIndex(0)
         #self.recurseChild(self.dlg,"")
@@ -136,9 +144,17 @@ class postgisQueryBuilder:
             #take only selected attributes by checkbox
             if rowCheckbox.checkState() == Qt.Checked:
                 self.PSQL.loadView(rowCheckbox.text(),self.querySet.getParameter("GEOMETRYFIELD"))
-      
-    def layerGetInfo(self):
-        pass
+        self.uncheckList(self.dlg.LayerList)
+
+    def layerGetTable(self):
+        for rowList in range(0,self.dlg.LayerList.count()):
+            rowCheckbox = self.dlg.LayerList.item(rowList)
+            #take only selected attributes by checkbox
+            if rowCheckbox.checkState() == Qt.Checked:
+                self.PSQL.tableResultGen(rowCheckbox.text(),"",self.dlg.TableResult)
+                self.dlg.tabWidget.setCurrentIndex(3)
+                self.uncheckList(self.dlg.LayerList)
+                break
 
     def layerDelete(self):
         for rowList in range(0,self.dlg.LayerList.count()):
@@ -148,10 +164,12 @@ class postgisQueryBuilder:
                 msg = "Are you sure you want to delete layer '%s' ?" % rowCheckbox.text()
                 reply = QMessageBox.question(None, 'Message', msg, QMessageBox.Yes, QMessageBox.No)
                 if reply == QMessageBox.Yes:
-                    print "DELETED", rowCheckbox.text()
-                    print self.PSQL.deleteLayer(rowCheckbox.text())
+                    result = self.PSQL.deleteLayer(rowCheckbox.text())
+                    if result != "":
+                        QMessageBox.information(None, "ERROR:", result)
+                    else:
+                        print "DELETED", rowCheckbox.text()
         self.populateLayerMenu()
-
 
     def layerRefresh(self):
         for rowList in range(0,self.dlg.LayerList.count()):
@@ -159,7 +177,8 @@ class postgisQueryBuilder:
             #take only selected attributes by checkbox
             if rowCheckbox.checkState() == Qt.Checked:
                 if self.PSQL.isMaterializedView(rowCheckbox.text()): 
-                    self.PSQL.refreshMaterializedView(rowCheckbox.text())
+                    print self.PSQL.refreshMaterializedView(rowCheckbox.text())
+        self.uncheckList(self.dlg.LayerList)
 
     def recurseChild(self,slot,tab):
         # for testing: prints qt object tree
@@ -167,6 +186,10 @@ class postgisQueryBuilder:
             print tab,"|",child.objectName()
             if child.children() != []:
                 self.recurseChild(child,tab + "   ")
+
+    def uncheckList(self,slot):
+        for row in range(0,slot.count()):
+            self.dlg.LayerList.item(row).setCheckState(Qt.Unchecked);
 
     def disableDialogSlot(self,slot):
         for child in self.dlg.tabWidget.widget(1).children():
@@ -247,6 +270,7 @@ class postgisQueryBuilder:
         if self.querySet.testQueryParametersCheckList():
             self.queryGen()
         self.addListToFieldTable(self.dlg.fieldsListB,self.PSQL.getFieldsContent(self.dlg.LAYERb.currentText()))
+        self.populateComboBox(self.dlg.FIELDb,self.PSQL.getFieldsContent(self.dlg.LAYERb.currentText()),"Select field",True)
 
     def addListToFieldTable(self,fieldSlot,fl):
         #called to populate field list for WHERE statement
@@ -257,9 +281,13 @@ class postgisQueryBuilder:
             item.setFlags(item.flags() | Qt.ItemIsUserCheckable)
             item.setCheckState(Qt.Unchecked)
             item.setText(row)
-            if self.PSQL.isTable(row):item.setIcon(QIcon(":/plugins/postgisquerybuilder/iT.png"))
-            elif self.PSQL.isView(row):item.setIcon(QIcon(":/plugins/postgisquerybuilder/iV.png"))
-            elif self.PSQL.isMaterializedView(row):item.setIcon(QIcon(":/plugins/postgisquerybuilder/iM.png"))
+            #print row
+            if self.PSQL.isTable(row):
+                item.setIcon(QIcon(":/plugins/postgisquerybuilder/iT.png"))
+            elif self.PSQL.isView(row):
+                item.setIcon(QIcon(":/plugins/postgisquerybuilder/iV.png"))
+            elif self.PSQL.isMaterializedView(row):
+                item.setIcon(QIcon(":/plugins/postgisquerybuilder/iM.png"))
             #exclude geometryfield from user options when postgis query
             if self.geoQuery and row == self.querySet.getParameter("GEOMETRYFIELD"):
                 item.setFlags(item.flags() ^ Qt.ItemIsEnabled)
@@ -275,8 +303,8 @@ class postgisQueryBuilder:
                 items.append('"'+self.dlg.LAYERa.currentText()+'".'+self.dlg.fieldsListA.item(index).text())
         for index in xrange(self.dlg.fieldsListB.count()):
              if self.dlg.fieldsListB.item(index).checkState() == Qt.Checked:
-                items.append('"%s"'%(self.dlg.LAYERb.currentText())+self.dlg.fieldsListB.item(index).text())
-        #print items
+                items.append('"'+self.dlg.LAYERb.currentText()+'".'+self.dlg.fieldsListB.item(index).text())
+        #print "SELECTED FIELDS",items
         self.querySet.setFieldsSet(items)
         if self.querySet.testQueryParametersCheckList():
             self.queryGen()
@@ -294,6 +322,13 @@ class postgisQueryBuilder:
             self.tDelimiter = ""
         self.populateComboBox(self.dlg.OPERATOR,["=","<>",">","<","<=",">="],"Select",True)
         self.populateComboBox(self.dlg.CONDITION,self.PSQL.getUniqeValues(self.querySet.getParameter("LAYERa"),self.dlg.FIELD.currentText(),100),"",True)
+        if self.querySet.testQueryParametersCheckList():
+            self.queryGen()
+
+    def setFIELDb(self):
+        if self.dlg.FIELDb.currentText()[:6] == "Select":
+            return
+        self.querySet.setParameter("FIELDb",self.dlg.FIELDb.currentText())
         if self.querySet.testQueryParametersCheckList():
             self.queryGen()
 
@@ -343,6 +378,11 @@ class postgisQueryBuilder:
             self.querySet.setParameter("SPATIALRELNOT","NOT ")
         else:
             self.querySet.setParameter("SPATIALRELNOT"," ")
+        if self.querySet.testQueryParametersCheckList():
+            self.queryGen()
+
+    def setJOIN(self):
+        self.querySet.setParameter("JOIN",self.dlg.JOIN.currentText())
         if self.querySet.testQueryParametersCheckList():
             self.queryGen()
 
@@ -407,22 +447,22 @@ class postgisQueryBuilder:
                 "SPATIALREL","SPATIALRELNOT","LAYERaLabel","BUFFERRADIUSLabel",\
                 "FIELDLabel","OPERATORLabel","CONDITIONLabel","SPATIALRELLabel",
                 "SPATIALRELNOTLabel","fieldsListALabel","fieldsListBLabel",\
-                "DISTANCEOP","DISTANCE","DISTANCEOPLabel","DISTANCELabel"]
+                "DISTANCEOP","DISTANCE","DISTANCEOPLabel","DISTANCELabel","FIELDb","FIELDbLabel","JOIN"]
         for slot in toHide:
             self.hideDialogSlot(slot)
 
     def clearQueryDefSlot(self):
-        toClear=["LAYERa","LAYERb","BUFFERRADIUS","FIELD",\
+        toClear=["LAYERa","LAYERb","BUFFERRADIUS","FIELD","FIELDb",\
                   "OPERATOR","CONDITION","SPATIALREL","fieldsListA","fieldsListB",\
-                  "DISTANCEOP","DISTANCE"]
+                  "DISTANCEOP","DISTANCE","JOIN"]
         for slot in toClear:
             self.clearDialogSlot(slot)
 
     def disableQueryDefSlot(self):
-        toDisable=["LAYERa","LAYERb","BUFFERRADIUS","FIELD",\
+        toDisable=["LAYERa","LAYERb","BUFFERRADIUS","FIELD","FIELDb",\
                     "OPERATOR","CONDITION","SPATIALREL",\
                     "SPATIALRELNOT","fieldsListA","fieldsListB",
-                    "DISTANCEOP","DISTANCE"]
+                    "DISTANCEOP","DISTANCE","JOIN"]
         for slot in toDisable:
             self.disableDialogSlot(slot)
 
@@ -454,7 +494,6 @@ class postgisQueryBuilder:
         self.resetDialog()
         self.populateGui()
         self.dlg.tabWidget.setCurrentIndex(1)
-        
 
     def setConnection(self):
         self.PSQL.setConnection(self.dlg.PSQLConnection.currentText())
@@ -469,15 +508,15 @@ class postgisQueryBuilder:
             self.populateGui()
             self.resetDialog()
             #self.dlg.tabWidget.setCurrentIndex(1)
+            self.querySet.setSchema(self.dlg.DBSchema.currentText())
             self.populateLayerMenu()
-
 
     def populateLayerMenu(self):
         self.addListToFieldTable(self.dlg.LayerList,self.PSQL.getLayers())
 
     def runQuery(self):
         #method to run generated query
-        self.PSQL.tableResultGen(self.dlg.QueryResult.toPlainText(),self.dlg.TableResult)
+        self.PSQL.tableResultGen(self.dlg.LAYERa.currentText(),self.dlg.QueryResult.toPlainText(),self.dlg.TableResult)
         self.dlg.tabWidget.setCurrentIndex(3)
 
         if self.dlg.AddToMap.checkState():
@@ -485,9 +524,6 @@ class postgisQueryBuilder:
                 self.PSQL.loadView(self.querySet.getParameter("VIEWNAME"),self.querySet.getParameter("GEOMETRYFIELD"))
             else:
                 self.PSQL.loadSql(self.querySet.getParameter("VIEWNAME"),self.dlg.QueryResult.toPlainText(),self.querySet.getParameter("GEOMETRYFIELD"))
-
-    def tableResultGen(self):
-        self.PSQL.test()
 
     def unload(self):
         # Remove the plugin menu item and icon

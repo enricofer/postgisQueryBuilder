@@ -97,16 +97,10 @@ class PSQL:
         return fields
 
     def getFieldsType(self,layer,field):
-        sql="SELECT data_type FROM information_schema.columns WHERE table_name='%s' AND column_name = '%s';" % (layer,field)
-        #print sql
+        sql = "SELECT typname FROM pg_attribute a JOIN pg_class c on a.attrelid = c.oid JOIN pg_type t on a.atttypid = t.oid WHERE relname = '%s' and attname = '%s'" % (layer,field)
         query = self.db.exec_(sql)
         query.next()
         res = str(query.value(0))
-        if res == "":
-            sql = "SELECT typname FROM pg_attribute a JOIN pg_class c on a.attrelid = c.oid JOIN pg_type t on a.atttypid = t.oid WHERE relname = '%s' and attname = '%s' and attnum >= 1;" % (layer,field)
-            query = self.db.exec_(sql)
-            query.next()
-            res = str(query.value(0))
         #print res
         return res
 
@@ -149,11 +143,11 @@ class PSQL:
                 fields=[]
                 count = 0
                 query.value(count)
-                for k in range(0,query.record().count()-1):
+                for k in range(0,query.record().count()):
                     fields.append(query.value(k))
                     if rows[0] == []:
                         fieldNames=[]
-                        for n in range(0,query.record().count()-1):
+                        for n in range(0,query.record().count()):
                             fieldNames.append(query.record().fieldName(n))
                         rows[0]=fieldNames
                 #print rows
@@ -177,7 +171,7 @@ class PSQL:
 
     def isView(self,vName):
         sql = "SELECT viewname FROM pg_catalog.pg_views where schemaname = '%s' and viewname = '%s'" % (self.schema,vName)
-        print sql
+        #print sql
         query = QSqlQuery(self.db)
         query.exec_(sql)
         query.first()
@@ -216,14 +210,21 @@ class PSQL:
         out_file.write(sql+"\n")
         out_file.close()
     
-    def tableResultGen(self,sql,tableSlot):
-        res=self.submitQuery(sql)
+    def tableResultGen(self,tableName,sql,tableSlot):
+        if sql != "":
+            res=self.submitQuery(sql)
+        else:
+            res=self.submitQuery('SELECT * FROM "%s"' % tableName)
         if res["result"] != []:
             tab=res["result"]
             print tab[0]
             print len(tab[0])
             tableSlot.setColumnCount(len(tab[0]))
             tableSlot.setRowCount(len(tab)-1)
+            #add field type to field labels
+            if tableName != "":
+                for column in range(0,len(tab[0])):
+                    tab[0][column] += "\n" + self.getFieldsType(tableName,tab[0][column])
             tableSlot.setHorizontalHeaderLabels(tab[0])
             for column in range(0,len(tab[0])):
                 for row in range(1,len(tab)):

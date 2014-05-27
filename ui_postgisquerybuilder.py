@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_postgisquerybuilder.ui'
 #
-# Created: Mon May 26 13:37:26 2014
+# Created: Tue May 27 11:32:57 2014
 #      by: PyQt4 UI code generator 4.10.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -76,14 +76,17 @@ class Ui_postgisQueryBuilder(object):
         self.RefreshButton.setGeometry(QtCore.QRect(510, 257, 90, 23))
         self.RefreshButton.setObjectName(_fromUtf8("RefreshButton"))
         self.AddToMapButton = QtGui.QPushButton(self.ConnectionTab)
-        self.AddToMapButton.setGeometry(QtCore.QRect(310, 257, 90, 23))
+        self.AddToMapButton.setGeometry(QtCore.QRect(210, 257, 90, 23))
         self.AddToMapButton.setObjectName(_fromUtf8("AddToMapButton"))
         self.DeleteButton = QtGui.QPushButton(self.ConnectionTab)
         self.DeleteButton.setGeometry(QtCore.QRect(410, 257, 90, 23))
         self.DeleteButton.setObjectName(_fromUtf8("DeleteButton"))
         self.GetInfoButton = QtGui.QPushButton(self.ConnectionTab)
-        self.GetInfoButton.setGeometry(QtCore.QRect(210, 257, 90, 23))
+        self.GetInfoButton.setGeometry(QtCore.QRect(310, 257, 90, 23))
         self.GetInfoButton.setObjectName(_fromUtf8("GetInfoButton"))
+        self.label_2 = QtGui.QLabel(self.ConnectionTab)
+        self.label_2.setGeometry(QtCore.QRect(210, 10, 371, 16))
+        self.label_2.setObjectName(_fromUtf8("label_2"))
         self.tabWidget.addTab(self.ConnectionTab, _fromUtf8(""))
         self.DefinitionTab = QtGui.QWidget()
         self.DefinitionTab.setObjectName(_fromUtf8("DefinitionTab"))
@@ -184,6 +187,18 @@ class Ui_postgisQueryBuilder(object):
         self.DISTANCEOP = QtGui.QComboBox(self.DefinitionTab)
         self.DISTANCEOP.setGeometry(QtCore.QRect(5, 260, 81, 20))
         self.DISTANCEOP.setObjectName(_fromUtf8("DISTANCEOP"))
+        self.FIELDbLabel = QtGui.QLabel(self.DefinitionTab)
+        self.FIELDbLabel.setGeometry(QtCore.QRect(300, 241, 201, 16))
+        self.FIELDbLabel.setObjectName(_fromUtf8("FIELDbLabel"))
+        self.FIELDb = QtGui.QComboBox(self.DefinitionTab)
+        self.FIELDb.setGeometry(QtCore.QRect(300, 260, 214, 20))
+        self.FIELDb.setObjectName(_fromUtf8("FIELDb"))
+        self.JOIN = QtGui.QComboBox(self.DefinitionTab)
+        self.JOIN.setGeometry(QtCore.QRect(220, 260, 74, 20))
+        self.JOIN.setObjectName(_fromUtf8("JOIN"))
+        self.JOINLabel = QtGui.QLabel(self.DefinitionTab)
+        self.JOINLabel.setGeometry(QtCore.QRect(220, 241, 71, 16))
+        self.JOINLabel.setObjectName(_fromUtf8("JOINLabel"))
         self.tabWidget.addTab(self.DefinitionTab, _fromUtf8(""))
         self.QueryTab = QtGui.QWidget()
         self.QueryTab.setObjectName(_fromUtf8("QueryTab"))
@@ -220,7 +235,7 @@ class Ui_postgisQueryBuilder(object):
         self.tabWidget.addTab(self.TableTab, _fromUtf8(""))
 
         self.retranslateUi(postgisQueryBuilder)
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(postgisQueryBuilder)
 
     def retranslateUi(self, postgisQueryBuilder):
@@ -234,7 +249,8 @@ class Ui_postgisQueryBuilder(object):
         self.RefreshButton.setText(_translate("postgisQueryBuilder", "Refresh", None))
         self.AddToMapButton.setText(_translate("postgisQueryBuilder", "Add to map", None))
         self.DeleteButton.setText(_translate("postgisQueryBuilder", "Delete", None))
-        self.GetInfoButton.setText(_translate("postgisQueryBuilder", "Get info", None))
+        self.GetInfoButton.setText(_translate("postgisQueryBuilder", "Get table", None))
+        self.label_2.setText(_translate("postgisQueryBuilder", "Available relations list (T:table V:view M:materialized view)", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.ConnectionTab), _translate("postgisQueryBuilder", "Connection", None))
         self.SPATIALRELNOT.setText(_translate("postgisQueryBuilder", "NOT", None))
         self.CONDITIONLabel.setText(_translate("postgisQueryBuilder", "Condition", None))
@@ -248,6 +264,8 @@ class Ui_postgisQueryBuilder(object):
         self.label.setText(_translate("postgisQueryBuilder", "Query type", None))
         self.DISTANCELabel.setText(_translate("postgisQueryBuilder", "Condition", None))
         self.DISTANCEOPLabel.setText(_translate("postgisQueryBuilder", "Operator", None))
+        self.FIELDbLabel.setText(_translate("postgisQueryBuilder", "Select Field of Layer B", None))
+        self.JOINLabel.setText(_translate("postgisQueryBuilder", "Join type", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.DefinitionTab), _translate("postgisQueryBuilder", "Definition", None))
         self.AddToMap.setText(_translate("postgisQueryBuilder", "Add to map", None))
         self.ButtonRun.setText(_translate("postgisQueryBuilder", "Run query", None))
