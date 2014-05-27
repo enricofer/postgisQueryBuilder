@@ -68,7 +68,7 @@ class postgisQueryBuilder:
         self.dlg.OPERATOR.activated.connect(self.setOPERATOR)
         self.dlg.DISTANCEOP.activated.connect(self.setDISTANCEOP)
         self.dlg.SPATIALREL.activated.connect(self.setSPATIALREL)
-        self.dlg.SPATIALRELNOT.clicked.connect(self.setSPATIALRELNOT)
+        self.dlg.SPATIALRELNOT.stateChanged.connect(self.setSPATIALRELNOT)
         self.dlg.checkCreateView.clicked.connect(self.checkCreateView)
         self.dlg.BUFFERRADIUS.textChanged.connect(self.setBUFFERRADIUS)
         self.dlg.CONDITION.activated.connect(self.setCONDITION)
@@ -96,7 +96,7 @@ class postgisQueryBuilder:
         self.dlg.OPERATOR.activated.disconnect(self.setOPERATOR)
         self.dlg.DISTANCEOP.activated.disconnect(self.setDISTANCEOP)
         self.dlg.SPATIALREL.activated.disconnect(self.setSPATIALREL)
-        self.dlg.SPATIALRELNOT.clicked.disconnect(self.setSPATIALRELNOT)
+        self.dlg.SPATIALRELNOT.stateChanged.disconnect(self.setSPATIALRELNOT)
         self.dlg.checkCreateView.clicked.disconnect(self.checkCreateView)
         self.dlg.BUFFERRADIUS.textChanged.disconnect(self.setBUFFERRADIUS)
         self.dlg.CONDITION.activated.disconnect(self.setCONDITION)
@@ -426,6 +426,9 @@ class postgisQueryBuilder:
             self.showDialogSlot(slot)
             self.showDialogSlot(slot+"Label")
         #print self.querySet.testQueryParametersCheckList()
+        #simulate click on checkbox to set required slot
+        self.dlg.SPATIALRELNOT.setCheckState(Qt.Checked)
+        self.dlg.SPATIALRELNOT.setCheckState(Qt.Unchecked)
         self.dlg.Helper.setText(self.querySet.getDescription())
         
 
