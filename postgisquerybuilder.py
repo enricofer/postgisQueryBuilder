@@ -450,7 +450,7 @@ class postgisQueryBuilder:
                 "SPATIALREL","SPATIALRELNOT","LAYERaLabel","BUFFERRADIUSLabel",\
                 "FIELDLabel","OPERATORLabel","CONDITIONLabel","SPATIALRELLabel",
                 "SPATIALRELNOTLabel","fieldsListALabel","fieldsListBLabel",\
-                "DISTANCEOP","DISTANCE","DISTANCEOPLabel","DISTANCELabel","FIELDb","FIELDbLabel","JOIN"]
+                "DISTANCEOP","DISTANCE","DISTANCEOPLabel","DISTANCELabel","FIELDb","FIELDbLabel","JOIN","JOINLabel"]
         for slot in toHide:
             self.hideDialogSlot(slot)
 
