@@ -228,6 +228,9 @@ class PSQL:
             tableSlot.setHorizontalHeaderLabels(tab[0])
             for column in range(0,len(tab[0])):
                 for row in range(1,len(tab)):
-                    item = unicode(tab[row][column], errors='replace')
+                    try:
+                        item = unicode(tab[row][column], errors='replace')
+                    except TypeError:
+                        item = str(tab[row][column])
                     if item != None:
                         tableSlot.setItem(row-1, column, QTableWidgetItem(item))

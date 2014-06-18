@@ -214,7 +214,7 @@ class querySet():
         self.parameters["SCHEMA"] = self.schemaName
         self.parameters["FIELDSET"]=""
         for e in self.fieldSet:
-            self.parameters["FIELDSET"] += e+","
+            self.parameters["FIELDSET"] += e+','
         #print self.parameters["FIELDSET"]
         test = None
         for f in self.fieldSet:

@@ -239,7 +239,10 @@ class postgisQueryBuilder:
         combo.clear()
         model=QStandardItemModel(combo)
         for elem in list:
-            item = QStandardItem(str(elem))
+            try:
+                item = QStandardItem(unicode(elem))
+            except TypeError:
+                item = QStandardItem(str(elem))
             model.appendRow(item)
         if sort:
             model.sort(0)
@@ -300,10 +303,10 @@ class postgisQueryBuilder:
         items = []
         for index in xrange(self.dlg.fieldsListA.count()):
              if self.dlg.fieldsListA.item(index).checkState() == Qt.Checked:
-                items.append('"'+self.dlg.LAYERa.currentText()+'".'+self.dlg.fieldsListA.item(index).text())
+                items.append('"'+self.dlg.LAYERa.currentText()+'"."'+self.dlg.fieldsListA.item(index).text()+'"')
         for index in xrange(self.dlg.fieldsListB.count()):
              if self.dlg.fieldsListB.item(index).checkState() == Qt.Checked:
-                items.append('"'+self.dlg.LAYERb.currentText()+'".'+self.dlg.fieldsListB.item(index).text())
+                items.append('"'+self.dlg.LAYERb.currentText()+'"."'+self.dlg.fieldsListB.item(index).text()+'"')
         #print "SELECTED FIELDS",items
         self.querySet.setFieldsSet(items)
         if self.querySet.testQueryParametersCheckList():
@@ -312,7 +315,7 @@ class postgisQueryBuilder:
     def setFIELD(self):
         if self.dlg.FIELD.currentText()[:6] == "Select":
             return
-        self.querySet.setParameter("FIELD",self.dlg.FIELD.currentText())
+        self.querySet.setParameter("FIELD",'"'+self.dlg.LAYERa.currentText()+'"."'+self.dlg.FIELD.currentText()+'"')
         fType = self.PSQL.getFieldsType(self.querySet.getParameter("LAYERa"),self.dlg.FIELD.currentText())
         fType = fType[:4]
         #print fType
@@ -328,7 +331,7 @@ class postgisQueryBuilder:
     def setFIELDb(self):
         if self.dlg.FIELDb.currentText()[:6] == "Select":
             return
-        self.querySet.setParameter("FIELDb",self.dlg.FIELDb.currentText())
+        self.querySet.setParameter("FIELDb",'"'+self.dlg.LAYERb.currentText()+'"."'+self.dlg.FIELDb.currentText()+'"')
         if self.querySet.testQueryParametersCheckList():
             self.queryGen()
 
