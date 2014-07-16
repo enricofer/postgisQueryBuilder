@@ -143,7 +143,7 @@ class postgisQueryBuilder:
             rowCheckbox = self.dlg.LayerList.item(rowList)
             #take only selected attributes by checkbox
             if rowCheckbox.checkState() == Qt.Checked:
-                self.PSQL.loadView(rowCheckbox.text(),self.querySet.getParameter("GEOMETRYFIELD"))
+                self.PSQL.loadView(rowCheckbox.text(),self.dlg.GEOMETRYFIELD.text(),self.dlg.KEYFIELD.text())
         self.uncheckList(self.dlg.LayerList)
 
     def layerGetTable(self):
@@ -527,9 +527,9 @@ class postgisQueryBuilder:
 
         if self.dlg.AddToMap.checkState():
             if self.dlg.checkCreateView.checkState():
-                self.PSQL.loadView(self.querySet.getParameter("VIEWNAME"),self.querySet.getParameter("GEOMETRYFIELD"))
+                self.PSQL.loadView(self.querySet.getParameter("VIEWNAME"),self.querySet.getParameter("GEOMETRYFIELD"),self.querySet.getParameter("KEYFIELD"))
             else:
-                self.PSQL.loadSql(self.querySet.getParameter("VIEWNAME"),self.dlg.QueryResult.toPlainText(),self.querySet.getParameter("GEOMETRYFIELD"))
+                self.PSQL.loadSql(self.querySet.getParameter("VIEWNAME"),self.dlg.QueryResult.toPlainText(),self.querySet.getParameter("GEOMETRYFIELD"),self.querySet.getParameter("KEYFIELD"))
 
     def unload(self):
         # Remove the plugin menu item and icon

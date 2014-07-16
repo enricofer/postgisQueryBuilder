@@ -2,6 +2,7 @@
 Makefile
 *.log
 help/
+.idea/
 i18n/
 .DS_Store
 plugin_upload.py

@@ -19,6 +19,7 @@ class PSQL:
         s.endGroup()
         return currentConnections
 
+
     def setConnection(self,conn):
         s = QSettings()
         s.beginGroup("PostgreSQL/connections/"+conn)
@@ -34,12 +35,14 @@ class PSQL:
         #print self.PSQLDatabase,self.PSQLService,self.PSQLHost,self.PSQLPort,self.PSQLUsername,self.PSQLPassword
         self.db = QSqlDatabase.addDatabase("QPSQL")
         self.db.setHostName(self.PSQLHost)
+        self.db.setPort(int(self.PSQLPort))
         self.db.setDatabaseName(self.PSQLDatabase)
         self.db.setUserName(self.PSQLUsername)
         self.db.setPassword(self.PSQLPassword)
         ok = self.db.open()
         if not ok:
             error = "Database Error: %s" % self.db.lastError().text()
+            QMessageBox.information(None, "DB ERROR:", error)
         else:
             error=""
         #print error
@@ -184,20 +187,20 @@ class PSQL:
         query.first()
         return query.isValid()
 
-    def loadView(self,layer,GeomField):
+    def loadView(self,layer,GeomField,KeyField):
         uri = QgsDataSourceURI()
         uri.setConnection(self.PSQLHost,self.PSQLPort,self.PSQLDatabase,self.PSQLUsername,self.PSQLPassword)
-        uri.setDataSource("public",layer,GeomField,"","ogc_fid")
+        uri.setDataSource("public",layer,GeomField,"",KeyField)
         vlayer = QgsVectorLayer(uri.uri(), layer, "postgres")
         if vlayer.isValid():
             QgsMapLayerRegistry.instance().addMapLayer(vlayer,True)
         else:
             QMessageBox.information(None, "LAYER ERROR:", "The layer %s is not valid" % layer)
     
-    def loadSql(self,layerName,sql,GeomField):
+    def loadSql(self,layerName,sql,GeomField,KeyField):
         uri = QgsDataSourceURI()
         uri.setConnection(self.PSQLHost,self.PSQLPort,self.PSQLDatabase,self.PSQLUsername,self.PSQLPassword)
-        uri.setDataSource("","("+sql+")",GeomField,"","ogc_fid")
+        uri.setDataSource("","("+sql+")",GeomField,"",KeyField)
         vlayer = QgsVectorLayer(uri.uri(), layerName, "postgres")
         if vlayer.isValid():
             QgsMapLayerRegistry.instance().addMapLayer(vlayer,True)
