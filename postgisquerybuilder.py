@@ -442,9 +442,13 @@ class postgisQueryBuilder:
         self.querySet.resetParameters()
         self.disableQueryDefSlot()
         self.hideQueryDefSlot()
-        tables = self.PSQL.getLayers()
-        self.populateComboBox(self.dlg.LAYERa,tables,"Select Layer",True)
-        self.populateComboBox(self.dlg.LAYERb,tables,"Select Layer",True)
+        try:
+            tables = self.PSQL.getLayers()
+        except AttributeError:
+            pass
+        else:
+            self.populateComboBox(self.dlg.LAYERa,tables,"Select Layer",True)
+            self.populateComboBox(self.dlg.LAYERb,tables,"Select Layer",True)
         self.geoQuery = None
         self.eventsConnect()
 

@@ -147,7 +147,10 @@ class PSQL:
                 count = 0
                 query.value(count)
                 for k in range(0,query.record().count()):
-                    fields.append(query.value(k))
+                    try:
+                        fields.append(query.value(k).toString())
+                    except AttributeError:
+                        fields.append(str(query.value(k)))
                     if rows[0] == []:
                         fieldNames=[]
                         for n in range(0,query.record().count()):
@@ -156,6 +159,7 @@ class PSQL:
                 #print rows
                 rows += [fields]
             result["result"] = rows
+        print result
         return result
 
     def submitCommand(self,sql):
