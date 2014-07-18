@@ -159,7 +159,7 @@ class PSQL:
                 #print rows
                 rows += [fields]
             result["result"] = rows
-        print result
+        #print result
         return result
 
     def submitCommand(self,sql):
