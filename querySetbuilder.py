@@ -34,7 +34,7 @@ class querySet():
             'Returns a geometry that represents the point set union of geomA and geomB.',\
             'http://postgis.refractions.net/documentation/manual-svn/ST_Union.html',\
             ['LAYERa','LAYERb','fieldsListA','fieldsListB'],\
-            'SELECT [[FIELDSET]],ST_Union("[[LAYERa]]".[[GEOMETRYFIELD]],"[[LAYERb]]".[[GEOMETRYFIELD]]) AS [[GEOMETRYFIELD]] FROM "[[SCHEMA]]"."[[LAYERa]]","[[SCHEMA]]"."[[LAYERb]]"',\
+            'SELECT [[ONLYGEOMSET]],ST_Union("[[LAYERa]]".[[GEOMETRYFIELD]],"[[LAYERb]]".[[GEOMETRYFIELD]]) AS [[GEOMETRYFIELD]] FROM "[[SCHEMA]]"."[[LAYERa]]","[[SCHEMA]]"."[[LAYERb]]"',\
             '_Union_of_[[LAYERa]]_and_[[LAYERb]]'\
             ],\
             'ST_Union 1 layer':\
@@ -42,7 +42,7 @@ class querySet():
             'Returns a geometry that represents the point set union of the Geometries in geomA.',\
             'http://postgis.refractions.net/documentation/manual-svn/ST_Union.html',\
             ['LAYERa','fieldsListA'],\
-            'SELECT [[FIELDSET]],ST_Union("[[LAYERa]]".[[GEOMETRYFIELD]]) AS [[GEOMETRYFIELD]] FROM "[[SCHEMA]]"."[[LAYERa]]"',\
+            'SELECT [[FIELDSET]],ST_Union("[[LAYERa]]".[[GEOMETRYFIELD]]) AS [[GEOMETRYFIELD]] FROM "[[SCHEMA]]"."[[LAYERa]]" [[GROUPBYSET]]',\
             '_Union_of_[[LAYERa]]'\
             ],\
             'ST_Difference':\
@@ -146,7 +146,7 @@ class querySet():
         self.parameters = {"VIEWNAME":"","LAYERa":"","LAYERb":"",\
                            "GEOMETRYFIELD":"the_geom","KEYFIELD":"ogc_fid","BUFFERRADIUS":"","FIELD":"","FIELDb":"","JOIN":"",\
                            "OPERATOR":"","CONDITION":"","SPATIALREL":None,\
-                           "SPATIALRELNOT":" ","FIDFIELD":"","FIELDSET":"", "MATERIALIZED":"","DISTANCEOP":"","DISTANCE":"","SCHEMA":""}
+                           "SPATIALRELNOT":" ","FIDFIELD":"","FIELDSET":"","GROUPBYSET":"", "ONLYGEOMSET":"", "MATERIALIZED":"","DISTANCEOP":"","DISTANCE":"","SCHEMA":""}
         self.currentQuery = ""
         self.fieldSet = []
     
@@ -213,9 +213,12 @@ class querySet():
     def buildFIELDSET(self):
         self.parameters["SCHEMA"] = self.schemaName
         self.parameters["FIELDSET"]=""
+        self.parameters["GROUPBYSET"]=""
+        self.parameters["ONLYGEOMSET"]=("row_number() OVER () AS %s" % (self.parameters["KEYFIELD"]))
         for e in self.fieldSet:
             self.parameters["FIELDSET"] += e+','
-        #print self.parameters["FIELDSET"]
+            if not (e.find(self.parameters["GEOMETRYFIELD"])!=-1):
+                self.parameters["GROUPBYSET"] += e+','
         test = None
         for f in self.fieldSet:
             if (f[-len(self.parameters["KEYFIELD"]):] == self.parameters["KEYFIELD"]):
@@ -224,7 +227,10 @@ class querySet():
             self.parameters["FIELDSET"] += ("row_number() OVER () AS %s" % (self.parameters["KEYFIELD"]))
         else:
             self.parameters["FIELDSET"]=self.parameters["FIELDSET"][:len(self.parameters["FIELDSET"])-1]
-        #print self.parameters["FIELDSET"]
+        if self.parameters["GROUPBYSET"]!="":
+            self.parameters["GROUPBYSET"]="GROUP BY "+self.parameters["GROUPBYSET"][:len(self.parameters["GROUPBYSET"])-1]
+        #print "FIELDSET:",self.parameters["FIELDSET"]
+        #print "GROUPBYSET:",self.parameters["GROUPBYSET"]
 
 
     def getQueryParsed(self,isView):
