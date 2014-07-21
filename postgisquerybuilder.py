@@ -126,12 +126,12 @@ class postgisQueryBuilder:
         # Add toolbar button and menu item
         self.iface.addToolBarIcon(self.action)
         self.iface.addPluginToDatabaseMenu(u"&postgisQueryBuilder", self.action)
+        self.dlg.GEOMETRYFIELD.setText("the_geom")
+        self.dlg.KEYFIELD.setText("ogc_fid")
         self.populateGui()
         self.eventsConnect()
 
     def populateGui(self):
-        self.dlg.GEOMETRYFIELD.setText("the_geom")
-        self.dlg.KEYFIELD.setText("ogc_fid")
         self.populateComboBox(self.dlg.QueryType,self.querySet.getQueryLabels(),"Select query type",True)
         self.populateComboBox(self.dlg.OPERATOR,["=","<>",">","<","<=",">="],"Select",True)
         self.populateComboBox(self.dlg.DISTANCEOP,["=","<>",">","<","<=",">="],"Select",True)
@@ -239,6 +239,9 @@ class postgisQueryBuilder:
     def tabChangedHub(self,tab):
         if tab == 0:
             self.updateLayerMenu()
+        elif tab==1 or tab==2:
+            self.querySet.setParameter("GEOMETRYFIELD",self.dlg.GEOMETRYFIELD.text())
+            self.querySet.setParameter("KEYFIELD",self.dlg.KEYFIELD.text())
         elif tab == 4:
             self.updateHistoryLog()
 
@@ -275,7 +278,7 @@ class postgisQueryBuilder:
         if self.querySet.testQueryParametersCheckList():
             self.queryGen()
         self.populateComboBox(self.dlg.FIELD,self.PSQL.getFieldsContent(self.dlg.LAYERa.currentText()),"Select field",True)
-        if not self.PSQL.testIfFidExist(self.PSQL.getFieldsContent(self.dlg.LAYERa.currentText())):
+        if not self.PSQL.testIfFieldExist(self.dlg.LAYERa.currentText(),self.querySet.getParameter("KEYFIELD")):
             self.querySet.setFIDFIELD()
         self.addListToFieldTable(self.dlg.fieldsListA,self.PSQL.getFieldsContent(self.dlg.LAYERa.currentText()))
         
@@ -334,7 +337,7 @@ class postgisQueryBuilder:
         fType = self.PSQL.getFieldsType(self.querySet.getParameter("LAYERa"),self.dlg.FIELD.currentText())
         fType = fType[:4]
         #print fType
-        if ((fType == "char") or (fType == "text")):
+        if ((fType == "char") or (fType == "text") or  (fType == "varc")):
             self.tDelimiter = "'"
         else:
             self.tDelimiter = ""
@@ -410,8 +413,6 @@ class postgisQueryBuilder:
             self.dlg.QueryResult.setPlainText(self.querySet.getQueryParsed(self.dlg.checkCreateView.checkState()))
 
     def queryGen(self):
-        self.querySet.setParameter("GEOMETRYFIELD",self.dlg.GEOMETRYFIELD.text())
-        self.querySet.setParameter("KEYFIELD",self.dlg.KEYFIELD.text())
         if self.dlg.checkCreateView.checkState():
             self.enableDialogSlot("QueryName")
         if self.dlg.checkMaterialized.checkState():
@@ -423,7 +424,7 @@ class postgisQueryBuilder:
         self.enableDialogSlot("AddToMap")
         qName = self.querySet.getNameParsed()
         self.dlg.QueryName.setText(qName)
-        self.querySet.setParameter("VIEWNAME",qName)
+        self.querySet.setParameter("VIEWNAME", qName)
         self.dlg.QueryResult.setPlainText(self.querySet.getQueryParsed(self.dlg.checkCreateView.checkState()))
         self.dlg.QueryName.textChanged.connect(self.setQueryName)
 

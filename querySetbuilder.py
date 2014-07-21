@@ -134,7 +134,7 @@ class querySet():
         self.isView=bool
 
     def setFIDFIELD(self):
-        self.parameters["FIDFIELD"]= "row_number() OVER () AS ogc_fid,"
+        self.parameters["FIDFIELD"]= "row_number() OVER () AS %s," % (self.getParameter("KEYFIELD"))
     
     def unsetFIDFIELD(self):
         self.parameters["FIDFIELD"]= ""
@@ -204,9 +204,13 @@ class querySet():
         return self.querySet[self.currentQuery][3]
     
     def setParameter(self,var,value):
+        print "set "+var+": ",value
         if var in self.parameters:
             self.parameters[var] = value
-            self.QueryParametersCheckList[var]=True
+            try:
+                self.QueryParametersCheckList[var]=True
+            except:
+                pass
         else:
             print "ALERT: variable not found"
 
@@ -221,7 +225,7 @@ class querySet():
                 self.parameters["GROUPBYSET"] += e+','
         test = None
         for f in self.fieldSet:
-            if (f[-len(self.parameters["KEYFIELD"]):] == self.parameters["KEYFIELD"]):
+            if (f[-len(self.parameters["KEYFIELD"])-1:-1] == self.parameters["KEYFIELD"]):
                 test = True
         if self.fieldSet==[] or not test:
             self.parameters["FIELDSET"] += ("row_number() OVER () AS %s" % (self.parameters["KEYFIELD"]))
@@ -236,7 +240,7 @@ class querySet():
     def getQueryParsed(self,isView):
         if self.testIfQueryDefined():
             if isView:
-                viewDef = 'CREATE %s VIEW "%s" AS ' % (self.parameters["MATERIALIZED"],self.parameters["VIEWNAME"])
+                viewDef = 'CREATE %s VIEW "%s"."%s" AS ' % (self.parameters["MATERIALIZED"],self.parameters["SCHEMA"],self.parameters["VIEWNAME"])
             else:
                 viewDef = ''
             self.buildFIELDSET()

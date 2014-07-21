@@ -52,6 +52,12 @@ class PSQL:
     def setSchema(self,schema):
         self.schema = schema
 
+    def getSchema(self):
+        return self.schema 
+        
+    def getExtendedTableName(self,tableName):
+        return '"%s"."%s"' % (self.schema,tableName)
+
     def getLayers(self):
         sql="select table_name from information_schema.tables where table_schema='%s';" % self.schema 
         query = self.db.exec_(sql)
@@ -66,12 +72,14 @@ class PSQL:
         layers.sort()
         return layers
 
-    def testIfFidExist(self,layer):
+    def testIfFieldExist(self,layer,fieldname):
         fields=self.getFieldsContent(layer)
+        print "testIffieldExists",layer,fields,fieldname
         test = None
         for f in fields:
-            if (f == "ogc_fid"):
+            if (f == fieldname):
                 test = True
+        print test
         return test
 
     def refreshMaterializedView(self,mView):
@@ -86,7 +94,7 @@ class PSQL:
         return self.submitCommand(sql)
 
     def getFieldsContent(self,layer):
-        sql="SELECT column_name FROM information_schema.columns WHERE table_name='%s';" % layer
+        sql="SELECT column_name FROM information_schema.columns WHERE table_name='%s' and table_schema='%s';" % (layer,self.schema)
         query = self.db.exec_(sql)
         fields=[]
         while (query.next()):
@@ -98,6 +106,16 @@ class PSQL:
             while (query.next()):
                 fields.append(str(query.value(0)))
             #print fields
+        return fields
+
+    def testgetFieldsContent(self,layer):
+        sql="SELECT attname, typname ,relname FROM pg_attribute a JOIN pg_class c on a.attrelid = c.oid JOIN pg_type t on a.atttypid = t.oid WHERE relname = '%s' and attnum >= 1;" % layer
+        print sql
+        query = self.db.exec_(sql)
+        fields=[]
+        while (query.next()):
+            fields.append(str(query.value(0)))
+        print fields
         return fields
 
     def getFieldsType(self,layer,field):
