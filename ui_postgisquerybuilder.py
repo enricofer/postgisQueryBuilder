@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_postgisquerybuilder.ui'
 #
-# Created: Tue May 27 11:32:57 2014
+# Created: Mon Jul 21 13:00:14 2014
 #      by: PyQt4 UI code generator 4.10.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -197,7 +197,7 @@ class Ui_postgisQueryBuilder(object):
         self.JOIN.setGeometry(QtCore.QRect(220, 260, 74, 20))
         self.JOIN.setObjectName(_fromUtf8("JOIN"))
         self.JOINLabel = QtGui.QLabel(self.DefinitionTab)
-        self.JOINLabel.setGeometry(QtCore.QRect(220, 241, 71, 16))
+        self.JOINLabel.setGeometry(QtCore.QRect(220, 240, 71, 16))
         self.JOINLabel.setObjectName(_fromUtf8("JOINLabel"))
         self.tabWidget.addTab(self.DefinitionTab, _fromUtf8(""))
         self.QueryTab = QtGui.QWidget()
@@ -233,9 +233,16 @@ class Ui_postgisQueryBuilder(object):
         self.TableResult.horizontalHeader().setMinimumSectionSize(25)
         self.TableResult.verticalHeader().setDefaultSectionSize(25)
         self.tabWidget.addTab(self.TableTab, _fromUtf8(""))
+        self.tab = QtGui.QWidget()
+        self.tab.setObjectName(_fromUtf8("tab"))
+        self.historyLog = QtGui.QPlainTextEdit(self.tab)
+        self.historyLog.setGeometry(QtCore.QRect(5, 5, 605, 275))
+        self.historyLog.setReadOnly(True)
+        self.historyLog.setObjectName(_fromUtf8("historyLog"))
+        self.tabWidget.addTab(self.tab, _fromUtf8(""))
 
         self.retranslateUi(postgisQueryBuilder)
-        self.tabWidget.setCurrentIndex(1)
+        self.tabWidget.setCurrentIndex(4)
         QtCore.QMetaObject.connectSlotsByName(postgisQueryBuilder)
 
     def retranslateUi(self, postgisQueryBuilder):
@@ -273,4 +280,15 @@ class Ui_postgisQueryBuilder(object):
         self.checkCreateView.setText(_translate("postgisQueryBuilder", "As view", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.QueryTab), _translate("postgisQueryBuilder", "Query", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.TableTab), _translate("postgisQueryBuilder", "Table result", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("postgisQueryBuilder", "History", None))
+
+
+if __name__ == "__main__":
+    import sys
+    app = QtGui.QApplication(sys.argv)
+    postgisQueryBuilder = QtGui.QDialog()
+    ui = Ui_postgisQueryBuilder()
+    ui.setupUi(postgisQueryBuilder)
+    postgisQueryBuilder.show()
+    sys.exit(app.exec_())
 

@@ -58,7 +58,7 @@
     <enum>QTabWidget::Rounded</enum>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>4</number>
    </property>
    <property name="elideMode">
     <enum>Qt::ElideLeft</enum>
@@ -763,6 +763,24 @@
      <attribute name="verticalHeaderDefaultSectionSize">
       <number>25</number>
      </attribute>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="tab">
+    <attribute name="title">
+     <string>History</string>
+    </attribute>
+    <widget class="QPlainTextEdit" name="historyLog">
+     <property name="geometry">
+      <rect>
+       <x>5</x>
+       <y>5</y>
+       <width>605</width>
+       <height>275</height>
+      </rect>
+     </property>
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
     </widget>
    </widget>
   </widget>

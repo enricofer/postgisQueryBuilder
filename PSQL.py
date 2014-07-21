@@ -4,6 +4,7 @@ from PyQt4.QtSql import *
 from qgis.core import *
 
 import os.path
+import datetime
 
 class PSQL:
 
@@ -129,7 +130,7 @@ class PSQL:
         return schemas
 
 
-    def submitQuery(self,sql):
+    def submitQuery(self,name,sql):
         query = QSqlQuery(self.db)
         query.exec_(sql)
         result={}
@@ -148,7 +149,9 @@ class PSQL:
                 query.value(count)
                 for k in range(0,query.record().count()):
                     try:
-                        fields.append(query.value(k).toString())
+                        fields.append(unicode(query.value(k), errors='replace'))
+                    except TypeError:
+                        fields.append(query.value(k))
                     except AttributeError:
                         fields.append(str(query.value(k)))
                     if rows[0] == []:
@@ -159,6 +162,7 @@ class PSQL:
                 #print rows
                 rows += [fields]
             result["result"] = rows
+            self.queryLogger(name,sql)
         #print result
         return result
 
@@ -166,7 +170,7 @@ class PSQL:
         query = QSqlQuery(self.db)
         query.exec_(sql)
         if query.lastError().text() != " ":
-            self.queryLogger(sql)
+            self.queryLogger("SQL_COMMAND",sql)
         return query.lastError().text()
 
     def isTable(self,tName):
@@ -198,6 +202,7 @@ class PSQL:
         vlayer = QgsVectorLayer(uri.uri(), layer, "postgres")
         if vlayer.isValid():
             QgsMapLayerRegistry.instance().addMapLayer(vlayer,True)
+            #self.queryLogger(layerName,"VIEW LOAD")
         else:
             QMessageBox.information(None, "LAYER ERROR:", "The layer %s is not valid" % layer)
     
@@ -208,20 +213,20 @@ class PSQL:
         vlayer = QgsVectorLayer(uri.uri(), layerName, "postgres")
         if vlayer.isValid():
             QgsMapLayerRegistry.instance().addMapLayer(vlayer,True)
-            self.queryLogger(sql)
+            self.queryLogger(layerName,sql)
         else:
             QMessageBox.information(None, "LAYER ERROR:", "The layer %s is not valid" % layerName)
     
-    def queryLogger (self,sql):
+    def queryLogger (self,name,sql):
         out_file = open(os.path.join(os.path.dirname(__file__),"validSql.log"),"a")
-        out_file.write(sql+"\n")
+        out_file.write(str(datetime.datetime.now())+"\n"+name+"\n"+sql+"\n"+"\n")
         out_file.close()
     
     def tableResultGen(self,tableName,sql,tableSlot):
         if sql != "":
-            res=self.submitQuery(sql)
+            res=self.submitQuery(tableName,sql)
         else:
-            res=self.submitQuery('SELECT * FROM "%s"' % tableName)
+            res=self.submitQuery(tableName,'SELECT * FROM "%s"' % tableName)
         if res["result"] != []:
             tab=res["result"]
             print tab[0]
@@ -236,8 +241,19 @@ class PSQL:
             for column in range(0,len(tab[0])):
                 for row in range(1,len(tab)):
                     try:
-                        item = unicode(tab[row][column], errors='replace')
-                    except TypeError:
+                        item = tab[row][column].encode('utf-8')
+                    except AttributeError:
                         item = str(tab[row][column])
                     if item != None:
                         tableSlot.setItem(row-1, column, QTableWidgetItem(item))
+                        
+    def getLayerInfo(self,layer):
+        sql = 'SELECT COUNT(*) FROM "%s"' % (layer)
+        query = self.db.exec_(sql)
+        query.fist()
+        result="Total geometries: %s \n\n" % query.value(0)
+        sql = 'SELECT column_name, data_type FROM information_schema.columns WHERE table_name = "%s"' % (layer)
+        query = self.db.exec_(sql)
+        while (query.next()):
+            result+=query.value(0)+": "+query.value(1)+"\n"
+        return result

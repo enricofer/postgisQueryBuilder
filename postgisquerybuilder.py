@@ -87,6 +87,7 @@ class postgisQueryBuilder:
         self.dlg.RefreshButton.clicked.connect(self.layerRefresh)
         self.dlg.JOIN.activated.connect(self.setJOIN)
         self.dlg.FIELDb.activated.connect(self.setFIELDb)
+        self.dlg.tabWidget.currentChanged.connect(self.tabChangedHub)
 
     def eventsDisconnect(self):
         self.dlg.QueryType.activated.disconnect(self.setQueryType)
@@ -113,6 +114,7 @@ class postgisQueryBuilder:
         self.dlg.FIELDb.activated.disconnect(self.setFIELDb)
         self.dlg.fieldsListA.clicked.disconnect(self.setFieldsList)
         self.dlg.fieldsListB.clicked.disconnect(self.setFieldsList)
+        self.dlg.tabWidget.currentChanged.disconnect(self.tabChangedHub)
 
     def initGui(self):
         # Create action that will start plugin configuration
@@ -234,6 +236,19 @@ class postgisQueryBuilder:
     def setMaterialized(self):
         self.queryGen()
 
+    def tabChangedHub(self,tab):
+        if tab == 0:
+            self.updateLayerMenu()
+        elif tab == 4:
+            self.updateHistoryLog()
+
+    def updateHistoryLog(self):
+        historyFile = os.path.join(os.path.dirname(__file__),"validSql.log")
+        if os.path.exists(historyFile):
+            in_file = open(historyFile,"r")
+            self.dlg.historyLog.setPlainText(in_file.read())
+            self.dlg.historyLog.moveCursor(QTextCursor.End)
+    
     def populateComboBox(self,combo,list,predef,sort):
         #procedure to fill specified combobox with provided list
         combo.clear()
@@ -524,16 +539,22 @@ class postgisQueryBuilder:
     def populateLayerMenu(self):
         self.addListToFieldTable(self.dlg.LayerList,self.PSQL.getLayers())
 
+    def updateLayerMenu(self):
+        if self.dlg.DBSchema.currentText() != "Select schema":
+            self.addListToFieldTable(self.dlg.LayerList,self.PSQL.getLayers())
+
     def runQuery(self):
         #method to run generated query
-        self.PSQL.tableResultGen(self.dlg.LAYERa.currentText(),self.dlg.QueryResult.toPlainText(),self.dlg.TableResult)
-        self.dlg.tabWidget.setCurrentIndex(3)
-
         if self.dlg.AddToMap.checkState():
             if self.dlg.checkCreateView.checkState():
+                self.PSQL.submitQuery(self.querySet.getParameter("VIEWNAME"),self.dlg.QueryResult.toPlainText())
                 self.PSQL.loadView(self.querySet.getParameter("VIEWNAME"),self.querySet.getParameter("GEOMETRYFIELD"),self.querySet.getParameter("KEYFIELD"))
             else:
                 self.PSQL.loadSql(self.querySet.getParameter("VIEWNAME"),self.dlg.QueryResult.toPlainText(),self.querySet.getParameter("GEOMETRYFIELD"),self.querySet.getParameter("KEYFIELD"))
+        else:
+            self.PSQL.tableResultGen(self.dlg.LAYERa.currentText(),self.dlg.QueryResult.toPlainText(),self.dlg.TableResult)
+            self.dlg.tabWidget.setCurrentIndex(3)
+            
 
     def unload(self):
         # Remove the plugin menu item and icon
