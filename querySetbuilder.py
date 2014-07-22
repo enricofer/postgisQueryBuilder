@@ -91,7 +91,7 @@ class querySet():
             'http://www.postgresql.org/docs/8.2/static/sql-select.html',\
             ['LAYERa','FIELD','OPERATOR','CONDITION','fieldsListA'],\
             'SELECT [[FIELDSET]] FROM "[[SCHEMA]]"."[[LAYERa]]" WHERE [[FIELD]][[OPERATOR]][[CONDITION]]',\
-            '_[[FIELD]]_Selection_of_[[LAYERa]]'\
+            '_[[SIMPLEFIELD]]_Selection_of_[[LAYERa]]'\
             ],\
             'SELECT BY GEOMETRY':\
             [\
@@ -144,7 +144,7 @@ class querySet():
     
     def resetParameters(self):
         self.parameters = {"VIEWNAME":"","LAYERa":"","LAYERb":"",\
-                           "GEOMETRYFIELD":"the_geom","KEYFIELD":"ogc_fid","BUFFERRADIUS":"","FIELD":"","FIELDb":"","JOIN":"",\
+                           "GEOMETRYFIELD":"the_geom","KEYFIELD":"ogc_fid","BUFFERRADIUS":"","FIELD":"","SIMPLEFIELD":"","FIELDb":"","JOIN":"",\
                            "OPERATOR":"","CONDITION":"","SPATIALREL":None,\
                            "SPATIALRELNOT":" ","FIDFIELD":"","FIELDSET":"","GROUPBYSET":"", "ONLYGEOMSET":"", "MATERIALIZED":"","DISTANCEOP":"","DISTANCE":"","SCHEMA":""}
         self.currentQuery = ""
@@ -204,7 +204,7 @@ class querySet():
         return self.querySet[self.currentQuery][3]
     
     def setParameter(self,var,value):
-        print "set "+var+": ",value
+        #print "set "+var+": ",value
         if var in self.parameters:
             self.parameters[var] = value
             try:
@@ -225,10 +225,11 @@ class querySet():
                 self.parameters["GROUPBYSET"] += e+','
         test = None
         for f in self.fieldSet:
+            #print f[-len(self.parameters["KEYFIELD"])-1:-1]
             if (f[-len(self.parameters["KEYFIELD"])-1:-1] == self.parameters["KEYFIELD"]):
                 test = True
         if self.fieldSet==[] or not test:
-            self.parameters["FIELDSET"] += ("row_number() OVER () AS %s" % (self.parameters["KEYFIELD"]))
+            self.parameters["FIELDSET"] += ('row_number() OVER () AS "%s"' % (self.parameters["KEYFIELD"]))
         else:
             self.parameters["FIELDSET"]=self.parameters["FIELDSET"][:len(self.parameters["FIELDSET"])-1]
         if self.parameters["GROUPBYSET"]!="":

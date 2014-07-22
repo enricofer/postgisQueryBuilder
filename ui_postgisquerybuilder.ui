@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>639</width>
-    <height>363</height>
+    <height>371</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -23,7 +23,7 @@
    <property name="geometry">
     <rect>
      <x>440</x>
-     <y>330</y>
+     <y>335</y>
      <width>91</width>
      <height>25</height>
     </rect>
@@ -36,7 +36,7 @@
    <property name="geometry">
     <rect>
      <x>540</x>
-     <y>330</y>
+     <y>335</y>
      <width>90</width>
      <height>25</height>
     </rect>
@@ -58,7 +58,7 @@
     <enum>QTabWidget::Rounded</enum>
    </property>
    <property name="currentIndex">
-    <number>4</number>
+    <number>1</number>
    </property>
    <property name="elideMode">
     <enum>Qt::ElideLeft</enum>
@@ -67,52 +67,6 @@
     <attribute name="title">
      <string>Connection</string>
     </attribute>
-    <widget class="QLabel" name="KEYFIELDLabel">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>55</y>
-       <width>181</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Key field</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="GEOMETRYFIELDLabel">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>102</y>
-       <width>171</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Geometry field</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="GEOMETRYFIELD">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>121</y>
-       <width>180</width>
-       <height>20</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="KEYFIELD">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>74</y>
-       <width>180</width>
-       <height>20</height>
-      </rect>
-     </property>
-    </widget>
     <widget class="QLabel" name="PSQLConnectionLabel">
      <property name="geometry">
       <rect>
@@ -140,7 +94,7 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>164</y>
+       <y>75</y>
        <width>180</width>
        <height>22</height>
       </rect>
@@ -150,7 +104,7 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>145</y>
+       <y>55</y>
        <width>181</width>
        <height>16</height>
       </rect>
@@ -513,8 +467,8 @@
     <widget class="QPushButton" name="ButtonHelp">
      <property name="geometry">
       <rect>
-       <x>520</x>
-       <y>258</y>
+       <x>128</x>
+       <y>47</y>
        <width>90</width>
        <height>25</height>
       </rect>
@@ -631,6 +585,32 @@
       <string>Join type</string>
      </property>
     </widget>
+    <widget class="QPushButton" name="queryReadyButton">
+     <property name="geometry">
+      <rect>
+       <x>570</x>
+       <y>245</y>
+       <width>35</width>
+       <height>35</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>querybuilderlogo.png</normaloff>querybuilderlogo.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>30</width>
+       <height>30</height>
+      </size>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
     <zorder>SPATIALREL</zorder>
     <zorder>SPATIALRELNOT</zorder>
     <zorder>CONDITIONLabel</zorder>
@@ -660,6 +640,7 @@
     <zorder>FIELDb</zorder>
     <zorder>JOIN</zorder>
     <zorder>JOINLabel</zorder>
+    <zorder>queryReadyButton</zorder>
    </widget>
    <widget class="QWidget" name="QueryTab">
     <attribute name="title">
@@ -757,6 +738,9 @@
        <height>275</height>
       </rect>
      </property>
+     <property name="sortingEnabled">
+      <bool>true</bool>
+     </property>
      <attribute name="horizontalHeaderMinimumSectionSize">
       <number>25</number>
      </attribute>
@@ -783,6 +767,52 @@
      </property>
     </widget>
    </widget>
+  </widget>
+  <widget class="QLineEdit" name="KEYFIELD">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>340</y>
+     <width>90</width>
+     <height>20</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="KEYFIELDLabel">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>322</y>
+     <width>181</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Key field</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="GEOMETRYFIELDLabel">
+   <property name="geometry">
+    <rect>
+     <x>115</x>
+     <y>322</y>
+     <width>171</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Geometry field</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="GEOMETRYFIELD">
+   <property name="geometry">
+    <rect>
+     <x>115</x>
+     <y>340</y>
+     <width>90</width>
+     <height>20</height>
+    </rect>
+   </property>
   </widget>
  </widget>
  <resources/>

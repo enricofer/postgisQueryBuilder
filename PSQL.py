@@ -12,6 +12,8 @@ class PSQL:
         self.iface = iface
         self.schema = ""
 
+        
+        
     def getConnections(self):
         s = QSettings() 
         s.beginGroup("PostgreSQL/connections")
@@ -74,12 +76,11 @@ class PSQL:
 
     def testIfFieldExist(self,layer,fieldname):
         fields=self.getFieldsContent(layer)
-        print "testIffieldExists",layer,fields,fieldname
+        #print "testIffieldExists",layer,fields,fieldname
         test = None
         for f in fields:
             if (f == fieldname):
                 test = True
-        print test
         return test
 
     def refreshMaterializedView(self,mView):
@@ -110,12 +111,12 @@ class PSQL:
 
     def testgetFieldsContent(self,layer):
         sql="SELECT attname, typname ,relname FROM pg_attribute a JOIN pg_class c on a.attrelid = c.oid JOIN pg_type t on a.atttypid = t.oid WHERE relname = '%s' and attnum >= 1;" % layer
-        print sql
+        #print sql
         query = self.db.exec_(sql)
         fields=[]
         while (query.next()):
             fields.append(str(query.value(0)))
-        print fields
+        #print fields
         return fields
 
     def getFieldsType(self,layer,field):
@@ -247,7 +248,7 @@ class PSQL:
             res=self.submitQuery(tableName,'SELECT * FROM "%s"' % tableName)
         if res["result"] != []:
             tab=res["result"]
-            print tab[0]
+            #print tab[0]
             print len(tab[0])
             tableSlot.setColumnCount(len(tab[0]))
             tableSlot.setRowCount(len(tab)-1)
@@ -275,3 +276,4 @@ class PSQL:
         while (query.next()):
             result+=query.value(0)+": "+query.value(1)+"\n"
         return result
+        

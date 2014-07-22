@@ -16,3 +16,16 @@ Moved to Database menu.
 Added Layer operation panel
 Added Spatial join query type
 Added Analytical join query type
+
+v1.4
+Fixed schema definition issues
+Fixed attribute layer name issues
+Fixed tables unicode decoding error
+Fixed key and geometry defaults definition issues
+Fixed ui implementation issues
+Fixed non standard tcp port database connection issue
+Default to schema "public" if available
+Reload of available layers when connection tab get focus
+Added history tab of valid queries
+Key field and geometry field slots moved to the bottom of dialog view
+New tutorial on youtube: http://youtu.be/XsNILLhVS7I

@@ -88,6 +88,10 @@ class postgisQueryBuilder:
         self.dlg.JOIN.activated.connect(self.setJOIN)
         self.dlg.FIELDb.activated.connect(self.setFIELDb)
         self.dlg.tabWidget.currentChanged.connect(self.tabChangedHub)
+        self.dlg.KEYFIELD.textChanged.connect(self.keyGeomFieldsChanged)
+        self.dlg.GEOMETRYFIELD.textChanged.connect(self.keyGeomFieldsChanged)
+        self.dlg.queryReadyButton.clicked.connect(self.focusOnQuery)
+        
 
     def eventsDisconnect(self):
         self.dlg.QueryType.activated.disconnect(self.setQueryType)
@@ -115,6 +119,8 @@ class postgisQueryBuilder:
         self.dlg.fieldsListA.clicked.disconnect(self.setFieldsList)
         self.dlg.fieldsListB.clicked.disconnect(self.setFieldsList)
         self.dlg.tabWidget.currentChanged.disconnect(self.tabChangedHub)
+        self.dlg.KEYFIELD.textChanged.disconnect(self.keyGeomFieldsChanged)
+        self.dlg.GEOMETRYFIELD.textChanged.disconnect(self.keyGeomFieldsChanged)
 
     def initGui(self):
         # Create action that will start plugin configuration
@@ -236,14 +242,32 @@ class postgisQueryBuilder:
     def setMaterialized(self):
         self.queryGen()
 
+
+    def keyGeomFieldsChanged(self):
+        self.querySet.setParameter("GEOMETRYFIELD",self.dlg.GEOMETRYFIELD.text())
+        self.querySet.setParameter("KEYFIELD",self.dlg.KEYFIELD.text())
+        test = None
+        try:
+            test = self.querySet.testQueryParametersCheckList()
+        except:
+            pass
+        if test:
+            self.queryGen()
+
+
     def tabChangedHub(self,tab):
         if tab == 0:
-            self.updateLayerMenu()
-        elif tab==1 or tab==2:
-            self.querySet.setParameter("GEOMETRYFIELD",self.dlg.GEOMETRYFIELD.text())
-            self.querySet.setParameter("KEYFIELD",self.dlg.KEYFIELD.text())
+            try:
+                self.updateLayerMenu()
+            except:
+                pass
+        if tab == 2:
+            self.keyGeomFieldsChanged()
         elif tab == 4:
             self.updateHistoryLog()
+
+    def focusOnQuery(self):
+        self.dlg.tabWidget.setCurrentIndex(2)
 
     def updateHistoryLog(self):
         historyFile = os.path.join(os.path.dirname(__file__),"validSql.log")
@@ -334,6 +358,7 @@ class postgisQueryBuilder:
         if self.dlg.FIELD.currentText()[:6] == "Select":
             return
         self.querySet.setParameter("FIELD",'"'+self.dlg.LAYERa.currentText()+'"."'+self.dlg.FIELD.currentText()+'"')
+        self.querySet.setParameter("SIMPLEFIELD",self.dlg.FIELD.currentText())
         fType = self.PSQL.getFieldsType(self.querySet.getParameter("LAYERa"),self.dlg.FIELD.currentText())
         fType = fType[:4]
         #print fType
@@ -422,6 +447,7 @@ class postgisQueryBuilder:
         self.enableDialogSlot("QueryResult")
         self.enableDialogSlot("checkCreateView")
         self.enableDialogSlot("AddToMap")
+        self.dlg.queryReadyButton.show()
         qName = self.querySet.getNameParsed()
         self.dlg.QueryName.setText(qName)
         self.querySet.setParameter("VIEWNAME", qName)
@@ -456,6 +482,8 @@ class postgisQueryBuilder:
         self.eventsDisconnect()
         self.clearAllDialogs()
         self.querySet.resetParameters()
+        self.dlg.queryReadyButton.hide()
+        self.hideDialogSlot("queryReadyButton")
         self.disableQueryDefSlot()
         self.hideQueryDefSlot()
         try:
@@ -510,6 +538,7 @@ class postgisQueryBuilder:
         conn = self.PSQL.getConnections()
         self.populateComboBox(self.dlg.PSQLConnection,conn,"Select connection",True)
         self.hideQueryDefSlot()
+        self.dlg.queryReadyButton.hide()
         self.dlg.PSQLConnection.activated.connect(self.setConnection)
 
     def closeDialog(self):
@@ -524,8 +553,14 @@ class postgisQueryBuilder:
     def setConnection(self):
         self.PSQL.setConnection(self.dlg.PSQLConnection.currentText())
         #print "SCHEMAS",self.PSQL.getSchemas()
-        self.populateComboBox(self.dlg.DBSchema,self.PSQL.getSchemas(),"Select schema",True)
+        schemas = self.PSQL.getSchemas()
+        self.populateComboBox(self.dlg.DBSchema,schemas,"Select schema",True)
         self.dlg.DBSchema.activated.connect(self.loadPSQLLayers)
+        for r in range (0,self.dlg.DBSchema.count()):
+            if self.dlg.DBSchema.itemText(r) == "public":
+                self.dlg.DBSchema.setCurrentIndex(r)
+                self.dlg.DBSchema.removeItem(0)
+                self.loadPSQLLayers()
 
 
     def loadPSQLLayers(self):
@@ -555,7 +590,6 @@ class postgisQueryBuilder:
         else:
             self.PSQL.tableResultGen(self.dlg.LAYERa.currentText(),self.dlg.QueryResult.toPlainText(),self.dlg.TableResult)
             self.dlg.tabWidget.setCurrentIndex(3)
-            
 
     def unload(self):
         # Remove the plugin menu item and icon
