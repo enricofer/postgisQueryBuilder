@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>639</width>
-    <height>935</height>
+    <height>555</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -58,7 +58,7 @@
     <enum>QFrame::NoFrame</enum>
    </property>
    <property name="currentIndex">
-    <number>4</number>
+    <number>3</number>
    </property>
    <widget class="QWidget" name="ConnectionSlot">
     <property name="geometry">
@@ -166,14 +166,6 @@
     </widget>
    </widget>
    <widget class="QWidget" name="availableLayersSlot">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>621</width>
-      <height>231</height>
-     </rect>
-    </property>
     <attribute name="label">
      <string>Available layers</string>
     </attribute>
@@ -252,6 +244,18 @@
       </rect>
      </property>
     </widget>
+    <zorder>label_2</zorder>
+    <zorder>GetInfoButton</zorder>
+    <zorder>DeleteButton</zorder>
+    <zorder>AddToMapButton</zorder>
+    <zorder>RefreshButton</zorder>
+    <zorder>LayerList</zorder>
+    <zorder>label_2</zorder>
+    <zorder>GetInfoButton</zorder>
+    <zorder>DeleteButton</zorder>
+    <zorder>RefreshButton</zorder>
+    <zorder>AddToMapButton</zorder>
+    <zorder>LayerList</zorder>
    </widget>
    <widget class="QWidget" name="queryTypeSlot">
     <property name="geometry">
@@ -265,11 +269,36 @@
     <attribute name="label">
      <string>Query type</string>
     </attribute>
+    <widget class="QLabel" name="Helper">
+     <property name="geometry">
+      <rect>
+       <x>230</x>
+       <y>0</y>
+       <width>381</width>
+       <height>61</height>
+      </rect>
+     </property>
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
     <widget class="QLabel" name="label">
      <property name="geometry">
       <rect>
-       <x>340</x>
-       <y>10</y>
+       <x>6</x>
+       <y>24</y>
        <width>131</width>
        <height>16</height>
       </rect>
@@ -297,8 +326,8 @@
     <widget class="QPushButton" name="ButtonHelp">
      <property name="geometry">
       <rect>
-       <x>230</x>
-       <y>0</y>
+       <x>129</x>
+       <y>37</y>
        <width>90</width>
        <height>25</height>
       </rect>
@@ -309,14 +338,6 @@
     </widget>
    </widget>
    <widget class="QWidget" name="queryDefinitionSlot">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>621</width>
-      <height>231</height>
-     </rect>
-    </property>
     <attribute name="label">
      <string>Query definition</string>
     </attribute>
@@ -324,7 +345,7 @@
      <property name="geometry">
       <rect>
        <x>310</x>
-       <y>191</y>
+       <y>170</y>
        <width>151</width>
        <height>16</height>
       </rect>
@@ -337,7 +358,7 @@
      <property name="geometry">
       <rect>
        <x>5</x>
-       <y>43</y>
+       <y>4</y>
        <width>151</width>
        <height>16</height>
       </rect>
@@ -350,7 +371,7 @@
      <property name="geometry">
       <rect>
        <x>220</x>
-       <y>190</y>
+       <y>169</y>
        <width>71</width>
        <height>16</height>
       </rect>
@@ -363,7 +384,7 @@
      <property name="geometry">
       <rect>
        <x>5</x>
-       <y>191</y>
+       <y>170</y>
        <width>281</width>
        <height>16</height>
       </rect>
@@ -376,7 +397,7 @@
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>210</y>
+       <y>189</y>
        <width>113</width>
        <height>20</height>
       </rect>
@@ -386,7 +407,7 @@
      <property name="geometry">
       <rect>
        <x>310</x>
-       <y>210</y>
+       <y>189</y>
        <width>50</width>
        <height>18</height>
       </rect>
@@ -411,7 +432,7 @@
      <property name="geometry">
       <rect>
        <x>5</x>
-       <y>60</y>
+       <y>21</y>
        <width>300</width>
        <height>20</height>
       </rect>
@@ -421,7 +442,7 @@
      <property name="geometry">
       <rect>
        <x>5</x>
-       <y>210</y>
+       <y>189</y>
        <width>170</width>
        <height>20</height>
       </rect>
@@ -431,7 +452,7 @@
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>191</y>
+       <y>170</y>
        <width>151</width>
        <height>16</height>
       </rect>
@@ -444,9 +465,9 @@
      <property name="geometry">
       <rect>
        <x>5</x>
-       <y>80</y>
+       <y>44</y>
        <width>300</width>
-       <height>111</height>
+       <height>121</height>
       </rect>
      </property>
      <property name="minimumSize">
@@ -460,7 +481,7 @@
      <property name="geometry">
       <rect>
        <x>5</x>
-       <y>210</y>
+       <y>189</y>
        <width>214</width>
        <height>20</height>
       </rect>
@@ -470,9 +491,9 @@
      <property name="geometry">
       <rect>
        <x>310</x>
-       <y>80</y>
+       <y>44</y>
        <width>300</width>
-       <height>111</height>
+       <height>121</height>
       </rect>
      </property>
      <property name="sizePolicy">
@@ -498,7 +519,7 @@
      <property name="geometry">
       <rect>
        <x>300</x>
-       <y>191</y>
+       <y>170</y>
        <width>201</width>
        <height>16</height>
       </rect>
@@ -511,7 +532,7 @@
      <property name="geometry">
       <rect>
        <x>5</x>
-       <y>191</y>
+       <y>170</y>
        <width>281</width>
        <height>16</height>
       </rect>
@@ -524,7 +545,7 @@
      <property name="geometry">
       <rect>
        <x>224</x>
-       <y>210</y>
+       <y>189</y>
        <width>81</width>
        <height>20</height>
       </rect>
@@ -534,7 +555,7 @@
      <property name="geometry">
       <rect>
        <x>5</x>
-       <y>210</y>
+       <y>189</y>
        <width>81</width>
        <height>20</height>
       </rect>
@@ -544,7 +565,7 @@
      <property name="geometry">
       <rect>
        <x>5</x>
-       <y>191</y>
+       <y>170</y>
        <width>201</width>
        <height>16</height>
       </rect>
@@ -557,7 +578,7 @@
      <property name="geometry">
       <rect>
        <x>310</x>
-       <y>43</y>
+       <y>4</y>
        <width>161</width>
        <height>16</height>
       </rect>
@@ -570,7 +591,7 @@
      <property name="geometry">
       <rect>
        <x>5</x>
-       <y>210</y>
+       <y>189</y>
        <width>300</width>
        <height>20</height>
       </rect>
@@ -580,7 +601,7 @@
      <property name="geometry">
       <rect>
        <x>310</x>
-       <y>60</y>
+       <y>21</y>
        <width>300</width>
        <height>20</height>
       </rect>
@@ -590,7 +611,7 @@
      <property name="geometry">
       <rect>
        <x>224</x>
-       <y>191</y>
+       <y>170</y>
        <width>98</width>
        <height>16</height>
       </rect>
@@ -603,7 +624,7 @@
      <property name="geometry">
       <rect>
        <x>300</x>
-       <y>210</y>
+       <y>189</y>
        <width>214</width>
        <height>20</height>
       </rect>
@@ -613,7 +634,7 @@
      <property name="geometry">
       <rect>
        <x>220</x>
-       <y>210</y>
+       <y>189</y>
        <width>74</width>
        <height>20</height>
       </rect>
@@ -623,7 +644,7 @@
      <property name="geometry">
       <rect>
        <x>570</x>
-       <y>195</y>
+       <y>174</y>
        <width>35</width>
        <height>35</height>
       </rect>
@@ -649,7 +670,7 @@
      <property name="geometry">
       <rect>
        <x>310</x>
-       <y>210</y>
+       <y>189</y>
        <width>151</width>
        <height>20</height>
       </rect>
@@ -662,7 +683,7 @@
      <property name="geometry">
       <rect>
        <x>5</x>
-       <y>191</y>
+       <y>170</y>
        <width>98</width>
        <height>16</height>
       </rect>
@@ -671,77 +692,18 @@
       <string>Operator</string>
      </property>
     </widget>
-    <widget class="QLabel" name="Helper">
-     <property name="geometry">
-      <rect>
-       <x>0</x>
-       <y>0</y>
-       <width>621</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="autoFillBackground">
-      <bool>false</bool>
-     </property>
-     <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-     </property>
-     <property name="wordWrap">
-      <bool>true</bool>
-     </property>
-    </widget>
    </widget>
    <widget class="QWidget" name="filterRecordSlot">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>621</width>
-      <height>231</height>
-     </rect>
-    </property>
     <attribute name="label">
      <string>Filter records</string>
     </attribute>
-    <widget class="QTableWidget" name="tableWidget">
-     <property name="geometry">
-      <rect>
-       <x>0</x>
-       <y>10</y>
-       <width>621</width>
-       <height>192</height>
-      </rect>
-     </property>
-    </widget>
    </widget>
    <widget class="QWidget" name="orderingGroupingSlot">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>621</width>
-      <height>231</height>
-     </rect>
-    </property>
     <attribute name="label">
      <string>Ordering and grouping</string>
     </attribute>
    </widget>
    <widget class="QWidget" name="viewDefinitionSlot">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>621</width>
-      <height>231</height>
-     </rect>
-    </property>
     <attribute name="label">
      <string>View definition</string>
     </attribute>
@@ -773,14 +735,6 @@
     </widget>
    </widget>
    <widget class="QWidget" name="SqlCodeSlot">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>621</width>
-      <height>231</height>
-     </rect>
-    </property>
     <attribute name="label">
      <string>SQL code</string>
     </attribute>
@@ -806,14 +760,6 @@
     </widget>
    </widget>
    <widget class="QWidget" name="tableResultSlot">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>621</width>
-      <height>231</height>
-     </rect>
-    </property>
     <attribute name="label">
      <string>Table result</string>
     </attribute>
@@ -838,14 +784,6 @@
     </widget>
    </widget>
    <widget class="QWidget" name="historySlot">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>621</width>
-      <height>231</height>
-     </rect>
-    </property>
     <attribute name="label">
      <string>History</string>
     </attribute>

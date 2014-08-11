@@ -160,7 +160,7 @@ class postgisQueryBuilder:
             #take only selected attributes by checkbox
             if rowCheckbox.checkState() == Qt.Checked:
                 self.PSQL.tableResultGen(rowCheckbox.text(),"",self.dlg.TableResult)
-                self.dlg.tabWidget.setCurrentIndex(3)
+                self.dlg.tabWidget.setCurrentIndex(8)
                 self.uncheckList(self.dlg.LayerList)
                 break
 
@@ -200,27 +200,27 @@ class postgisQueryBuilder:
             self.dlg.LayerList.item(row).setCheckState(Qt.Unchecked);
 
     def disableDialogSlot(self,slot):
-        for child in self.dlg.tabWidget.widget(1).children():
+        for child in self.dlg.tabWidget.widget(3).children():
             if child.objectName() == slot:
                 child.setDisabled(True)
 
     def hideDialogSlot(self,slot):
-        for child in self.dlg.tabWidget.widget(1).children():
+        for child in self.dlg.tabWidget.widget(3).children():
             if child.objectName() == slot:
                 child.hide()
 
     def showDialogSlot(self,slot):
-        for child in self.dlg.tabWidget.widget(1).children():
+        for child in self.dlg.tabWidget.widget(3).children():
             if child.objectName() == slot:
                 child.show()
 
     def enableDialogSlot(self,slot):
-        for child in self.dlg.tabWidget.widget(1).children():
+        for child in self.dlg.tabWidget.widget(3).children():
             if child.objectName() == slot:
                 child.setEnabled(True)
 
     def clearDialogSlot(self,slot):
-        for child in self.dlg.tabWidget.widget(1).children():
+        for child in self.dlg.tabWidget.widget(3).children():
             if child.objectName() == slot:
                 child.clear()
 
@@ -261,13 +261,13 @@ class postgisQueryBuilder:
                 self.updateLayerMenu()
             except:
                 pass
-        if tab == 2:
+        if tab == 3:
             self.keyGeomFieldsChanged()
-        elif tab == 4:
+        elif tab == 9:
             self.updateHistoryLog()
 
     def focusOnQuery(self):
-        self.dlg.tabWidget.setCurrentIndex(2)
+        self.dlg.tabWidget.setCurrentIndex(7)
 
     def updateHistoryLog(self):
         historyFile = os.path.join(os.path.dirname(__file__),"validSql.log")
@@ -589,7 +589,7 @@ class postgisQueryBuilder:
                 self.PSQL.loadSql(self.querySet.getParameter("VIEWNAME"),self.dlg.QueryResult.toPlainText(),self.querySet.getParameter("GEOMETRYFIELD"),self.querySet.getParameter("KEYFIELD"))
         else:
             self.PSQL.tableResultGen(self.dlg.LAYERa.currentText(),self.dlg.QueryResult.toPlainText(),self.dlg.TableResult)
-            self.dlg.tabWidget.setCurrentIndex(3)
+            self.dlg.tabWidget.setCurrentIndex(8)
 
     def unload(self):
         # Remove the plugin menu item and icon
