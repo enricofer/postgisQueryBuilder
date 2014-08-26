@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>639</width>
-    <height>935</height>
+    <height>556</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -709,7 +709,7 @@
     <attribute name="label">
      <string>Filter records</string>
     </attribute>
-    <widget class="QTableWidget" name="tableWidget">
+    <widget class="QTableWidget" name="filterTable">
      <property name="geometry">
       <rect>
        <x>0</x>
@@ -718,6 +718,15 @@
        <height>192</height>
       </rect>
      </property>
+     <property name="showGrid">
+      <bool>false</bool>
+     </property>
+     <attribute name="horizontalHeaderVisible">
+      <bool>false</bool>
+     </attribute>
+     <attribute name="verticalHeaderVisible">
+      <bool>false</bool>
+     </attribute>
     </widget>
    </widget>
    <widget class="QWidget" name="orderingGroupingSlot">

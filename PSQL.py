@@ -87,13 +87,17 @@ class PSQL:
         layers=[]
         exclusionList = ["spatial_ref_sys","geography_columns","geometry_columns","raster_columns","raster_overviews"]
         while (query.next()):
-            if not query.value(0) in exclusionList : layers.append(query.value(0))
+            if not query.value(0) in exclusionList : 
+                if self.getGeometryField(query.value(0)) != -1:
+                    layers.append(query.value(0))
         sql="SELECT matviewname FROM pg_matviews where schemaname='%s';"  % self.schema
         query = self.db.exec_(sql)
         while (query.next()):
-            layers.append(str(query.value(0)))
+            if self.getGeometryField(query.value(0)) != -1:
+                layers.append(query.value(0))
         layers.sort()
         return layers
+        
 
     def testIfFieldExist(self,layer,fieldname):
         fields=self.getFieldsContent(layer)
@@ -148,13 +152,20 @@ class PSQL:
         #print res
         return res
 
+    def getGeometryField(self,layer):
+        fields = self.getFieldsContent(layer)
+        for field in fields:
+            if self.getFieldsType(layer,field)== 'geometry':
+                return field
+        return -1
+
     def getUniqeValues(self,layer,field,range):
         sql = 'SELECT DISTINCT %s FROM "%s"' % (field,layer)
         query = self.db.exec_(sql)
         values = []
         conta = 0
         while (query.next()):
-            values.append(str(query.value(0)))
+            values.append(query.value(0))
             if conta == range:
                 return values
                 pass

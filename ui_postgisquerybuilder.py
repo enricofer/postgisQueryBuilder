@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'D:\documenti\dev\postgisQueryBuilder\ui_postgisquerybuilder.ui'
+# Form implementation generated from reading ui file 'C:\Users\DEMO\Documents\dev\postgisQueryBuilder\ui_postgisquerybuilder.ui'
 #
-# Created: Mon Aug 11 16:54:32 2014
-#      by: PyQt4 UI code generator 4.10.3
+# Created: Thu Aug 14 17:03:02 2014
+#      by: PyQt4 UI code generator 4.10.2
 #
 # WARNING! All changes made in this file will be lost!
 
 from PyQt4 import QtCore, QtGui
+from TableSet import tableSet
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -26,7 +27,7 @@ except AttributeError:
 class Ui_postgisQueryBuilder(object):
     def setupUi(self, postgisQueryBuilder):
         postgisQueryBuilder.setObjectName(_fromUtf8("postgisQueryBuilder"))
-        postgisQueryBuilder.resize(639, 935)
+        postgisQueryBuilder.resize(639, 556)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Ignored, QtGui.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -221,6 +222,14 @@ class Ui_postgisQueryBuilder(object):
         self.filterRecordSlot = QtGui.QWidget()
         self.filterRecordSlot.setGeometry(QtCore.QRect(0, 0, 621, 231))
         self.filterRecordSlot.setObjectName(_fromUtf8("filterRecordSlot"))
+        self.filterTable = tableSet(self.filterRecordSlot)
+        self.filterTable.setGeometry(QtCore.QRect(0, 10, 621, 192))
+        self.filterTable.setShowGrid(False)
+        self.filterTable.setObjectName(_fromUtf8("filterTable"))
+        self.filterTable.setColumnCount(0)
+        self.filterTable.setRowCount(0)
+        self.filterTable.horizontalHeader().setVisible(False)
+        self.filterTable.verticalHeader().setVisible(False)
         self.tabWidget.addItem(self.filterRecordSlot, _fromUtf8(""))
         self.orderingGroupingSlot = QtGui.QWidget()
         self.orderingGroupingSlot.setGeometry(QtCore.QRect(0, 0, 621, 231))
@@ -274,7 +283,7 @@ class Ui_postgisQueryBuilder(object):
         self.ButtonRun.setObjectName(_fromUtf8("ButtonRun"))
 
         self.retranslateUi(postgisQueryBuilder)
-        self.tabWidget.setCurrentIndex(2)
+        self.tabWidget.setCurrentIndex(4)
         QtCore.QMetaObject.connectSlotsByName(postgisQueryBuilder)
 
     def retranslateUi(self, postgisQueryBuilder):
@@ -319,14 +328,4 @@ class Ui_postgisQueryBuilder(object):
         self.tabWidget.setItemText(self.tabWidget.indexOf(self.historySlot), _translate("postgisQueryBuilder", "History", None))
         self.AddToMap.setText(_translate("postgisQueryBuilder", "Add to map", None))
         self.ButtonRun.setText(_translate("postgisQueryBuilder", "Run query", None))
-
-
-if __name__ == "__main__":
-    import sys
-    app = QtGui.QApplication(sys.argv)
-    postgisQueryBuilder = QtGui.QDialog()
-    ui = Ui_postgisQueryBuilder()
-    ui.setupUi(postgisQueryBuilder)
-    postgisQueryBuilder.show()
-    sys.exit(app.exec_())
 

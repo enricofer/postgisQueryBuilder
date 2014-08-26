@@ -30,6 +30,7 @@ import resources_rc
 # Import the code for the dialog
 from postgisquerybuilderdialog import postgisQueryBuilderDialog
 from querySetbuilder import querySet
+from TableSet import tableSet
 from PSQL import PSQL
 from PyQt4 import QtGui
 
@@ -256,6 +257,7 @@ class postgisQueryBuilder:
 
 
     def tabChangedHub(self,tab):
+        print "TAB:",tab
         if tab == 0:
             try:
                 self.updateLayerMenu()
@@ -305,6 +307,7 @@ class postgisQueryBuilder:
         if not self.PSQL.testIfFieldExist(self.dlg.LAYERa.currentText(),self.querySet.getParameter("KEYFIELD")):
             self.querySet.setFIDFIELD()
         self.addListToFieldTable(self.dlg.fieldsListA,self.PSQL.getFieldsContent(self.dlg.LAYERa.currentText()))
+        self.populateFilterTable()
         
 
     def setLAYERb(self):
@@ -552,7 +555,7 @@ class postgisQueryBuilder:
 
     def setConnection(self):
         self.PSQL.setConnection(self.dlg.PSQLConnection.currentText())
-        #print "SCHEMAS",self.PSQL.getSchemas()
+        print "SCHEMAS",self.PSQL.getSchemas()
         schemas = self.PSQL.getSchemas()
         self.populateComboBox(self.dlg.DBSchema,schemas,"Select schema",True)
         self.dlg.DBSchema.activated.connect(self.loadPSQLLayers)
@@ -571,6 +574,12 @@ class postgisQueryBuilder:
             #self.dlg.tabWidget.setCurrentIndex(1)
             self.querySet.setSchema(self.dlg.DBSchema.currentText())
             self.populateLayerMenu()
+
+    def populateFilterTable(self):
+        self.dlg.filterTable.populateFilterTable(self.PSQL,self.dlg.LAYERa.currentText())
+
+    def testSignal(self,v1,v2):
+        print "catch:", v1,v2
 
     def populateLayerMenu(self):
         self.addListToFieldTable(self.dlg.LayerList,self.PSQL.getLayers())

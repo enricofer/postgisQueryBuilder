@@ -1,0 +1,2 @@
+pyrcc4 -o "C:\Users\DEMO\Documents\dev\postgisQueryBuilder\resources_rc.py" "C:\Users\DEMO\Documents\dev\postgisQueryBuilder\resources.qrc"
+pyuic4 -o "C:\Users\DEMO\Documents\dev\postgisQueryBuilder\ui_postgisquerybuilder.py" "C:\Users\DEMO\Documents\dev\postgisQueryBuilder\ui_postgisquerybuilder.ui"
