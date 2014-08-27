@@ -150,7 +150,7 @@ class tableSet(QtGui.QTableWidget):
         controlItem.addItem("Attribute filter")
         controlItem.addItem("Spatial filter")
         controlItem.addItem("NOT")
-        controlItem.addItem(")")
+        controlItem.addItem("(")
         controlItem.addItem("")
         controlItem.addItem("Delete")
         controlItem.addItem("Insert")
@@ -289,11 +289,12 @@ class tableSet(QtGui.QTableWidget):
                 if previous == "QUERY":
                     print "malformed: QUERY"
                     return None
-                    previous = "QUERY"
+                previous = "QUERY"
             elif self.cellWidget(row,1).currentText() == 'AND' or self.cellWidget(row,1).currentText() == 'OR':
                 if previous == "AND/OR":
                     print "malformed: AND/OR"
                     return None
+                previous = "AND/OR"
             for column in range (1,3):
                 if self.cellWidget(row,column).currentText()[:6] == 'Select':
                     print "malformed: Select"
@@ -305,11 +306,9 @@ class tableSet(QtGui.QTableWidget):
 
 
     def getWhereStatement(self):
-        whereStatement = "WHERE "
-        if self.testIfSintaxOk():
-            whereStatement = "WHERE "
-        else:
-            print ""
+        whereStatement = ""
+        if not(self.testIfSintaxOk() and self.rowCount()>1):
+            return ""
         for row in range(0,self.rowCount()-1):
             if self.cellWidget(row,2).currentText() in ['=','>','<','>=','<=','<>']:
                 fType = self.PSQL.getFieldsType(self.layerQuery,self.cellWidget(row,1).currentText())
@@ -328,6 +327,8 @@ class tableSet(QtGui.QTableWidget):
                                                                 self.PSQL.getGeometryField(self.cellWidget(row,3).currentText()))
             else:
                 whereStatement += self.cellWidget(row,1).currentText()+" "
+        if whereStatement != "": 
+            whereStatement = " WHERE " + whereStatement
         return whereStatement
 
 
@@ -341,8 +342,6 @@ class tableSet(QtGui.QTableWidget):
         if cbox.column == 1:
             self.uniqueValuesLoad(cbox.row,3,self.PSQL.getUniqeValues(self.layerQuery,self.cellWidget(cbox.row,1).currentText(),50))
         if cbox.column == 0:
-            if self.testIfSintaxOk(): print "malformed query"
-            else: print "wellformed query"
             if cbox.currentText() == "Attribute filter":
                 nextAction = "bool"
                 self.setCellWidget(cbox.row,1,self.fieldsLoad(cbox.row,1))
@@ -384,6 +383,11 @@ class tableSet(QtGui.QTableWidget):
             elif cbox.currentText() == "Insert":
                 if cbox.row != (self.rowCount()-1):
                     self.insRow(cbox.row)
+            elif cbox.currentText() == "":
+                if self.testIfSintaxOk(): print "wellformed query:"
+                else: print "malformed query:"
+                print self.getWhereStatement()
+                return None
             if cbox.row == (self.rowCount()-1):
                 self.insertRow((self.rowCount()))
                 if nextAction == "filter/group":

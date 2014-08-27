@@ -147,47 +147,40 @@ class postgisQueryBuilder:
         self.dlg.tabWidget.setCurrentIndex(0)
         #self.recurseChild(self.dlg,"")
 
+#    def layerAddToMap(self):
+#        for rowList in range(0,self.dlg.LayerList.count()):
+#            rowCheckbox = self.dlg.LayerList.item(rowList)
+#            #take only selected attributes by checkbox
+#            if rowCheckbox.checkState() == Qt.Checked:
+#                self.PSQL.loadView(rowCheckbox.text(),self.dlg.GEOMETRYFIELD.text(),self.dlg.KEYFIELD.text())
+#        self.uncheckList(self.dlg.LayerList)
+        
     def layerAddToMap(self):
-        for rowList in range(0,self.dlg.LayerList.count()):
-            rowCheckbox = self.dlg.LayerList.item(rowList)
-            #take only selected attributes by checkbox
-            if rowCheckbox.checkState() == Qt.Checked:
-                self.PSQL.loadView(rowCheckbox.text(),self.dlg.GEOMETRYFIELD.text(),self.dlg.KEYFIELD.text())
-        self.uncheckList(self.dlg.LayerList)
+        for rowSel in (self.dlg.LayerList.selectedItems()):
+            self.PSQL.loadView(rowSel.text(),self.dlg.GEOMETRYFIELD.text(),self.dlg.KEYFIELD.text())
 
     def layerGetTable(self):
-        for rowList in range(0,self.dlg.LayerList.count()):
-            rowCheckbox = self.dlg.LayerList.item(rowList)
-            #take only selected attributes by checkbox
-            if rowCheckbox.checkState() == Qt.Checked:
-                self.PSQL.tableResultGen(rowCheckbox.text(),"",self.dlg.TableResult)
+        for rowSel in (self.dlg.LayerList.selectedItems()):
+                self.PSQL.tableResultGen(rowSel.text(),"",self.dlg.TableResult)
                 self.dlg.tabWidget.setCurrentIndex(8)
-                self.uncheckList(self.dlg.LayerList)
                 break
 
     def layerDelete(self):
-        for rowList in range(0,self.dlg.LayerList.count()):
-            rowCheckbox = self.dlg.LayerList.item(rowList)
-            #take only selected attributes by checkbox
-            if rowCheckbox.checkState() == Qt.Checked:
-                msg = "Are you sure you want to delete layer '%s' ?" % rowCheckbox.text()
-                reply = QMessageBox.question(None, 'Message', msg, QMessageBox.Yes, QMessageBox.No)
-                if reply == QMessageBox.Yes:
-                    result = self.PSQL.deleteLayer(rowCheckbox.text())
-                    if result != "":
-                        QMessageBox.information(None, "ERROR:", result)
-                    else:
-                        print "DELETED", rowCheckbox.text()
+        for rowSel in (self.dlg.LayerList.selectedItems()):
+            msg = "Are you sure you want to delete layer '%s' ?" % rowSel.text()
+            reply = QMessageBox.question(None, 'Message', msg, QMessageBox.Yes, QMessageBox.No)
+            if reply == QMessageBox.Yes:
+                result = self.PSQL.deleteLayer(rowSel.text())
+                if result != "":
+                    QMessageBox.information(None, "ERROR:", result)
+                else:
+                    print "DELETED", rowSel.text()
         self.populateLayerMenu()
 
     def layerRefresh(self):
-        for rowList in range(0,self.dlg.LayerList.count()):
-            rowCheckbox = self.dlg.LayerList.item(rowList)
-            #take only selected attributes by checkbox
-            if rowCheckbox.checkState() == Qt.Checked:
-                if self.PSQL.isMaterializedView(rowCheckbox.text()): 
-                    print self.PSQL.refreshMaterializedView(rowCheckbox.text())
-        self.uncheckList(self.dlg.LayerList)
+        for rowSel in (self.dlg.LayerList.selectedItems()):
+            if self.PSQL.isMaterializedView(rowSel.text()): 
+                print self.PSQL.refreshMaterializedView(rowSel.text())
 
     def recurseChild(self,slot,tab):
         # for testing: prints qt object tree
@@ -265,8 +258,16 @@ class postgisQueryBuilder:
                 pass
         if tab == 3:
             self.keyGeomFieldsChanged()
+        if tab == 7:
+            self.queryGen()
+        if tab == 5:
+            self.updateOrderBy()
         elif tab == 9:
             self.updateHistoryLog()
+
+    def updateOrderBy(self):
+        if self.dlg.LAYERa.currentText()[:6] != "Select":
+            self.populateComboBox(self.dlg.orderBy,self.PSQL.getFieldsContent(self.dlg.LAYERa.currentText())," ",True)
 
     def focusOnQuery(self):
         self.dlg.tabWidget.setCurrentIndex(7)
@@ -306,7 +307,7 @@ class postgisQueryBuilder:
         self.populateComboBox(self.dlg.FIELD,self.PSQL.getFieldsContent(self.dlg.LAYERa.currentText()),"Select field",True)
         if not self.PSQL.testIfFieldExist(self.dlg.LAYERa.currentText(),self.querySet.getParameter("KEYFIELD")):
             self.querySet.setFIDFIELD()
-        self.addListToFieldTable(self.dlg.fieldsListA,self.PSQL.getFieldsContent(self.dlg.LAYERa.currentText()))
+        self.addListToFieldTable(self.dlg.fieldsListA,self.PSQL.getFieldsContent(self.dlg.LAYERa.currentText()),True)
         self.populateFilterTable()
         
 
@@ -317,17 +318,18 @@ class postgisQueryBuilder:
         self.querySet.setParameter("LAYERb",self.dlg.LAYERb.currentText())
         if self.querySet.testQueryParametersCheckList():
             self.queryGen()
-        self.addListToFieldTable(self.dlg.fieldsListB,self.PSQL.getFieldsContent(self.dlg.LAYERb.currentText()))
+        self.addListToFieldTable(self.dlg.fieldsListB,self.PSQL.getFieldsContent(self.dlg.LAYERb.currentText()),True)
         self.populateComboBox(self.dlg.FIELDb,self.PSQL.getFieldsContent(self.dlg.LAYERb.currentText()),"Select field",True)
 
-    def addListToFieldTable(self,fieldSlot,fl):
+    def addListToFieldTable(self,fieldSlot,fl,check):
         #called to populate field list for WHERE statement
         wdgt=fieldSlot
         wdgt.clear()
         for row in fl:
             item=QListWidgetItem()
-            item.setFlags(item.flags() | Qt.ItemIsUserCheckable)
-            item.setCheckState(Qt.Unchecked)
+            if check:
+                item.setFlags(item.flags() | Qt.ItemIsUserCheckable)
+                item.setCheckState(Qt.Unchecked)
             item.setText(row)
             #print row
             if self.PSQL.isTable(row):
@@ -454,6 +456,14 @@ class postgisQueryBuilder:
         qName = self.querySet.getNameParsed()
         self.dlg.QueryName.setText(qName)
         self.querySet.setParameter("VIEWNAME", qName)
+        if self.dlg.filterTable.testIfSintaxOk():
+            self.querySet.setParameter("WHERE", self.dlg.filterTable.getWhereStatement())
+        else:
+            self.querySet.setParameter("WHERE", "")
+        if self.dlg.orderBy.currentText() != " ":
+            self.querySet.setParameter("ORDERBY", 'ORDER BY "'+self.dlg.orderBy.currentText()+'"')
+        else:
+            self.querySet.setParameter("ORDERBY", "")
         self.dlg.QueryResult.setPlainText(self.querySet.getQueryParsed(self.dlg.checkCreateView.checkState()))
         self.dlg.QueryName.textChanged.connect(self.setQueryName)
 
@@ -582,23 +592,27 @@ class postgisQueryBuilder:
         print "catch:", v1,v2
 
     def populateLayerMenu(self):
-        self.addListToFieldTable(self.dlg.LayerList,self.PSQL.getLayers())
+        self.addListToFieldTable(self.dlg.LayerList,self.PSQL.getLayers(),None)
 
     def updateLayerMenu(self):
         if self.dlg.DBSchema.currentText() != "Select schema":
-            self.addListToFieldTable(self.dlg.LayerList,self.PSQL.getLayers())
+            self.addListToFieldTable(self.dlg.LayerList,self.PSQL.getLayers(),True)
 
     def runQuery(self):
         #method to run generated query
-        if self.dlg.AddToMap.checkState():
-            if self.dlg.checkCreateView.checkState():
-                self.PSQL.submitQuery(self.querySet.getParameter("VIEWNAME"),self.dlg.QueryResult.toPlainText())
-                self.PSQL.loadView(self.querySet.getParameter("VIEWNAME"),self.querySet.getParameter("GEOMETRYFIELD"),self.querySet.getParameter("KEYFIELD"))
+        if self.dlg.filterTable.testIfSintaxOk():
+            if self.dlg.AddToMap.checkState():
+                if self.dlg.checkCreateView.checkState():
+                    self.PSQL.submitQuery(self.querySet.getParameter("VIEWNAME"),self.dlg.QueryResult.toPlainText())
+                    self.PSQL.loadView(self.querySet.getParameter("VIEWNAME"),self.querySet.getParameter("GEOMETRYFIELD"),self.querySet.getParameter("KEYFIELD"))
+                else:
+                    self.PSQL.loadSql(self.querySet.getParameter("VIEWNAME"),self.dlg.QueryResult.toPlainText(),self.querySet.getParameter("GEOMETRYFIELD"),self.querySet.getParameter("KEYFIELD"))
             else:
-                self.PSQL.loadSql(self.querySet.getParameter("VIEWNAME"),self.dlg.QueryResult.toPlainText(),self.querySet.getParameter("GEOMETRYFIELD"),self.querySet.getParameter("KEYFIELD"))
+                self.PSQL.tableResultGen(self.dlg.LAYERa.currentText(),self.dlg.QueryResult.toPlainText(),self.dlg.TableResult)
+                self.dlg.tabWidget.setCurrentIndex(8)
         else:
-            self.PSQL.tableResultGen(self.dlg.LAYERa.currentText(),self.dlg.QueryResult.toPlainText(),self.dlg.TableResult)
-            self.dlg.tabWidget.setCurrentIndex(8)
+            QMessageBox.information(None, "FILTER ERROR:", "The Filter table is malformed")
+            self.dlg.tabWidget.setCurrentIndex(4)
 
     def unload(self):
         # Remove the plugin menu item and icon

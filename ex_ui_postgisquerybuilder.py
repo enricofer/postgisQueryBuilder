@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'C:\Users\DEMO\Documents\dev\postgisQueryBuilder\ui_postgisquerybuilder.ui'
 #
-# Created: Wed Aug 27 16:58:30 2014
+# Created: Thu Aug 14 17:03:02 2014
 #      by: PyQt4 UI code generator 4.10.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -40,7 +40,7 @@ class Ui_postgisQueryBuilder(object):
         self.ButtonClose.setGeometry(QtCore.QRect(540, 513, 90, 25))
         self.ButtonClose.setObjectName(_fromUtf8("ButtonClose"))
         self.tabWidget = QtGui.QToolBox(postgisQueryBuilder)
-        self.tabWidget.setGeometry(QtCore.QRect(20, 10, 621, 501))
+        self.tabWidget.setGeometry(QtCore.QRect(10, 10, 621, 501))
         self.tabWidget.setFrameShape(QtGui.QFrame.NoFrame)
         self.tabWidget.setObjectName(_fromUtf8("tabWidget"))
         self.ConnectionSlot = QtGui.QWidget()
@@ -231,16 +231,10 @@ class Ui_postgisQueryBuilder(object):
         self.filterTable.horizontalHeader().setVisible(False)
         self.filterTable.verticalHeader().setVisible(False)
         self.tabWidget.addItem(self.filterRecordSlot, _fromUtf8(""))
-        self.orderingSlot = QtGui.QWidget()
-        self.orderingSlot.setGeometry(QtCore.QRect(0, 0, 621, 231))
-        self.orderingSlot.setObjectName(_fromUtf8("orderingSlot"))
-        self.labelOrderby = QtGui.QLabel(self.orderingSlot)
-        self.labelOrderby.setGeometry(QtCore.QRect(1, 7, 131, 16))
-        self.labelOrderby.setObjectName(_fromUtf8("labelOrderby"))
-        self.orderBy = QtGui.QComboBox(self.orderingSlot)
-        self.orderBy.setGeometry(QtCore.QRect(0, 30, 221, 22))
-        self.orderBy.setObjectName(_fromUtf8("orderBy"))
-        self.tabWidget.addItem(self.orderingSlot, _fromUtf8(""))
+        self.orderingGroupingSlot = QtGui.QWidget()
+        self.orderingGroupingSlot.setGeometry(QtCore.QRect(0, 0, 621, 231))
+        self.orderingGroupingSlot.setObjectName(_fromUtf8("orderingGroupingSlot"))
+        self.tabWidget.addItem(self.orderingGroupingSlot, _fromUtf8(""))
         self.viewDefinitionSlot = QtGui.QWidget()
         self.viewDefinitionSlot.setGeometry(QtCore.QRect(0, 0, 621, 231))
         self.viewDefinitionSlot.setObjectName(_fromUtf8("viewDefinitionSlot"))
@@ -289,7 +283,7 @@ class Ui_postgisQueryBuilder(object):
         self.ButtonRun.setObjectName(_fromUtf8("ButtonRun"))
 
         self.retranslateUi(postgisQueryBuilder)
-        self.tabWidget.setCurrentIndex(5)
+        self.tabWidget.setCurrentIndex(4)
         QtCore.QMetaObject.connectSlotsByName(postgisQueryBuilder)
 
     def retranslateUi(self, postgisQueryBuilder):
@@ -324,8 +318,7 @@ class Ui_postgisQueryBuilder(object):
         self.DISTANCEOPLabel.setText(_translate("postgisQueryBuilder", "Operator", None))
         self.tabWidget.setItemText(self.tabWidget.indexOf(self.queryDefinitionSlot), _translate("postgisQueryBuilder", "Query definition", None))
         self.tabWidget.setItemText(self.tabWidget.indexOf(self.filterRecordSlot), _translate("postgisQueryBuilder", "Filter records", None))
-        self.labelOrderby.setText(_translate("postgisQueryBuilder", "Order by selected field:", None))
-        self.tabWidget.setItemText(self.tabWidget.indexOf(self.orderingSlot), _translate("postgisQueryBuilder", "Ordering", None))
+        self.tabWidget.setItemText(self.tabWidget.indexOf(self.orderingGroupingSlot), _translate("postgisQueryBuilder", "Ordering and grouping", None))
         self.checkCreateView.setText(_translate("postgisQueryBuilder", "As view", None))
         self.checkMaterialized.setText(_translate("postgisQueryBuilder", "Materialized", None))
         self.tabWidget.setItemText(self.tabWidget.indexOf(self.viewDefinitionSlot), _translate("postgisQueryBuilder", "View definition", None))

@@ -48,7 +48,7 @@
   <widget class="QToolBox" name="tabWidget">
    <property name="geometry">
     <rect>
-     <x>10</x>
+     <x>20</x>
      <y>10</y>
      <width>621</width>
      <height>501</height>
@@ -58,7 +58,7 @@
     <enum>QFrame::NoFrame</enum>
    </property>
    <property name="currentIndex">
-    <number>4</number>
+    <number>5</number>
    </property>
    <widget class="QWidget" name="ConnectionSlot">
     <property name="geometry">
@@ -729,7 +729,7 @@
      </attribute>
     </widget>
    </widget>
-   <widget class="QWidget" name="orderingGroupingSlot">
+   <widget class="QWidget" name="orderingSlot">
     <property name="geometry">
      <rect>
       <x>0</x>
@@ -739,8 +739,31 @@
      </rect>
     </property>
     <attribute name="label">
-     <string>Ordering and grouping</string>
+     <string>Ordering</string>
     </attribute>
+    <widget class="QLabel" name="labelOrderby">
+     <property name="geometry">
+      <rect>
+       <x>1</x>
+       <y>7</y>
+       <width>131</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Order by selected field:</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="orderBy">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>30</y>
+       <width>221</width>
+       <height>22</height>
+      </rect>
+     </property>
+    </widget>
    </widget>
    <widget class="QWidget" name="viewDefinitionSlot">
     <property name="geometry">
