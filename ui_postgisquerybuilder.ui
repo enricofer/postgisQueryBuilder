@@ -23,7 +23,7 @@
    <property name="geometry">
     <rect>
      <x>440</x>
-     <y>513</y>
+     <y>520</y>
      <width>91</width>
      <height>25</height>
     </rect>
@@ -36,7 +36,7 @@
    <property name="geometry">
     <rect>
      <x>540</x>
-     <y>513</y>
+     <y>520</y>
      <width>90</width>
      <height>25</height>
     </rect>
@@ -48,7 +48,7 @@
   <widget class="QToolBox" name="tabWidget">
    <property name="geometry">
     <rect>
-     <x>20</x>
+     <x>10</x>
      <y>10</y>
      <width>621</width>
      <height>501</height>
@@ -58,7 +58,7 @@
     <enum>QFrame::NoFrame</enum>
    </property>
    <property name="currentIndex">
-    <number>5</number>
+    <number>8</number>
    </property>
    <widget class="QWidget" name="ConnectionSlot">
     <property name="geometry">
@@ -696,6 +696,19 @@
       <bool>true</bool>
      </property>
     </widget>
+    <widget class="QCheckBox" name="selectAllFields">
+     <property name="geometry">
+      <rect>
+       <x>270</x>
+       <y>43</y>
+       <width>71</width>
+       <height>18</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>All</string>
+     </property>
+    </widget>
    </widget>
    <widget class="QWidget" name="filterRecordSlot">
     <property name="geometry">
@@ -709,7 +722,7 @@
     <attribute name="label">
      <string>Filter records</string>
     </attribute>
-    <widget class="QTableWidget" name="filterTable">
+    <widget class="tableSet" name="filterTable">
      <property name="geometry">
       <rect>
        <x>0</x>
@@ -868,6 +881,19 @@
       <number>25</number>
      </attribute>
     </widget>
+    <widget class="QLabel" name="labelRowsNumber">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>210</y>
+       <width>621</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
    </widget>
    <widget class="QWidget" name="historySlot">
     <property name="geometry">
@@ -899,7 +925,7 @@
   <widget class="QCheckBox" name="AddToMap">
    <property name="geometry">
     <rect>
-     <x>120</x>
+     <x>110</x>
      <y>523</y>
      <width>116</width>
      <height>18</height>
@@ -915,7 +941,7 @@
   <widget class="QPushButton" name="ButtonRun">
    <property name="geometry">
     <rect>
-     <x>15</x>
+     <x>10</x>
      <y>520</y>
      <width>90</width>
      <height>25</height>
@@ -926,6 +952,13 @@
    </property>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>tableSet</class>
+   <extends>QTableWidget</extends>
+   <header>TableSet</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

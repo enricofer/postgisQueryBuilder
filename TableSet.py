@@ -29,6 +29,7 @@ class tableSet(QtGui.QTableWidget):
         super (tableSet,self).__init__(parent)
         self.signalMapper = QtCore.QSignalMapper()
         self.signalMapper.mapped[QtGui.QWidget].connect(self.on_signalMapper_mapped)
+        self.rowSize = 20
         #self.twg = twg
         #self.layerList = layerList
 
@@ -42,10 +43,11 @@ class tableSet(QtGui.QTableWidget):
         self.setRowCount(1)
         self.setColumnCount(4)
         self.setColumnWidth(0,90)
-        self.setColumnWidth(1,210) 
+        self.setColumnWidth(1,220) 
         self.setColumnWidth(2,90) 
-        self.setColumnWidth(3,210) 
+        self.setColumnWidth(3,220) 
         self.setCellWidget(0,0,self.actionFilterCell(0,0))
+        self.setRowHeight(0,self.rowSize)
         
 
     def expopulateFilterTable(self,layerList):
@@ -223,6 +225,10 @@ class tableSet(QtGui.QTableWidget):
     def oneValueLoad(self,value):
         item = QtGui.QComboBox()
         item.addItem(value)
+        if value == "":
+            item.hide()
+            item.setDisabled(True)
+            print "OKKKKKKK"
         return item
 
     def valueLoad(self):
@@ -260,6 +266,7 @@ class tableSet(QtGui.QTableWidget):
                     pass
         self.insertRow(row)
         self.setCellWidget(row,0,self.actionCell(row,0))
+        self.setRowHeight(row,self.rowSize)
 
     def testIfSintaxOk(self):
         res= None
@@ -390,6 +397,7 @@ class tableSet(QtGui.QTableWidget):
                 return None
             if cbox.row == (self.rowCount()-1):
                 self.insertRow((self.rowCount()))
+                self.setRowHeight(self.rowCount()-1,self.rowSize)
                 if nextAction == "filter/group":
                     self.setCellWidget(self.rowCount()-1,0,self.actionFilterCell(self.rowCount()-1,0))
                 elif nextAction == "bool":

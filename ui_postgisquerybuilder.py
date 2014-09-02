@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'C:\Users\DEMO\Documents\dev\postgisQueryBuilder\ui_postgisquerybuilder.ui'
+# Form implementation generated from reading ui file 'ui_postgisquerybuilder.ui'
 #
-# Created: Wed Aug 27 16:58:30 2014
-#      by: PyQt4 UI code generator 4.10.2
+# Created: Thu Aug 28 16:59:10 2014
+#      by: PyQt4 UI code generator 4.10.3
 #
 # WARNING! All changes made in this file will be lost!
 
 from PyQt4 import QtCore, QtGui
-from TableSet import tableSet
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -34,13 +33,13 @@ class Ui_postgisQueryBuilder(object):
         sizePolicy.setHeightForWidth(postgisQueryBuilder.sizePolicy().hasHeightForWidth())
         postgisQueryBuilder.setSizePolicy(sizePolicy)
         self.ButtonReset = QtGui.QPushButton(postgisQueryBuilder)
-        self.ButtonReset.setGeometry(QtCore.QRect(440, 513, 91, 25))
+        self.ButtonReset.setGeometry(QtCore.QRect(440, 520, 91, 25))
         self.ButtonReset.setObjectName(_fromUtf8("ButtonReset"))
         self.ButtonClose = QtGui.QPushButton(postgisQueryBuilder)
-        self.ButtonClose.setGeometry(QtCore.QRect(540, 513, 90, 25))
+        self.ButtonClose.setGeometry(QtCore.QRect(540, 520, 90, 25))
         self.ButtonClose.setObjectName(_fromUtf8("ButtonClose"))
         self.tabWidget = QtGui.QToolBox(postgisQueryBuilder)
-        self.tabWidget.setGeometry(QtCore.QRect(20, 10, 621, 501))
+        self.tabWidget.setGeometry(QtCore.QRect(10, 10, 621, 501))
         self.tabWidget.setFrameShape(QtGui.QFrame.NoFrame)
         self.tabWidget.setObjectName(_fromUtf8("tabWidget"))
         self.ConnectionSlot = QtGui.QWidget()
@@ -218,6 +217,9 @@ class Ui_postgisQueryBuilder(object):
         self.Helper.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.Helper.setWordWrap(True)
         self.Helper.setObjectName(_fromUtf8("Helper"))
+        self.selectAllFields = QtGui.QCheckBox(self.queryDefinitionSlot)
+        self.selectAllFields.setGeometry(QtCore.QRect(270, 43, 71, 18))
+        self.selectAllFields.setObjectName(_fromUtf8("selectAllFields"))
         self.tabWidget.addItem(self.queryDefinitionSlot, _fromUtf8(""))
         self.filterRecordSlot = QtGui.QWidget()
         self.filterRecordSlot.setGeometry(QtCore.QRect(0, 0, 621, 231))
@@ -271,6 +273,10 @@ class Ui_postgisQueryBuilder(object):
         self.TableResult.setRowCount(0)
         self.TableResult.horizontalHeader().setMinimumSectionSize(25)
         self.TableResult.verticalHeader().setDefaultSectionSize(25)
+        self.labelRowsNumber = QtGui.QLabel(self.tableResultSlot)
+        self.labelRowsNumber.setGeometry(QtCore.QRect(0, 210, 621, 16))
+        self.labelRowsNumber.setText(_fromUtf8(""))
+        self.labelRowsNumber.setObjectName(_fromUtf8("labelRowsNumber"))
         self.tabWidget.addItem(self.tableResultSlot, _fromUtf8(""))
         self.historySlot = QtGui.QWidget()
         self.historySlot.setGeometry(QtCore.QRect(0, 0, 621, 231))
@@ -281,15 +287,15 @@ class Ui_postgisQueryBuilder(object):
         self.historyLog.setObjectName(_fromUtf8("historyLog"))
         self.tabWidget.addItem(self.historySlot, _fromUtf8(""))
         self.AddToMap = QtGui.QCheckBox(postgisQueryBuilder)
-        self.AddToMap.setGeometry(QtCore.QRect(120, 523, 116, 18))
+        self.AddToMap.setGeometry(QtCore.QRect(110, 523, 116, 18))
         self.AddToMap.setChecked(True)
         self.AddToMap.setObjectName(_fromUtf8("AddToMap"))
         self.ButtonRun = QtGui.QPushButton(postgisQueryBuilder)
-        self.ButtonRun.setGeometry(QtCore.QRect(15, 520, 90, 25))
+        self.ButtonRun.setGeometry(QtCore.QRect(10, 520, 90, 25))
         self.ButtonRun.setObjectName(_fromUtf8("ButtonRun"))
 
         self.retranslateUi(postgisQueryBuilder)
-        self.tabWidget.setCurrentIndex(5)
+        self.tabWidget.setCurrentIndex(8)
         QtCore.QMetaObject.connectSlotsByName(postgisQueryBuilder)
 
     def retranslateUi(self, postgisQueryBuilder):
@@ -322,6 +328,7 @@ class Ui_postgisQueryBuilder(object):
         self.LAYERbLabel.setText(_translate("postgisQueryBuilder", "Layer B", None))
         self.OPERATORLabel.setText(_translate("postgisQueryBuilder", "Operator", None))
         self.DISTANCEOPLabel.setText(_translate("postgisQueryBuilder", "Operator", None))
+        self.selectAllFields.setText(_translate("postgisQueryBuilder", "All", None))
         self.tabWidget.setItemText(self.tabWidget.indexOf(self.queryDefinitionSlot), _translate("postgisQueryBuilder", "Query definition", None))
         self.tabWidget.setItemText(self.tabWidget.indexOf(self.filterRecordSlot), _translate("postgisQueryBuilder", "Filter records", None))
         self.labelOrderby.setText(_translate("postgisQueryBuilder", "Order by selected field:", None))
@@ -336,3 +343,4 @@ class Ui_postgisQueryBuilder(object):
         self.AddToMap.setText(_translate("postgisQueryBuilder", "Add to map", None))
         self.ButtonRun.setText(_translate("postgisQueryBuilder", "Run query", None))
 
+from TableSet import tableSet

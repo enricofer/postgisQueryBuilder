@@ -106,6 +106,14 @@ class querySet():
             'SELECT [[FIELDSET]], ST_Distance("[[LAYERa]]".[[GEOMETRYFIELD]],"[[LAYERb]]".[[GEOMETRYFIELD]]) AS MinDistance, ST_MaxDistance("[[LAYERa]]".[[GEOMETRYFIELD]],"[[LAYERb]]".[[GEOMETRYFIELD]]) AS MaxDistance FROM "[[SCHEMA]]"."[[LAYERa]]","[[SCHEMA]]"."[[LAYERb]] [[WHERE]] [[ORDERBY]]"',\
             '_Distances_between_[[LAYERa]]_and_[[LAYERb]]'\
             ],\
+            'FIELDS SELECTION':\
+            [\
+            'Field subset selection for specified layer ',\
+            'http://postgis.org/docs/ST_Area.html',\
+            ['LAYERa','fieldsListA'],\
+            'SELECT [[FIELDSET]] FROM "[[SCHEMA]]"."[[LAYERa]]" [[WHERE]] [[ORDERBY]]',\
+            '_FieldsSubset_of_[[LAYERa]] '\
+            ],\
             'JOIN analytical':\
             [\
             'Returns the result of analytical join of Layer A and Layer B where field A meet field B',\

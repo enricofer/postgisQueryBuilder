@@ -297,7 +297,8 @@ class PSQL:
                         item = str(tab[row][column])
                     if item != None:
                         tableSlot.setItem(row-1, column, QTableWidgetItem(item))
-                        
+            return len(tab)-1
+
     def getLayerInfo(self,layer):
         sql = 'SELECT COUNT(*) FROM "%s"' % (layer)
         query = self.db.exec_(sql)

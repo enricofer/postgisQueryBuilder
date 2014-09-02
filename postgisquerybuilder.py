@@ -92,7 +92,7 @@ class postgisQueryBuilder:
         self.dlg.KEYFIELD.textChanged.connect(self.keyGeomFieldsChanged)
         self.dlg.GEOMETRYFIELD.textChanged.connect(self.keyGeomFieldsChanged)
         self.dlg.queryReadyButton.clicked.connect(self.focusOnQuery)
-        
+        self.dlg.selectAllFields.clicked.connect(self.selectAllFields)
 
     def eventsDisconnect(self):
         self.dlg.QueryType.activated.disconnect(self.setQueryType)
@@ -122,6 +122,7 @@ class postgisQueryBuilder:
         self.dlg.tabWidget.currentChanged.disconnect(self.tabChangedHub)
         self.dlg.KEYFIELD.textChanged.disconnect(self.keyGeomFieldsChanged)
         self.dlg.GEOMETRYFIELD.textChanged.disconnect(self.keyGeomFieldsChanged)
+        self.dlg.selectAllFields.clicked.disconnect(self.selectAllFields)
 
     def initGui(self):
         # Create action that will start plugin configuration
@@ -171,7 +172,8 @@ class postgisQueryBuilder:
             reply = QMessageBox.question(None, 'Message', msg, QMessageBox.Yes, QMessageBox.No)
             if reply == QMessageBox.Yes:
                 result = self.PSQL.deleteLayer(rowSel.text())
-                if result != "":
+                print result
+                if result != None:
                     QMessageBox.information(None, "ERROR:", result)
                 else:
                     print "DELETED", rowSel.text()
@@ -251,7 +253,7 @@ class postgisQueryBuilder:
 
     def tabChangedHub(self,tab):
         print "TAB:",tab
-        if tab == 0:
+        if tab == 1:
             try:
                 self.updateLayerMenu()
             except:
@@ -311,6 +313,10 @@ class postgisQueryBuilder:
         self.populateFilterTable()
         
 
+    def selectAllFields(self):
+        for row in range(0,self.dlg.fieldsListA.count()):
+            self.dlg.fieldsListA.item(row).setCheckState(self.dlg.selectAllFields.checkState())
+
     def setLAYERb(self):
         #called when LAYERb is activated
         if self.dlg.LAYERb.currentText()[:6] == "Select":
@@ -340,10 +346,12 @@ class postgisQueryBuilder:
                 item.setIcon(QIcon(":/plugins/postgisquerybuilder/iM.png"))
             #exclude geometryfield from user options when postgis query
             if self.geoQuery and row == self.querySet.getParameter("GEOMETRYFIELD"):
-                item.setFlags(item.flags() ^ Qt.ItemIsEnabled)
+                pass
+                #item.setFlags(item.flags() ^ Qt.ItemIsEnabled)
             else:
-                item.setFlags(item.flags() | Qt.ItemIsEnabled)
-            wdgt.addItem(item)
+                wdgt.addItem(item)
+                #item.setFlags(item.flags() | Qt.ItemIsEnabled)
+            
 
     def setFieldsList(self):
         # procedure to resume selected fields to SELECT statements
@@ -507,6 +515,7 @@ class postgisQueryBuilder:
             self.populateComboBox(self.dlg.LAYERa,tables,"Select Layer",True)
             self.populateComboBox(self.dlg.LAYERb,tables,"Select Layer",True)
         self.geoQuery = None
+        self.populateComboBox(self.dlg.orderBy,[" "],"",True)
         self.eventsConnect()
 
     def hideQueryDefSlot(self):
@@ -608,7 +617,8 @@ class postgisQueryBuilder:
                 else:
                     self.PSQL.loadSql(self.querySet.getParameter("VIEWNAME"),self.dlg.QueryResult.toPlainText(),self.querySet.getParameter("GEOMETRYFIELD"),self.querySet.getParameter("KEYFIELD"))
             else:
-                self.PSQL.tableResultGen(self.dlg.LAYERa.currentText(),self.dlg.QueryResult.toPlainText(),self.dlg.TableResult)
+                rows = self.PSQL.tableResultGen(self.dlg.LAYERa.currentText(),self.dlg.QueryResult.toPlainText(),self.dlg.TableResult)
+                self.dlg.labelRowsNumber.setText("Total rows: "+str(rows))
                 self.dlg.tabWidget.setCurrentIndex(8)
         else:
             QMessageBox.information(None, "FILTER ERROR:", "The Filter table is malformed")
