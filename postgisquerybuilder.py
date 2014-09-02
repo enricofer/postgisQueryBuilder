@@ -23,6 +23,7 @@
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from PyQt4.QtSql import *
+from PyQt4.QtSvg import *
 from qgis.core import *
 from PyQt4 import uic
 # Initialize Qt resources from file resources.py
@@ -298,6 +299,14 @@ class postgisQueryBuilder:
             combo.insertItem(0,predef)
             combo.setCurrentIndex(0)
 
+    def loadSVG(self,svgName):
+        svgFile = os.path.join( os.path.dirname( os.path.abspath( __file__ ) ), "svg",svgName + ".svg")
+        print svgFile
+        item = QGraphicsSvgItem(svgFile)
+        scene= QGraphicsScene()
+        scene.addItem(item)
+        self.dlg.DiagPanel.setScene(scene)
+        self.dlg.DiagPanel.fitInView(item,Qt.KeepAspectRatio) #,Qt.KeepAspectRatio
 
     def setLAYERa(self):
         #called when LAYERa is activated
@@ -331,9 +340,10 @@ class postgisQueryBuilder:
         #called to populate field list for WHERE statement
         wdgt=fieldSlot
         wdgt.clear()
+        print "LAYERLIST:",check
         for row in fl:
             item=QListWidgetItem()
-            if check:
+            if check == True:
                 item.setFlags(item.flags() | Qt.ItemIsUserCheckable)
                 item.setCheckState(Qt.Unchecked)
             item.setText(row)
@@ -477,6 +487,7 @@ class postgisQueryBuilder:
 
     def setQueryType(self,line):
         theQ = self.dlg.QueryType.currentText()
+        self.loadSVG(theQ.replace(" ","_"))
         if theQ[:6] == "Select":
             return
         #self.querySet.resetParameters()
@@ -496,6 +507,8 @@ class postgisQueryBuilder:
         self.dlg.SPATIALRELNOT.setCheckState(Qt.Checked)
         self.dlg.SPATIALRELNOT.setCheckState(Qt.Unchecked)
         self.dlg.Helper.setText(self.querySet.getDescription())
+        self.dlg.Helper2.setText(self.querySet.getDescription())
+        self.loadSVG(theQ.replace(" ","_"))
         
 
 
@@ -507,6 +520,7 @@ class postgisQueryBuilder:
         self.hideDialogSlot("queryReadyButton")
         self.disableQueryDefSlot()
         self.hideQueryDefSlot()
+        self.loadSVG("Select_query_type")
         try:
             tables = self.PSQL.getLayers()
         except AttributeError:
@@ -605,7 +619,7 @@ class postgisQueryBuilder:
 
     def updateLayerMenu(self):
         if self.dlg.DBSchema.currentText() != "Select schema":
-            self.addListToFieldTable(self.dlg.LayerList,self.PSQL.getLayers(),True)
+            self.addListToFieldTable(self.dlg.LayerList,self.PSQL.getLayers(),None)
 
     def runQuery(self):
         #method to run generated query

@@ -50,7 +50,7 @@ class querySet():
             'SELECT [[FIELDSET]],ST_PointOnSurface("[[LAYERa]]".[[GEOMETRYFIELD]]) AS [[GEOMETRYFIELD]] FROM "[[SCHEMA]]"."[[LAYERa]]" [[WHERE]] [[ORDERBY]]',\
             '_Points_on_Surfaces_of_[[LAYERa]]'\
             ],\
-            'ST_Union2 2 layer':\
+            'ST_Union 2 layer':\
             [\
             'Returns a geometry that represents the point set union of geomA and geomB.',\
             'http://postgis.refractions.net/documentation/manual-svn/ST_Union.html',\
