@@ -173,22 +173,22 @@ class postgisQueryBuilder:
             reply = QMessageBox.question(None, 'Message', msg, QMessageBox.Yes, QMessageBox.No)
             if reply == QMessageBox.Yes:
                 result = self.PSQL.deleteLayer(rowSel.text())
-                print result
+                #print result
                 if result != None:
                     QMessageBox.information(None, "ERROR:", result)
                 else:
-                    print "DELETED", rowSel.text()
+                    #print "DELETED", rowSel.text()
         self.populateLayerMenu()
 
     def layerRefresh(self):
         for rowSel in (self.dlg.LayerList.selectedItems()):
             if self.PSQL.isMaterializedView(rowSel.text()): 
-                print self.PSQL.refreshMaterializedView(rowSel.text())
+                self.PSQL.refreshMaterializedView(rowSel.text())
 
     def recurseChild(self,slot,tab):
         # for testing: prints qt object tree
         for child in slot.children():
-            print tab,"|",child.objectName()
+            #print tab,"|",child.objectName()
             if child.children() != []:
                 self.recurseChild(child,tab + "   ")
 
@@ -253,7 +253,7 @@ class postgisQueryBuilder:
 
 
     def tabChangedHub(self,tab):
-        print "TAB:",tab
+        #print "TAB:",tab
         if tab == 1:
             try:
                 self.updateLayerMenu()
@@ -301,7 +301,7 @@ class postgisQueryBuilder:
 
     def loadSVG(self,svgName):
         svgFile = os.path.join( os.path.dirname( os.path.abspath( __file__ ) ), "svg",svgName + ".svg")
-        print svgFile
+        #print svgFile
         item = QGraphicsSvgItem(svgFile)
         scene= QGraphicsScene()
         scene.addItem(item)
@@ -340,7 +340,7 @@ class postgisQueryBuilder:
         #called to populate field list for WHERE statement
         wdgt=fieldSlot
         wdgt.clear()
-        print "LAYERLIST:",check
+        #print "LAYERLIST:",check
         for row in fl:
             item=QListWidgetItem()
             if check == True:
@@ -588,7 +588,7 @@ class postgisQueryBuilder:
 
     def setConnection(self):
         self.PSQL.setConnection(self.dlg.PSQLConnection.currentText())
-        print "SCHEMAS",self.PSQL.getSchemas()
+        #print "SCHEMAS",self.PSQL.getSchemas()
         schemas = self.PSQL.getSchemas()
         self.populateComboBox(self.dlg.DBSchema,schemas,"Select schema",True)
         self.dlg.DBSchema.activated.connect(self.loadPSQLLayers)
@@ -612,7 +612,8 @@ class postgisQueryBuilder:
         self.dlg.filterTable.populateFilterTable(self.PSQL,self.dlg.LAYERa.currentText())
 
     def testSignal(self,v1,v2):
-        print "catch:", v1,v2
+        #print "catch:", v1,v2
+        pass
 
     def populateLayerMenu(self):
         self.addListToFieldTable(self.dlg.LayerList,self.PSQL.getLayers(),None)

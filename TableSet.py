@@ -64,8 +64,8 @@ class tableSet(QtGui.QTableWidget):
             self.setCellWidget(row,2,self.filtersLoad())
             self.setItem(row,3,QtGui.QTableWidgetItem(""))
             self.setCellWidget(row,4,self.layerLoad(row,4))
-        print self.cellWidget(19,1)
-        print self.cellWidget(19,4).row,self.cellWidget(19,4).column
+        #print self.cellWidget(19,1)
+        #print self.cellWidget(19,4).row,self.cellWidget(19,4).column
 
     def layerLoad(self):
         layerItem=QtGui.QComboBox()
@@ -122,7 +122,8 @@ class tableSet(QtGui.QTableWidget):
         return filterItem
 
     def testSignal(self,v1,v2):
-        print "catch:", v1,v2
+        #print "catch:", v1,v2
+        pass
 
     def actionCell(self,row,col):
         controlItem=QtGui.QComboBox()
@@ -228,7 +229,6 @@ class tableSet(QtGui.QTableWidget):
         if value == "":
             item.hide()
             item.setDisabled(True)
-            print "OKKKKKKK"
         return item
 
     def valueLoad(self):
@@ -276,38 +276,38 @@ class tableSet(QtGui.QTableWidget):
         for row in range(0,self.rowCount()-1):
             if self.cellWidget(row,1).currentText() == '(': 
                 if previous in ['QUERY',')']:
-                    print "malformed: ("
+                    #print "malformed: ("
                     return None
                 parOpen += 1
                 previous = "("
             elif self.cellWidget(row,1).currentText() == ')': 
                 if previous in ['AND/OR','(']:
-                    print "malformed: )"
+                    #print "malformed: )"
                     return None
                 parClosed += 1
                 previous = ")"
             elif self.cellWidget(row,1).currentText() == 'NOT': 
                 if previous in ['QUERY',')','(']:
-                    print "malformed: )"
+                    #print "malformed: )"
                     return None
                 parClosed += 1
                 previous = "NOT"
             elif self.cellWidget(row,2).currentText() in ['=','>','<','>=','<=','<>'] or self.cellWidget(row,2).currentText()[:2]=="ST":
                 if previous == "QUERY":
-                    print "malformed: QUERY"
+                    #print "malformed: QUERY"
                     return None
                 previous = "QUERY"
             elif self.cellWidget(row,1).currentText() == 'AND' or self.cellWidget(row,1).currentText() == 'OR':
                 if previous == "AND/OR":
-                    print "malformed: AND/OR"
+                    #print "malformed: AND/OR"
                     return None
                 previous = "AND/OR"
             for column in range (1,3):
                 if self.cellWidget(row,column).currentText()[:6] == 'Select':
-                    print "malformed: Select"
+                    #print "malformed: Select"
                     return None
         if parOpen != parClosed:
-            print "malformed: ()"
+            #print "malformed: ()"
             return None
         return True
 
@@ -343,8 +343,8 @@ class tableSet(QtGui.QTableWidget):
     @QtCore.pyqtSlot(QtGui.QWidget)
     def on_signalMapper_mapped(self,cbox):
         #print "row: {0} column: {1} text: {2}".format(cbox.row,cbox.column,cbox.currentText())
-        print cbox.currentText()
-        print "ROWS:",self.rowCount()
+        #print cbox.currentText()
+        #print "ROWS:",self.rowCount()
         nextAction=''
         if cbox.column == 1:
             self.uniqueValuesLoad(cbox.row,3,self.PSQL.getUniqeValues(self.layerQuery,self.cellWidget(cbox.row,1).currentText(),50))
@@ -391,9 +391,9 @@ class tableSet(QtGui.QTableWidget):
                 if cbox.row != (self.rowCount()-1):
                     self.insRow(cbox.row)
             elif cbox.currentText() == "":
-                if self.testIfSintaxOk(): print "wellformed query:"
-                else: print "malformed query:"
-                print self.getWhereStatement()
+                #if self.testIfSintaxOk(): print "wellformed query:"
+                #else: print "malformed query:"
+                self.getWhereStatement()
                 return None
             if cbox.row == (self.rowCount()-1):
                 self.insertRow((self.rowCount()))
@@ -407,4 +407,4 @@ class tableSet(QtGui.QTableWidget):
             else:
                 cbox.setCurrentIndex(0)
                 #cbox.setItemText(0,"")
-        print self.getWhereStatement()
+        self.getWhereStatement()

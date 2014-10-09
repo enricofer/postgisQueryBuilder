@@ -217,7 +217,8 @@ class querySet():
             except:
                 pass
         else:
-            print "ALERT: variable not found"
+            #print "ALERT: variable not found"
+            pass
 
     def buildFIELDSET(self):
         self.parameters["SCHEMA"] = self.schemaName

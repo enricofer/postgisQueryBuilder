@@ -281,7 +281,7 @@ class PSQL:
         if res["result"] != []:
             tab=res["result"]
             #print tab[0]
-            print len(tab[0])
+            #print len(tab[0])
             tableSlot.setColumnCount(len(tab[0]))
             tableSlot.setRowCount(len(tab)-1)
             #add field type to field labels
