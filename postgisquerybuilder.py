@@ -271,7 +271,10 @@ class postgisQueryBuilder:
 
     def updateOrderBy(self):
         if self.dlg.LAYERa.currentText()[:6] != "Select":
-            self.populateComboBox(self.dlg.orderBy,self.PSQL.getFieldsContent(self.dlg.LAYERa.currentText())," ",True)
+            try:
+                self.populateComboBox(self.dlg.orderBy,self.PSQL.getFieldsContent(self.dlg.LAYERa.currentText())," ",True)
+            except:
+                pass
 
     def focusOnQuery(self):
         self.dlg.tabWidget.setCurrentIndex(5)
@@ -472,7 +475,10 @@ class postgisQueryBuilder:
         self.enableDialogSlot("checkCreateView")
         self.enableDialogSlot("AddToMap")
         self.dlg.queryReadyButton.show()
-        qName = self.querySet.getNameParsed()
+        try:
+            qName = self.querySet.getNameParsed()
+        except:
+            return
         self.dlg.QueryName.setText(qName)
         self.querySet.setParameter("VIEWNAME", qName)
         if self.dlg.filterTable.testIfSintaxOk():
