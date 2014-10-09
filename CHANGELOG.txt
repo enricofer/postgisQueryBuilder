@@ -29,3 +29,10 @@ Reload of available layers when connection tab get focus
 Added history tab of valid queries
 Key field and geometry field slots moved to the bottom of dialog view
 New tutorial on youtube: http://youtu.be/XsNILLhVS7I
+
+v1.5
+changed UI tab mode
+Query helper added
+Attribute selection query type added
+Attribute and spatial filter dialog added
+Order by field added
