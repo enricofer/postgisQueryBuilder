@@ -164,7 +164,7 @@ class postgisQueryBuilder:
     def layerGetTable(self):
         for rowSel in (self.dlg.LayerList.selectedItems()):
                 self.PSQL.tableResultGen(rowSel.text(),"",self.dlg.TableResult)
-                self.dlg.tabWidget.setCurrentIndex(8)
+                self.dlg.tabWidget.setCurrentIndex(6)
                 break
 
     def layerDelete(self):
@@ -261,11 +261,11 @@ class postgisQueryBuilder:
                 pass
         if tab == 3:
             self.keyGeomFieldsChanged()
-        if tab == 7:
-            self.queryGen()
         if tab == 5:
+            self.queryGen()
+        if tab == 4:
             self.updateOrderBy()
-        elif tab == 9:
+        elif tab == 7:
             self.updateHistoryLog()
 
     def updateOrderBy(self):
@@ -273,7 +273,7 @@ class postgisQueryBuilder:
             self.populateComboBox(self.dlg.orderBy,self.PSQL.getFieldsContent(self.dlg.LAYERa.currentText())," ",True)
 
     def focusOnQuery(self):
-        self.dlg.tabWidget.setCurrentIndex(7)
+        self.dlg.tabWidget.setCurrentIndex(5)
 
     def updateHistoryLog(self):
         historyFile = os.path.join(os.path.dirname(__file__),"validSql.log")
@@ -506,7 +506,7 @@ class postgisQueryBuilder:
         #simulate click on checkbox to set required slot
         self.dlg.SPATIALRELNOT.setCheckState(Qt.Checked)
         self.dlg.SPATIALRELNOT.setCheckState(Qt.Unchecked)
-        self.dlg.Helper.setText(self.querySet.getDescription())
+        self.dlg.Helper.setText(theQ+":\n"+self.querySet.getDescription())
         self.dlg.Helper2.setText(self.querySet.getDescription())
         self.loadSVG(theQ.replace(" ","_"))
         
@@ -633,7 +633,7 @@ class postgisQueryBuilder:
             else:
                 rows = self.PSQL.tableResultGen(self.dlg.LAYERa.currentText(),self.dlg.QueryResult.toPlainText(),self.dlg.TableResult)
                 self.dlg.labelRowsNumber.setText("Total rows: "+str(rows))
-                self.dlg.tabWidget.setCurrentIndex(8)
+                self.dlg.tabWidget.setCurrentIndex(6)
         else:
             QMessageBox.information(None, "FILTER ERROR:", "The Filter table is malformed")
             self.dlg.tabWidget.setCurrentIndex(4)

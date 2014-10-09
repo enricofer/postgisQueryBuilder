@@ -15,7 +15,7 @@
    id="svg9885"
    version="1.1"
    inkscape:version="0.48.4 r9939"
-   sodipodi:docname="ST_Difference.svg">
+   sodipodi:docname="ST_Centroid.svg">
   <defs
      id="defs9887">
     <pattern
@@ -102,9 +102,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.6686063"
+     inkscape:zoom="5.6250283"
      inkscape:cx="130.8694"
-     inkscape:cy="89.294557"
+     inkscape:cy="53.73918"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -125,7 +125,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -144,14 +144,14 @@
        inkscape:connector-curvature="0"
        id="path8691-6"
        d="m 623.7045,700.58712 -15.18015,17.15215 -29.752,-27.91642 14.65473,-16.88662 z"
-       style="fill:none;stroke:#0000ff;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+       style="fill:#ffffff;stroke:#0000ff;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
     <path
        inkscape:connector-curvature="0"
        id="path8713-6"
        d="m 672.12528,688.76967 0,13.78858 8.13173,-7.42462 z"
        style="fill:#800080;stroke:#800080;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
     <path
-       style="fill:none;stroke:#008000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="fill:#ffffff;stroke:#008000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 607.8555,680.94694 -2.77165,-19.96417 27.95076,-5.2266 1.2085,6.49438 -21.04424,3.87315 1.84806,13.57749 z"
        id="path8853"
        inkscape:connector-curvature="0"
