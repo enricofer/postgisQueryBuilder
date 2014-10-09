@@ -178,6 +178,7 @@ class postgisQueryBuilder:
                     QMessageBox.information(None, "ERROR:", result)
                 else:
                     #print "DELETED", rowSel.text()
+                    pass
         self.populateLayerMenu()
 
     def layerRefresh(self):
