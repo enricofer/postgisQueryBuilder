@@ -169,7 +169,7 @@ class postgisQueryBuilder:
 
     def layerDelete(self):
         for rowSel in (self.dlg.LayerList.selectedItems()):
-            msg = "Are you sure you want to delete layer '%s' ?" % rowSel.text()
+            msg = "Are you sure you want to delete layer '%s' from schema '%s' ?" % (rowSel.text(),self.PSQL.getSchema())
             reply = QMessageBox.question(None, 'Message', msg, QMessageBox.Yes, QMessageBox.No)
             if reply == QMessageBox.Yes:
                 result = self.PSQL.deleteLayer(rowSel.text())

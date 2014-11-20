@@ -109,13 +109,13 @@ class PSQL:
         return test
 
     def refreshMaterializedView(self,mView):
-        sql = "REFRESH MATERIALIZED VIEW '%s'" % mView
+        sql = 'REFRESH MATERIALIZED VIEW "%s"."%s"' % (self.schema,mView)
         return self.submitCommand(sql)
 
     def deleteLayer(self,layer):
-        if self.isTable(layer): sql = 'DROP TABLE "%s"' % layer
-        elif self.isView (layer): sql = 'DROP VIEW "%s"' % layer
-        elif self.isMaterializedView (layer): sql = 'DROP MATERIALIZED VIEW "%s"' % layer
+        if self.isTable(layer): sql = 'DROP TABLE "%s"."%s"' % (self.schema,layer)
+        elif self.isView (layer): sql = 'DROP VIEW "%s"."%s"' % (self.schema,layer)
+        elif self.isMaterializedView (layer): sql = 'DROP MATERIALIZED VIEW "%s"."%s"' % (self.schema,layer)
         else: sql =""
         return self.submitCommand(sql)
 
@@ -249,7 +249,7 @@ class PSQL:
     def loadView(self,layer,GeomField,KeyField):
         uri = QgsDataSourceURI()
         uri.setConnection(self.PSQLHost,self.PSQLPort,self.PSQLDatabase,self.PSQLUsername,self.PSQLPassword)
-        uri.setDataSource("public",layer,GeomField,"",KeyField)
+        uri.setDataSource(self.schema,layer,GeomField,"",KeyField)
         vlayer = QgsVectorLayer(uri.uri(), layer, "postgres")
         if vlayer.isValid():
             QgsMapLayerRegistry.instance().addMapLayer(vlayer,True)
@@ -277,7 +277,7 @@ class PSQL:
         if sql != "":
             res=self.submitQuery(tableName,sql)
         else:
-            res=self.submitQuery(tableName,'SELECT * FROM "%s"' % tableName)
+            res=self.submitQuery(tableName,'SELECT * FROM "%s"."%s"' % (self.schema,tableName))
         if res["result"] != []:
             tab=res["result"]
             #print tab[0]
