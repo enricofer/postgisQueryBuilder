@@ -12,7 +12,7 @@
 name=postgisQueryBuilder
 qgisMinimumVersion=2.0
 description=User friendly postgis query generation. Tutorial on website.
-version=1.5
+version=1.5.1
 author=Enrico Ferreguti
 email=enricofer@gmail.com
 
@@ -21,10 +21,10 @@ email=enricofer@gmail.com
 # Optional items:
 
 # Uncomment the following line and add your changelog entries:
-# changelog=1.5 changed UI tab mode, Query helper added, Filter dialog added, Order by field added
+# changelog=v1.5.1 layer ops on "available layer" issue on schemas different from 'public' fixed
 
 # tags are comma separated with spaces allowed
-tags=postgis, help, view, views, query, builder, sql, spatial join, spatial filter 
+tags=postgis, help, view, views, query, builder, sql, spatial join, spatial filter, postgresql
 
 homepage=http://geogear.wordpress.com
 tracker=https://github.com/enricofer/postgisQueryBuilder/issues

@@ -36,3 +36,6 @@ Query helper added
 Attribute selection query type added
 Attribute and spatial filter dialog added
 Order by field added
+
+v1.5.1
+layer ops on "available layer" issue on schemas different from 'public' fixed
