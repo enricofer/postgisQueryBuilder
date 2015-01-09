@@ -32,6 +32,7 @@ import resources_rc
 from postgisquerybuilderdialog import postgisQueryBuilderDialog
 from querySetbuilder import querySet
 from TableSet import tableSet
+from convertToTable_dialog import convertToTableDialog
 from PSQL import PSQL
 from PyQt4 import QtGui
 
@@ -87,6 +88,7 @@ class postgisQueryBuilder:
         self.dlg.GetInfoButton.clicked.connect(self.layerGetTable)
         self.dlg.DeleteButton.clicked.connect(self.layerDelete)
         self.dlg.RefreshButton.clicked.connect(self.layerRefresh)
+        self.dlg.convertToTableButton.clicked.connect(self.convertToTable)
         self.dlg.JOIN.activated.connect(self.setJOIN)
         self.dlg.FIELDb.activated.connect(self.setFIELDb)
         self.dlg.tabWidget.currentChanged.connect(self.tabChangedHub)
@@ -116,6 +118,7 @@ class postgisQueryBuilder:
         self.dlg.GetInfoButton.clicked.disconnect(self.layerGetTable)
         self.dlg.DeleteButton.clicked.disconnect(self.layerDelete)
         self.dlg.RefreshButton.clicked.disconnect(self.layerRefresh)
+        self.dlg.convertToTableButton.clicked.disconnect(self.convertToTable)
         self.dlg.JOIN.activated.disconnect(self.setJOIN)
         self.dlg.FIELDb.activated.disconnect(self.setFIELDb)
         self.dlg.fieldsListA.clicked.disconnect(self.setFieldsList)
@@ -139,6 +142,7 @@ class postgisQueryBuilder:
         self.dlg.KEYFIELD.setText("ogc_fid")
         self.populateGui()
         self.eventsConnect()
+        self.toTableDlg = convertToTableDialog(self)
 
     def populateGui(self):
         self.populateComboBox(self.dlg.QueryType,self.querySet.getQueryLabels(),"Select query type",True)
@@ -167,6 +171,20 @@ class postgisQueryBuilder:
                 self.dlg.tabWidget.setCurrentIndex(6)
                 break
 
+    def exconvertToTable(self):
+        for rowSel in (self.dlg.LayerList.selectedItems()):
+            if self.PSQL.isMaterializedView(rowSel.text()) or self.PSQL.isView(rowSel.text()):
+                q = 'CREATE TABLE "%s"."%s" as (SELECT * FROM "%s"."%s");' % (self.PSQL.schema,rowSel.text()+"_totable",self.PSQL.schema,rowSel.text())
+                res = self.PSQL.submitCommand(q)
+                if res != "":
+                    QMessageBox.information(None, "ERROR:", res)
+
+    def convertToTable(self):
+        for rowSel in (self.dlg.LayerList.selectedItems()):
+            if self.PSQL.isMaterializedView(rowSel.text()) or self.PSQL.isView(rowSel.text()):
+                self.toTableDlg.ask(rowSel.text())
+                
+
     def layerDelete(self):
         for rowSel in (self.dlg.LayerList.selectedItems()):
             msg = "Are you sure you want to delete layer '%s' from schema '%s' ?" % (rowSel.text(),self.PSQL.getSchema())
@@ -174,7 +192,7 @@ class postgisQueryBuilder:
             if reply == QMessageBox.Yes:
                 result = self.PSQL.deleteLayer(rowSel.text())
                 #print result
-                if result != None:
+                if not (result == None or result == ""):
                     QMessageBox.information(None, "ERROR:", result)
                 else:
                     #print "DELETED", rowSel.text()

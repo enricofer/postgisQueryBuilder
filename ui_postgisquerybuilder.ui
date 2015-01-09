@@ -58,15 +58,15 @@
     <enum>QFrame::NoFrame</enum>
    </property>
    <property name="currentIndex">
-    <number>3</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="ConnectionSlot">
     <property name="geometry">
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>621</width>
-      <height>255</height>
+      <width>96</width>
+      <height>26</height>
      </rect>
     </property>
     <attribute name="label">
@@ -195,7 +195,7 @@
       <rect>
        <x>500</x>
        <y>50</y>
-       <width>90</width>
+       <width>121</width>
        <height>23</height>
       </rect>
      </property>
@@ -207,8 +207,8 @@
      <property name="geometry">
       <rect>
        <x>500</x>
-       <y>80</y>
-       <width>90</width>
+       <y>110</y>
+       <width>121</width>
        <height>23</height>
       </rect>
      </property>
@@ -220,8 +220,8 @@
      <property name="geometry">
       <rect>
        <x>500</x>
-       <y>110</y>
-       <width>90</width>
+       <y>140</y>
+       <width>121</width>
        <height>23</height>
       </rect>
      </property>
@@ -234,7 +234,7 @@
       <rect>
        <x>500</x>
        <y>20</y>
-       <width>90</width>
+       <width>121</width>
        <height>23</height>
       </rect>
      </property>
@@ -252,14 +252,27 @@
       </rect>
      </property>
     </widget>
+    <widget class="QPushButton" name="convertToTableButton">
+     <property name="geometry">
+      <rect>
+       <x>500</x>
+       <y>80</y>
+       <width>121</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Convert to table</string>
+     </property>
+    </widget>
    </widget>
    <widget class="QWidget" name="queryTypeSlot">
     <property name="geometry">
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>621</width>
-      <height>255</height>
+      <width>96</width>
+      <height>26</height>
      </rect>
     </property>
     <attribute name="label">
@@ -365,8 +378,8 @@
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>621</width>
-      <height>255</height>
+      <width>96</width>
+      <height>26</height>
      </rect>
     </property>
     <attribute name="label">
@@ -767,8 +780,8 @@
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>621</width>
-      <height>255</height>
+      <width>96</width>
+      <height>26</height>
      </rect>
     </property>
     <attribute name="label">
@@ -822,8 +835,8 @@
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>621</width>
-      <height>255</height>
+      <width>96</width>
+      <height>26</height>
      </rect>
     </property>
     <attribute name="label">
@@ -881,8 +894,8 @@
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>621</width>
-      <height>255</height>
+      <width>96</width>
+      <height>26</height>
      </rect>
     </property>
     <attribute name="label">
@@ -926,8 +939,8 @@
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>621</width>
-      <height>255</height>
+      <width>96</width>
+      <height>26</height>
      </rect>
     </property>
     <attribute name="label">

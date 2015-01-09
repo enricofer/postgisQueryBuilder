@@ -220,9 +220,12 @@ class PSQL:
     def submitCommand(self,sql):
         query = QSqlQuery(self.db)
         query.exec_(sql)
-        if query.lastError().text() != " ":
+        print "ERROR TYPE: ",query.lastError().type()
+        if query.lastError().type() != QSqlError.NoError:
             self.queryLogger("SQL_COMMAND",sql)
-        return query.lastError().text()
+            return ""
+        else:
+            return query.lastError().text()
 
     def isTable(self,tName):
         sql = "SELECT tablename FROM pg_catalog.pg_tables where schemaname = '%s' and tablename = '%s'" % (self.schema,tName)
