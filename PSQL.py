@@ -124,13 +124,13 @@ class PSQL:
         query = self.db.exec_(sql)
         fields=[]
         while (query.next()):
-            fields.append(str(query.value(0)))
+            fields.append(unicode(query.value(0)))
         if fields==[]:
             sql="SELECT attname, typname ,relname FROM pg_attribute a JOIN pg_class c on a.attrelid = c.oid JOIN pg_type t on a.atttypid = t.oid WHERE relname = '%s' and attnum >= 1;" % layer
             #print sql
             query = self.db.exec_(sql)
             while (query.next()):
-                fields.append(str(query.value(0)))
+                fields.append(unicode(query.value(0)))
             #print fields
         return fields
 
@@ -140,7 +140,7 @@ class PSQL:
         query = self.db.exec_(sql)
         fields=[]
         while (query.next()):
-            fields.append(str(query.value(0)))
+            fields.append(unicode(query.value(0)))
         #print fields
         return fields
 
@@ -148,7 +148,7 @@ class PSQL:
         sql = "SELECT typname FROM pg_attribute a JOIN pg_class c on a.attrelid = c.oid JOIN pg_type t on a.atttypid = t.oid WHERE relname = '%s' and attname = '%s'" % (layer,field)
         query = self.db.exec_(sql)
         query.next()
-        res = str(query.value(0))
+        res = unicode(query.value(0))
         #print res
         return res
 
@@ -204,7 +204,7 @@ class PSQL:
                     except TypeError:
                         fields.append(query.value(k))
                     except AttributeError:
-                        fields.append(str(query.value(k)))
+                        fields.append(unicode(query.value(k)))
                     if rows[0] == []:
                         fieldNames=[]
                         for n in range(0,query.record().count()):
@@ -297,7 +297,7 @@ class PSQL:
                     try:
                         item = tab[row][column].encode('utf-8')
                     except AttributeError:
-                        item = str(tab[row][column])
+                        item = unicode(tab[row][column])
                     if item != None:
                         tableSlot.setItem(row-1, column, QTableWidgetItem(item))
             return len(tab)-1
