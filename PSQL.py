@@ -23,6 +23,7 @@ from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from PyQt4.QtSql import *
 from qgis.core import *
+from askcredentialdialog import askCredentialDialog
 
 import os.path
 import datetime
@@ -56,21 +57,26 @@ class PSQL:
         self.PSQLPort=s.value("port", "" )
         self.PSQLService=s.value("service", "" )
         s.endGroup()
-        #print self.PSQLDatabase,self.PSQLService,self.PSQLHost,self.PSQLPort,self.PSQLUsername,self.PSQLPassword
         self.db = QSqlDatabase.addDatabase("QPSQL")
         self.db.setHostName(self.PSQLHost)
         self.db.setPort(int(self.PSQLPort))
         self.db.setDatabaseName(self.PSQLDatabase)
         self.db.setUserName(self.PSQLUsername)
         self.db.setPassword(self.PSQLPassword)
-        ok = self.db.open()
-        if not ok:
-            error = "Database Error: %s" % self.db.lastError().text()
-            QMessageBox.information(None, "DB ERROR:", error)
-        else:
-            error=""
-        #print error
-        return error
+        while not self.db.open():
+            print self.db.lastError().text()
+            if self.db.lastError().text()[:11] == "fe_sendauth" or self.db.lastError().text()[:11] == "FATAL:  pas":
+                accepted,user,password = askCredentialDialog.form(self.PSQLUsername,self.PSQLPassword,msg = self.db.lastError().text())
+                if accepted:
+                    self.db.setUserName(user)
+                    self.db.setPassword(password)
+                else:
+                    return "no credentials provided"
+            else:
+                error = "Database Error: %s" % self.db.lastError().text()
+                QMessageBox.information(None, "DB ERROR:", error)
+                return error
+
 
     def setSchema(self,schema):
         self.schema = schema
