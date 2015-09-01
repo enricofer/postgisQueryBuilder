@@ -42,10 +42,10 @@ class tableSet(QtGui.QTableWidget):
         #self.layerList = layerList
         self.setRowCount(1)
         self.setColumnCount(4)
-        self.setColumnWidth(0,90)
-        self.setColumnWidth(1,220) 
-        self.setColumnWidth(2,90) 
-        self.setColumnWidth(3,220) 
+        self.setColumnWidth(0,80)
+        self.setColumnWidth(1,80) #int(self.width()/3*2)
+        self.setColumnWidth(2,80) 
+        self.setColumnWidth(3,80) #int(self.width()/3)
         self.setCellWidget(0,0,self.actionFilterCell(0,0))
         self.setRowHeight(0,self.rowSize)
         

@@ -56,7 +56,6 @@ class postgisQueryBuilder:
             self.translator.load(localePath)
             if qVersion() > '4.3.3':
                 QCoreApplication.installTranslator(self.translator)
-        self.dlg = postgisQueryBuilderDialog()
         #self.dlg = uic.loadUi( os.path.join( os.path.dirname( os.path.abspath( __file__ ) ), "ui_postgisquerybuilder.ui" ) )
         self.querySet = querySet()
         self.PSQL = PSQL(self.iface)
@@ -79,7 +78,6 @@ class postgisQueryBuilder:
         self.dlg.DISTANCE.textChanged.connect(self.setDISTANCE)
         self.dlg.ButtonRun.clicked.connect(self.runQuery)
         self.dlg.ButtonReset.clicked.connect(self.resetForm)
-        self.dlg.ButtonClose.clicked.connect(self.closeDialog)
         self.dlg.ButtonHelp.clicked.connect(self.helpDialog)
         self.dlg.fieldsListA.clicked.connect(self.setFieldsList)
         self.dlg.fieldsListB.clicked.connect(self.setFieldsList)
@@ -113,7 +111,6 @@ class postgisQueryBuilder:
         self.dlg.DISTANCE.textChanged.disconnect(self.setDISTANCE)
         self.dlg.ButtonRun.clicked.disconnect(self.runQuery)
         self.dlg.ButtonReset.clicked.disconnect(self.resetForm)
-        self.dlg.ButtonClose.clicked.disconnect(self.closeDialog)
         self.dlg.AddToMapButton.clicked.disconnect(self.layerAddToMap)
         self.dlg.GetInfoButton.clicked.disconnect(self.layerGetTable)
         self.dlg.DeleteButton.clicked.disconnect(self.layerDelete)
@@ -138,8 +135,22 @@ class postgisQueryBuilder:
         # Add toolbar button and menu item
         self.iface.addToolBarIcon(self.action)
         self.iface.addPluginToDatabaseMenu(u"&postgisQueryBuilder", self.action)
+        #setup Docked widget
+        self.dlg = postgisQueryBuilderDialog()
+        self.PQBdockwidget=QDockWidget("postgisQueryBuilder" , self.iface.mainWindow() )
+        self.PQBdockwidget.setObjectName("postgisQueryBuilder")
+        self.PQBdockwidget.setWidget(self.dlg)
+        self.PQBdockwidget.setAllowedAreas(Qt.RightDockWidgetArea | Qt.LeftDockWidgetArea)
+        self.iface.addDockWidget( Qt.RightDockWidgetArea, self.PQBdockwidget)
+        #defaults
         self.dlg.GEOMETRYFIELD.setText("the_geom")
         self.dlg.KEYFIELD.setText("ogc_fid")
+        #hide Temp slots
+        self.dlg.USERFIELD.hide()
+        self.dlg.USERFIELDLabel.hide()
+        self.dlg.PASSWORDFIELD.hide()
+        self.dlg.PASSWORDFIELDLabel.hide()
+        #init
         self.populateGui()
         self.eventsConnect()
         self.toTableDlg = convertToTableDialog(self)
@@ -216,27 +227,27 @@ class postgisQueryBuilder:
             self.dlg.LayerList.item(row).setCheckState(Qt.Unchecked);
 
     def disableDialogSlot(self,slot):
-        for child in self.dlg.tabWidget.widget(3).children():
+        for child in self.dlg.tabWidget.widget(2).children():
             if child.objectName() == slot:
                 child.setDisabled(True)
 
     def hideDialogSlot(self,slot):
-        for child in self.dlg.tabWidget.widget(3).children():
+        for child in self.dlg.tabWidget.widget(2).children():
             if child.objectName() == slot:
                 child.hide()
 
     def showDialogSlot(self,slot):
-        for child in self.dlg.tabWidget.widget(3).children():
+        for child in self.dlg.tabWidget.widget(2).children():
             if child.objectName() == slot:
                 child.show()
 
     def enableDialogSlot(self,slot):
-        for child in self.dlg.tabWidget.widget(3).children():
+        for child in self.dlg.tabWidget.widget(2).children():
             if child.objectName() == slot:
                 child.setEnabled(True)
 
     def clearDialogSlot(self,slot):
-        for child in self.dlg.tabWidget.widget(3).children():
+        for child in self.dlg.tabWidget.widget(2).children():
             if child.objectName() == slot:
                 child.clear()
 
@@ -278,13 +289,13 @@ class postgisQueryBuilder:
                 self.updateLayerMenu()
             except:
                 pass
-        if tab == 3:
+        if tab == 2:
             self.keyGeomFieldsChanged()
-        if tab == 5:
-            self.queryGen()
         if tab == 4:
+            self.queryGen()
+        if tab == 3:
             self.updateOrderBy()
-        elif tab == 7:
+        elif tab == 6:
             self.updateHistoryLog()
 
     def updateOrderBy(self):
@@ -597,6 +608,7 @@ class postgisQueryBuilder:
 
     def getPSQLConnections(self):
         conn = self.PSQL.getConnections()
+        print conn
         self.populateComboBox(self.dlg.PSQLConnection,conn,"Select connection",True)
         self.hideQueryDefSlot()
         self.dlg.queryReadyButton.hide()
@@ -668,17 +680,14 @@ class postgisQueryBuilder:
         # Remove the plugin menu item and icon
         self.iface.removePluginMenu(u"&postgisQueryBuilder", self.action)
         self.iface.removeToolBarIcon(self.action)
+        self.iface.removeDockWidget(self.PQBdockwidget)
+        
 
     # run method that performs all the real work
     def run(self):
-        # show the dialog
-        self.dlg.show()
-        self.getPSQLConnections()
-        
-        # Run the dialog event loop
-        result = self.dlg.exec_()
-        # See if OK was pressed
-        if result == 1:
-            # do something useful (delete the line containing pass and
-            # substitute with your code)
-            pass
+        # show/hide the widget
+        if self.PQBdockwidget.isVisible():
+            self.PQBdockwidget.hide()
+        else:
+            self.PQBdockwidget.show()
+            self.getPSQLConnections()
