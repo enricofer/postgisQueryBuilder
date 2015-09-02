@@ -306,6 +306,7 @@ class PSQL:
                         item = unicode(tab[row][column])
                     if item != None:
                         tableSlot.setItem(row-1, column, QTableWidgetItem(item))
+            tableSlot.resizeColumnsToContents()
             return len(tab)-1
 
     def getLayerInfo(self,layer):

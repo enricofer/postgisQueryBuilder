@@ -93,7 +93,7 @@ class postgisQueryBuilder:
         self.dlg.KEYFIELD.textChanged.connect(self.keyGeomFieldsChanged)
         self.dlg.GEOMETRYFIELD.textChanged.connect(self.keyGeomFieldsChanged)
         self.dlg.queryReadyButton.clicked.connect(self.focusOnQuery)
-        self.dlg.selectAllFields.clicked.connect(self.selectAllFields)
+        self.dlg.LAYERaAllFields.clicked.connect(self.selectAllFields)
 
     def eventsDisconnect(self):
         self.dlg.QueryType.activated.disconnect(self.setQueryType)
@@ -123,7 +123,7 @@ class postgisQueryBuilder:
         self.dlg.tabWidget.currentChanged.disconnect(self.tabChangedHub)
         self.dlg.KEYFIELD.textChanged.disconnect(self.keyGeomFieldsChanged)
         self.dlg.GEOMETRYFIELD.textChanged.disconnect(self.keyGeomFieldsChanged)
-        self.dlg.selectAllFields.clicked.disconnect(self.selectAllFields)
+        self.dlg.LAYERaAllFields.clicked.disconnect(self.selectAllFields)
 
     def initGui(self):
         # Create action that will start plugin configuration
@@ -180,7 +180,7 @@ class postgisQueryBuilder:
     def layerGetTable(self):
         for rowSel in (self.dlg.LayerList.selectedItems()):
                 self.PSQL.tableResultGen(rowSel.text(),"",self.dlg.TableResult)
-                self.dlg.tabWidget.setCurrentIndex(6)
+                self.dlg.tabWidget.setCurrentIndex(4)
                 break
 
     def exconvertToTable(self):
@@ -228,27 +228,27 @@ class postgisQueryBuilder:
             self.dlg.LayerList.item(row).setCheckState(Qt.Unchecked);
 
     def disableDialogSlot(self,slot):
-        for child in self.dlg.tabWidget.widget(2).children():
+        for child in self.dlg.tabWidget.widget(1).children():
             if child.objectName() == slot:
                 child.setDisabled(True)
 
     def hideDialogSlot(self,slot):
-        for child in self.dlg.tabWidget.widget(2).children():
+        for child in self.dlg.tabWidget.widget(1).children():
             if child.objectName() == slot:
                 child.hide()
 
     def showDialogSlot(self,slot):
-        for child in self.dlg.tabWidget.widget(2).children():
+        for child in self.dlg.tabWidget.widget(1).children():
             if child.objectName() == slot:
                 child.show()
 
     def enableDialogSlot(self,slot):
-        for child in self.dlg.tabWidget.widget(2).children():
+        for child in self.dlg.tabWidget.widget(1).children():
             if child.objectName() == slot:
                 child.setEnabled(True)
 
     def clearDialogSlot(self,slot):
-        for child in self.dlg.tabWidget.widget(2).children():
+        for child in self.dlg.tabWidget.widget(1).children():
             if child.objectName() == slot:
                 child.clear()
 
@@ -290,13 +290,15 @@ class postgisQueryBuilder:
                 self.updateLayerMenu()
             except:
                 pass
-        if tab == 2:
-            self.keyGeomFieldsChanged()
-        if tab == 4:
-            self.queryGen()
+            try:
+                self.keyGeomFieldsChanged()
+            except:
+                pass
         if tab == 3:
+            self.queryGen()
+        if tab == 2:
             self.updateOrderBy()
-        elif tab == 6:
+        elif tab == 5:
             self.updateHistoryLog()
 
     def updateOrderBy(self):
@@ -307,7 +309,7 @@ class postgisQueryBuilder:
                 pass
 
     def focusOnQuery(self):
-        self.dlg.tabWidget.setCurrentIndex(5)
+        self.dlg.tabWidget.setCurrentIndex(3)
 
     def updateHistoryLog(self):
         historyFile = os.path.join(os.path.dirname(__file__),"validSql.log")
@@ -334,6 +336,7 @@ class postgisQueryBuilder:
             combo.setCurrentIndex(0)
 
     def loadSVG(self,svgName):
+        self.dlg.DiagPanel.show()
         svgFile = os.path.join( os.path.dirname( os.path.abspath( __file__ ) ), "svg",svgName + ".svg")
         #print svgFile
         item = QGraphicsSvgItem(svgFile)
@@ -358,7 +361,7 @@ class postgisQueryBuilder:
 
     def selectAllFields(self):
         for row in range(0,self.dlg.fieldsListA.count()):
-            self.dlg.fieldsListA.item(row).setCheckState(self.dlg.selectAllFields.checkState())
+            self.dlg.fieldsListA.item(row).setCheckState(self.dlg.LAYERaAllFields.checkState())
         self.setFieldsList()
 
     def setLAYERb(self):
@@ -525,11 +528,12 @@ class postgisQueryBuilder:
 
     def setQueryType(self,line):
         theQ = self.dlg.QueryType.currentText()
-        self.loadSVG(theQ.replace(" ","_"))
         if theQ[:6] == "Select":
             return
+        self.loadSVG(theQ.replace(" ","_"))
         #self.querySet.resetParameters()
         self.resetDialog()
+        self.dlg.summaryBox.show()
         self.querySet.setCurrentQuery(theQ)
         if theQ[:2]=="ST":
             self.geoQuery = True
@@ -537,15 +541,15 @@ class postgisQueryBuilder:
             self.geoQuery = None
         for slot in self.querySet.getRequiredSlots():
             #print slot
-            self.enableDialogSlot(slot)
+            #self.enableDialogSlot(slot)
             self.showDialogSlot(slot)
             self.showDialogSlot(slot+"Label")
+            self.showDialogSlot(slot+"AllFields")
         #print self.querySet.testQueryParametersCheckList()
         #simulate click on checkbox to set required slot
         self.dlg.SPATIALRELNOT.setCheckState(Qt.Checked)
         self.dlg.SPATIALRELNOT.setCheckState(Qt.Unchecked)
         self.dlg.Helper.setText(theQ+":\n"+self.querySet.getDescription())
-        self.dlg.Helper2.setText(self.querySet.getDescription())
         self.loadSVG(theQ.replace(" ","_"))
         
 
@@ -556,9 +560,10 @@ class postgisQueryBuilder:
         self.querySet.resetParameters()
         self.dlg.queryReadyButton.hide()
         self.hideDialogSlot("queryReadyButton")
-        self.disableQueryDefSlot()
+        #self.disableQueryDefSlot()
         self.hideQueryDefSlot()
         self.loadSVG("Select_query_type")
+        self.dlg.summaryBox.hide()
         try:
             tables = self.PSQL.getLayers()
         except AttributeError:
@@ -573,9 +578,10 @@ class postgisQueryBuilder:
     def hideQueryDefSlot(self):
         toHide=["BUFFERRADIUS","FIELD","OPERATOR","CONDITION",\
                 "SPATIALREL","SPATIALRELNOT","LAYERaLabel","BUFFERRADIUSLabel",\
-                "FIELDLabel","OPERATORLabel","CONDITIONLabel","SPATIALRELLabel",
+                "FIELD","FIELDLabel","OPERATORLabel","CONDITIONLabel","SPATIALRELLabel",
                 "SPATIALRELNOTLabel","fieldsListALabel","fieldsListBLabel",\
-                "DISTANCEOP","DISTANCE","DISTANCEOPLabel","DISTANCELabel","FIELDb","FIELDbLabel","JOIN","JOINLabel"]
+                "DISTANCEOP","DISTANCE","DISTANCEOPLabel","DISTANCELabel","FIELDb","FIELDbLabel","JOIN","JOINLabel",\
+                "LAYERa","LAYERb","LAYERbLabel","summaryBox","LAYERaAllFields","fieldsListA","fieldsListB"]
         for slot in toHide:
             self.hideDialogSlot(slot)
 
@@ -672,10 +678,10 @@ class postgisQueryBuilder:
             else:
                 rows = self.PSQL.tableResultGen(self.dlg.LAYERa.currentText(),self.dlg.QueryResult.toPlainText(),self.dlg.TableResult)
                 self.dlg.labelRowsNumber.setText("Total rows: "+str(rows))
-                self.dlg.tabWidget.setCurrentIndex(6)
+                self.dlg.tabWidget.setCurrentIndex(4)
         else:
             QMessageBox.information(None, "FILTER ERROR:", "The Filter table is malformed")
-            self.dlg.tabWidget.setCurrentIndex(4)
+            self.dlg.tabWidget.setCurrentIndex(2)
 
     def unload(self):
         # Remove the plugin menu item and icon

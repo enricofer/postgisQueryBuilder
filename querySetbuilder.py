@@ -54,7 +54,7 @@ class querySet():
             [\
             'Returns a geometry that represents the point set union of geomA and geomB.',\
             'http://postgis.refractions.net/documentation/manual-svn/ST_Union.html',\
-            ['LAYERa','LAYERb','fieldsListA','fieldsListB'],\
+            ['LAYERa','LAYERb','fieldsListA'],\
             'SELECT [[ONLYGEOMSET]],ST_Union("[[LAYERa]]".[[GEOMETRYFIELD]],"[[LAYERb]]".[[GEOMETRYFIELD]]) AS [[GEOMETRYFIELD]] FROM "[[SCHEMA]]"."[[LAYERa]]","[[SCHEMA]]"."[[LAYERb]] [[WHERE]] [[ORDERBY]]"',\
             '_Union_of_[[LAYERa]]_and_[[LAYERb]]'\
             ],\
@@ -70,7 +70,7 @@ class querySet():
             [\
             'Returns a geometry that represents that part of geometry A that does not intersect with geometry B.',\
             'http://postgis.refractions.net/documentation/manual-svn/ST_Difference.html',\
-            ['LAYERa','LAYERb','fieldsListA','fieldsListB'],\
+            ['LAYERa','LAYERb','fieldsListA'],\
             'SELECT [[FIELDSET]],ST_Difference("[[LAYERa]]".[[GEOMETRYFIELD]],"[[LAYERb]]".[[GEOMETRYFIELD]]) AS [[GEOMETRYFIELD]] FROM "[[SCHEMA]]"."[[LAYERa]]","[[SCHEMA]]"."[[LAYERb]]"',\
             '_Diff_between_[[LAYERa]]_and_[[LAYERb]]'\
             ],\
@@ -78,7 +78,7 @@ class querySet():
             [\
             'Returns a geometry that represents the shared portion of geomA and geomB. The geography implementation does a transform to geometry to do the intersection and then transform back to WGS84.',\
             'http://postgis.refractions.net/documentation/manual-svn/ST_Intersection.html',\
-            ['LAYERa','LAYERb','fieldsListA','fieldsListB'],\
+            ['LAYERa','LAYERb','fieldsListA'],\
             'SELECT [[FIELDSET]],ST_Intersection("[[LAYERa]]".[[GEOMETRYFIELD]],"[[LAYERb]]".[[GEOMETRYFIELD]]) AS [[GEOMETRYFIELD]] FROM "[[SCHEMA]]"."[[LAYERa]]","[[SCHEMA]]"."[[LAYERb]]"',\
             '_Int_between_[[LAYERa]]_and_[[LAYERb]]'\
             ],\
@@ -86,7 +86,7 @@ class querySet():
             [\
             'For geometry: Returns a geometry that represents all points whose distance from this Geometry is less than or equal to distance. Calculations are in the Spatial Reference System of this Geometry. For geography: Uses a planar transform wrapper.',\
             'http://postgis.refractions.net/documentation/manual-svn/ST_Buffer.html',\
-            ['LAYERa','BUFFERRADIUS','fieldsListA'],\
+            ['LAYERa','BUFFERRADIUS'],\
             'SELECT [[FIELDSET]],ST_Buffer("[[LAYERa]]".[[GEOMETRYFIELD]],[[BUFFERRADIUS]]::double precision) AS [[GEOMETRYFIELD]] FROM "[[SCHEMA]]"."[[LAYERa]]"  [[WHERE]] [[ORDERBY]]',\
             '_Buffer_of_[[LAYERa]]'\
             ],\
@@ -102,7 +102,7 @@ class querySet():
             [\
             'Add maximum and minimum measure information between geometries of LayerA and LayerB. For geometry type Returns the 2-dimensional cartesian minimum and maximum distance (based on spatial ref) between two geometries in projected units. For geography type defaults to return spheroidal minimum distance between two geographies in meters." area is in square meters.',\
             'http://postgis.org/docs/ST_Distance.html',\
-            ['LAYERa','LAYERb','fieldsListA','fieldsListB'],\
+            ['LAYERa','LAYERb','fieldsListA'],\
             'SELECT [[FIELDSET]], ST_Distance("[[LAYERa]]".[[GEOMETRYFIELD]],"[[LAYERb]]".[[GEOMETRYFIELD]]) AS MinDistance, ST_MaxDistance("[[LAYERa]]".[[GEOMETRYFIELD]],"[[LAYERb]]".[[GEOMETRYFIELD]]) AS MaxDistance FROM "[[SCHEMA]]"."[[LAYERa]]","[[SCHEMA]]"."[[LAYERb]] [[WHERE]] [[ORDERBY]]"',\
             '_Distances_between_[[LAYERa]]_and_[[LAYERb]]'\
             ],\
@@ -126,7 +126,7 @@ class querySet():
             [\
             'Returns the result of spatial join of Layer A and Layer B where relationship is true',\
             'http://workshops.boundlessgeo.com/postgis-intro/joins_exercises.html',\
-            ['LAYERa','LAYERb','SPATIALREL','fieldsListA','fieldsListB'],\
+            ['LAYERa','LAYERb','SPATIALREL','SPATIALRELNOT','fieldsListA','fieldsListB'],\
             'SELECT [[FIELDSET]] FROM "[[SCHEMA]]"."[[LAYERa]]" INNER JOIN "[[SCHEMA]]"."[[LAYERb]]" ON [[SPATIALREL]]("[[LAYERa]]".[[GEOMETRYFIELD]],"[[LAYERb]]".[[GEOMETRYFIELD]]) [[WHERE]] [[ORDERBY]]',\
             '_spatial_join_of_[[LAYERa]]_and_[[LAYERb]]'\
             ],\

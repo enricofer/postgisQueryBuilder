@@ -9,12 +9,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>484</width>
-    <height>635</height>
+    <width>598</width>
+    <height>944</height>
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
+   <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
@@ -22,9 +22,24 @@
   <property name="windowTitle">
    <string>postgisQueryBuilder</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_20">
+  <layout class="QVBoxLayout" name="verticalLayout_18">
+   <property name="sizeConstraint">
+    <enum>QLayout::SetMinimumSize</enum>
+   </property>
    <item>
     <widget class="QToolBox" name="tabWidget">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>200</width>
+       <height>0</height>
+      </size>
+     </property>
      <property name="frameShape">
       <enum>QFrame::NoFrame</enum>
      </property>
@@ -38,7 +53,7 @@
       <number>0</number>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>1</number>
      </property>
      <property name="tabSpacing">
       <number>0</number>
@@ -48,8 +63,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>466</width>
-        <height>437</height>
+        <width>580</width>
+        <height>767</height>
        </rect>
       </property>
       <attribute name="label">
@@ -222,6 +237,24 @@
          </item>
          <item>
           <widget class="QLabel" name="label_2">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>10000</width>
+             <height>16777215</height>
+            </size>
+           </property>
            <property name="text">
             <string>Available relations list (T:table V:view M:materialized view)</string>
            </property>
@@ -293,19 +326,19 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="queryTypeSlot">
+     <widget class="QWidget" name="queryDefinitionSlot">
       <property name="geometry">
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>466</width>
-        <height>437</height>
+        <width>580</width>
+        <height>767</height>
        </rect>
       </property>
       <attribute name="label">
-       <string>Query type</string>
+       <string>Query definition</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_18">
+      <layout class="QVBoxLayout" name="verticalLayout_17">
        <property name="leftMargin">
         <number>0</number>
        </property>
@@ -319,7 +352,10 @@
         <number>3</number>
        </property>
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_11">
+        <layout class="QVBoxLayout" name="verticalLayout_7">
+         <property name="spacing">
+          <number>2</number>
+         </property>
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_8">
            <item>
@@ -351,153 +387,129 @@
           </layout>
          </item>
          <item>
-          <widget class="QLabel" name="Helper2">
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>80</height>
-            </size>
+          <widget class="QGroupBox" name="summaryBox">
+           <property name="title">
+            <string>Summary</string>
            </property>
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>1000000</height>
-            </size>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-           </property>
-           <property name="wordWrap">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QGraphicsView" name="DiagPanel">
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>150</height>
-            </size>
-           </property>
-           <property name="acceptDrops">
-            <bool>false</bool>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">color: rgba(212, 208, 200, 0)</string>
-           </property>
-           <property name="frameShape">
-            <enum>QFrame::NoFrame</enum>
-           </property>
-           <property name="frameShadow">
-            <enum>QFrame::Raised</enum>
-           </property>
-           <property name="verticalScrollBarPolicy">
-            <enum>Qt::ScrollBarAlwaysOff</enum>
-           </property>
-           <property name="horizontalScrollBarPolicy">
-            <enum>Qt::ScrollBarAlwaysOff</enum>
-           </property>
-           <property name="backgroundBrush">
-            <brush brushstyle="SolidPattern">
-             <color alpha="255">
-              <red>212</red>
-              <green>208</green>
-              <blue>200</blue>
-             </color>
-            </brush>
-           </property>
-           <property name="foregroundBrush">
-            <brush brushstyle="NoBrush">
-             <color alpha="255">
-              <red>170</red>
-              <green>170</green>
-              <blue>170</blue>
-             </color>
-            </brush>
-           </property>
-           <property name="interactive">
-            <bool>false</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer name="verticalSpacer_2">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>40</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="queryDefinitionSlot">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>466</width>
-        <height>437</height>
-       </rect>
-      </property>
-      <attribute name="label">
-       <string>Query definition</string>
-      </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_17">
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>3</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
-        <number>3</number>
-       </property>
-       <item>
-        <layout class="QVBoxLayout" name="verticalLayout_7">
-         <property name="spacing">
-          <number>2</number>
-         </property>
-         <item>
-          <widget class="QLabel" name="Helper">
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>25</height>
-            </size>
-           </property>
-           <property name="autoFillBackground">
-            <bool>false</bool>
-           </property>
-           <property name="frameShape">
-            <enum>QFrame::StyledPanel</enum>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-           </property>
-           <property name="wordWrap">
-            <bool>true</bool>
-           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_11">
+            <property name="spacing">
+             <number>3</number>
+            </property>
+            <property name="sizeConstraint">
+             <enum>QLayout::SetMinimumSize</enum>
+            </property>
+            <property name="leftMargin">
+             <number>3</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>3</number>
+            </property>
+            <property name="bottomMargin">
+             <number>3</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="Helper">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="autoFillBackground">
+               <bool>false</bool>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::NoFrame</enum>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+              </property>
+              <property name="wordWrap">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QGraphicsView" name="DiagPanel">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>100</height>
+               </size>
+              </property>
+              <property name="acceptDrops">
+               <bool>false</bool>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">color: rgba(212, 208, 200, 0)</string>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::NoFrame</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Raised</enum>
+              </property>
+              <property name="verticalScrollBarPolicy">
+               <enum>Qt::ScrollBarAlwaysOff</enum>
+              </property>
+              <property name="horizontalScrollBarPolicy">
+               <enum>Qt::ScrollBarAlwaysOff</enum>
+              </property>
+              <property name="backgroundBrush">
+               <brush brushstyle="SolidPattern">
+                <color alpha="255">
+                 <red>212</red>
+                 <green>208</green>
+                 <blue>200</blue>
+                </color>
+               </brush>
+              </property>
+              <property name="foregroundBrush">
+               <brush brushstyle="NoBrush">
+                <color alpha="255">
+                 <red>170</red>
+                 <green>170</green>
+                 <blue>170</blue>
+                </color>
+               </brush>
+              </property>
+              <property name="interactive">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </widget>
          </item>
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_3">
+           <property name="spacing">
+            <number>2</number>
+           </property>
            <item>
             <widget class="QLabel" name="LAYERaLabel">
              <property name="text">
@@ -506,20 +518,23 @@
             </widget>
            </item>
            <item>
-            <spacer name="horizontalSpacer_2">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+            <widget class="QComboBox" name="LAYERa">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
              </property>
-             <property name="sizeHint" stdset="0">
+             <property name="minimumSize">
               <size>
-               <width>40</width>
-               <height>20</height>
+               <width>150</width>
+               <height>0</height>
               </size>
              </property>
-            </spacer>
+            </widget>
            </item>
            <item>
-            <widget class="QCheckBox" name="selectAllFields">
+            <widget class="QCheckBox" name="LAYERaAllFields">
              <property name="text">
               <string>Select all fields</string>
              </property>
@@ -528,12 +543,9 @@
           </layout>
          </item>
          <item>
-          <widget class="QComboBox" name="LAYERa"/>
-         </item>
-         <item>
           <widget class="QListWidget" name="fieldsListA">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -541,20 +553,52 @@
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>30</height>
+             <height>50</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>100</height>
             </size>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="LAYERbLabel">
-           <property name="text">
-            <string>Layer B</string>
+          <layout class="QHBoxLayout" name="horizontalLayout_10">
+           <property name="spacing">
+            <number>2</number>
            </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QComboBox" name="LAYERb"/>
+           <item>
+            <widget class="QLabel" name="LAYERbLabel">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>20</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>Layer B</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="LAYERb">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>150</width>
+               <height>0</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
          <item>
           <widget class="QListWidget" name="fieldsListB">
@@ -567,13 +611,13 @@
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>0</height>
+             <height>50</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
              <width>16777215</width>
-             <height>30</height>
+             <height>50</height>
             </size>
            </property>
           </widget>
@@ -584,7 +628,10 @@
             <number>2</number>
            </property>
            <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_14">
+            <layout class="QHBoxLayout" name="horizontalLayout_11">
+             <property name="spacing">
+              <number>3</number>
+             </property>
              <item>
               <widget class="QLabel" name="BUFFERRADIUSLabel">
                <property name="sizePolicy">
@@ -599,23 +646,35 @@
               </widget>
              </item>
              <item>
-              <widget class="QLabel" name="SPATIALRELLabel">
-               <property name="text">
-                <string>Spatial relationship between LayerA and Layer B</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLabel" name="FIELDLabel">
-               <property name="text">
-                <string>Select Field of Layer A</string>
-               </property>
-              </widget>
+              <widget class="QLineEdit" name="BUFFERRADIUS"/>
              </item>
             </layout>
            </item>
            <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_15">
+            <layout class="QHBoxLayout" name="horizontalLayout_14"/>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_12">
+             <property name="spacing">
+              <number>3</number>
+             </property>
+             <item>
+              <widget class="QLabel" name="SPATIALRELLabel">
+               <property name="text">
+                <string>Relationship between A and B</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QComboBox" name="SPATIALREL">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+              </widget>
+             </item>
              <item>
               <widget class="QCheckBox" name="SPATIALRELNOT">
                <property name="sizePolicy">
@@ -635,85 +694,93 @@
                </property>
               </widget>
              </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_13">
+             <property name="spacing">
+              <number>3</number>
+             </property>
              <item>
-              <widget class="QComboBox" name="SPATIALREL"/>
+              <widget class="QLabel" name="FIELDLabel">
+               <property name="minimumSize">
+                <size>
+                 <width>65</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Join field of A</string>
+               </property>
+              </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="BUFFERRADIUS"/>
-             </item>
-             <item>
-              <widget class="QLineEdit" name="DISTANCE"/>
-             </item>
-             <item>
-              <widget class="QComboBox" name="FIELD"/>
+              <widget class="QComboBox" name="FIELD">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+              </widget>
              </item>
             </layout>
            </item>
            <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_16">
-             <item>
-              <widget class="QLabel" name="DISTANCELabel">
-               <property name="text">
-                <string>Condition</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLabel" name="OPERATORLabel">
-               <property name="text">
-                <string>Operator</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLabel" name="DISTANCEOPLabel">
-               <property name="text">
-                <string>Operator</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLabel" name="CONDITIONLabel">
-               <property name="text">
-                <string>Condition</string>
-               </property>
-              </widget>
-             </item>
+            <layout class="QHBoxLayout" name="horizontalLayout_17">
+             <property name="spacing">
+              <number>3</number>
+             </property>
              <item>
               <widget class="QLabel" name="JOINLabel">
+               <property name="minimumSize">
+                <size>
+                 <width>65</width>
+                 <height>0</height>
+                </size>
+               </property>
                <property name="text">
                 <string>Join type</string>
                </property>
               </widget>
              </item>
-            </layout>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_18">
              <item>
-              <widget class="QComboBox" name="DISTANCEOP"/>
-             </item>
-             <item>
-              <widget class="QComboBox" name="JOIN"/>
-             </item>
-             <item>
-              <widget class="QComboBox" name="CONDITION">
-               <property name="editable">
-                <bool>true</bool>
+              <widget class="QComboBox" name="JOIN">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
                </property>
               </widget>
-             </item>
-             <item>
-              <widget class="QComboBox" name="OPERATOR"/>
              </item>
             </layout>
            </item>
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_19">
+             <property name="spacing">
+              <number>3</number>
+             </property>
              <item>
               <widget class="QLabel" name="FIELDbLabel">
+               <property name="minimumSize">
+                <size>
+                 <width>65</width>
+                 <height>0</height>
+                </size>
+               </property>
                <property name="text">
-                <string>Select Field of Layer B</string>
+                <string>Join field of B</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QComboBox" name="FIELDb">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
                </property>
               </widget>
              </item>
@@ -721,9 +788,6 @@
            </item>
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_20">
-             <item>
-              <widget class="QComboBox" name="FIELDb"/>
-             </item>
              <item>
               <widget class="QPushButton" name="queryReadyButton">
                <property name="text">
@@ -743,6 +807,54 @@
                 <bool>true</bool>
                </property>
               </widget>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_15">
+               <item>
+                <widget class="QLabel" name="OPERATORLabel">
+                 <property name="text">
+                  <string>Operator</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QComboBox" name="OPERATOR"/>
+               </item>
+               <item>
+                <widget class="QLabel" name="DISTANCEOPLabel">
+                 <property name="text">
+                  <string>Operator</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QComboBox" name="DISTANCEOP"/>
+               </item>
+               <item>
+                <widget class="QLabel" name="DISTANCELabel">
+                 <property name="text">
+                  <string>Condition</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="DISTANCE"/>
+               </item>
+               <item>
+                <widget class="QLabel" name="CONDITIONLabel">
+                 <property name="text">
+                  <string>Condition</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QComboBox" name="CONDITION">
+                 <property name="editable">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+              </layout>
              </item>
             </layout>
            </item>
@@ -770,8 +882,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>466</width>
-        <height>437</height>
+        <width>580</width>
+        <height>767</height>
        </rect>
       </property>
       <attribute name="label">
@@ -844,8 +956,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>466</width>
-        <height>437</height>
+        <width>580</width>
+        <height>767</height>
        </rect>
       </property>
       <attribute name="label">
@@ -919,8 +1031,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>466</width>
-        <height>437</height>
+        <width>580</width>
+        <height>767</height>
        </rect>
       </property>
       <attribute name="label">
@@ -973,8 +1085,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>466</width>
-        <height>437</height>
+        <width>580</width>
+        <height>767</height>
        </rect>
       </property>
       <attribute name="label">
@@ -1036,7 +1148,7 @@
        </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>40</width>
+         <width>70</width>
          <height>20</height>
         </size>
        </property>
@@ -1058,9 +1170,6 @@
     </layout>
    </item>
   </layout>
-  <zorder>tabWidget</zorder>
-  <zorder>horizontalLayoutWidget_9</zorder>
-  <zorder>horizontalLayoutWidget_13</zorder>
  </widget>
  <customwidgets>
   <customwidget>
