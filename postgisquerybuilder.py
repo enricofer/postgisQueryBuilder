@@ -151,6 +151,7 @@ class postgisQueryBuilder:
         self.dlg.PASSWORDFIELD.hide()
         self.dlg.PASSWORDFIELDLabel.hide()
         #init
+        self.getPSQLConnections()
         self.populateGui()
         self.eventsConnect()
         self.toTableDlg = convertToTableDialog(self)
@@ -358,6 +359,7 @@ class postgisQueryBuilder:
     def selectAllFields(self):
         for row in range(0,self.dlg.fieldsListA.count()):
             self.dlg.fieldsListA.item(row).setCheckState(self.dlg.selectAllFields.checkState())
+        self.setFieldsList()
 
     def setLAYERb(self):
         #called when LAYERb is activated
@@ -608,7 +610,6 @@ class postgisQueryBuilder:
 
     def getPSQLConnections(self):
         conn = self.PSQL.getConnections()
-        print conn
         self.populateComboBox(self.dlg.PSQLConnection,conn,"Select connection",True)
         self.hideQueryDefSlot()
         self.dlg.queryReadyButton.hide()
