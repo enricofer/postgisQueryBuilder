@@ -53,7 +53,7 @@
       <number>0</number>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>2</number>
      </property>
      <property name="tabSpacing">
       <number>0</number>
@@ -1148,7 +1148,7 @@
        </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>70</width>
+         <width>80</width>
          <height>20</height>
         </size>
        </property>

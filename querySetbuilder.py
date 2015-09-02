@@ -86,7 +86,7 @@ class querySet():
             [\
             'For geometry: Returns a geometry that represents all points whose distance from this Geometry is less than or equal to distance. Calculations are in the Spatial Reference System of this Geometry. For geography: Uses a planar transform wrapper.',\
             'http://postgis.refractions.net/documentation/manual-svn/ST_Buffer.html',\
-            ['LAYERa','BUFFERRADIUS'],\
+            ['LAYERa','fieldsListA','BUFFERRADIUS'],\
             'SELECT [[FIELDSET]],ST_Buffer("[[LAYERa]]".[[GEOMETRYFIELD]],[[BUFFERRADIUS]]::double precision) AS [[GEOMETRYFIELD]] FROM "[[SCHEMA]]"."[[LAYERa]]"  [[WHERE]] [[ORDERBY]]',\
             '_Buffer_of_[[LAYERa]]'\
             ],\

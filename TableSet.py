@@ -30,6 +30,7 @@ class tableSet(QtGui.QTableWidget):
         self.signalMapper = QtCore.QSignalMapper()
         self.signalMapper.mapped[QtGui.QWidget].connect(self.on_signalMapper_mapped)
         self.rowSize = 20
+        self.opSlotSize = 75
         #self.twg = twg
         #self.layerList = layerList
 
@@ -42,12 +43,18 @@ class tableSet(QtGui.QTableWidget):
         #self.layerList = layerList
         self.setRowCount(1)
         self.setColumnCount(4)
-        self.setColumnWidth(0,80)
-        self.setColumnWidth(1,80) #int(self.width()/3*2)
-        self.setColumnWidth(2,80) 
-        self.setColumnWidth(3,80) #int(self.width()/3)
+        objSlotSize = int((self.width()-self.opSlotSize*2)/2)
+        self.setColumnWidth(0,self.opSlotSize)
+        self.setColumnWidth(1,objSlotSize) #int(self.width()/3*2)
+        self.setColumnWidth(2,self.opSlotSize) 
+        self.setColumnWidth(3,objSlotSize) #int(self.width()/3)
         self.setCellWidget(0,0,self.actionFilterCell(0,0))
         self.setRowHeight(0,self.rowSize)
+        
+    def resizeEvent(self,ev):
+        objSlotSize = int((self.width()-self.opSlotSize*2)/2)
+        self.setColumnWidth(1,objSlotSize) #int(self.width()/3*2)
+        self.setColumnWidth(3,objSlotSize) #int(self.width()/3)
         
 
     def expopulateFilterTable(self,layerList):
@@ -117,7 +124,7 @@ class tableSet(QtGui.QTableWidget):
         filterItem.addItem("ST_Intersects")
         filterItem.addItem("ST_Disjoint")
         filterItem.addItem("ST_Crosses")
-        filterItem.insertItem(0,"Select")
+        filterItem.insertItem(0,"Select","Select")
         filterItem.setCurrentIndex(0)
         return filterItem
 
@@ -128,7 +135,7 @@ class tableSet(QtGui.QTableWidget):
     def actionCell(self,row,col):
         controlItem=QtGui.QComboBox()
         controlItem.addItem("")
-        controlItem.addItem("Attribute filter")
+        controlItem.addItem("Attrib  filter")
         controlItem.addItem("Spatial filter")
         controlItem.addItem("")
         controlItem.addItem("AND")
@@ -150,7 +157,7 @@ class tableSet(QtGui.QTableWidget):
     def actionFilterCell(self,row,col):
         controlItem=QtGui.QComboBox()
         controlItem.addItem("")
-        controlItem.addItem("Attribute filter")
+        controlItem.addItem("Attrib  filter")
         controlItem.addItem("Spatial filter")
         controlItem.addItem("NOT")
         controlItem.addItem("(")
@@ -185,7 +192,7 @@ class tableSet(QtGui.QTableWidget):
     def groupFilterCell(self,row,col):
         controlItem=QtGui.QComboBox()
         controlItem.addItem("")
-        controlItem.addItem("Attribute filter")
+        controlItem.addItem("Attrib  filter")
         controlItem.addItem("Spatial filter")
         controlItem.addItem("AND/OR")
         controlItem.addItem("NOT/()")
@@ -241,7 +248,8 @@ class tableSet(QtGui.QTableWidget):
         valueItem.clear()
         for value in uniqueValueList:
             try :
-                valueItem.addItem(value.encode('utf8','ignore'))
+                #valueItem.addItem(value.encode('utf8','ignore'))
+                valueItem.addItem(unicode(value))
             except:
                 valueItem.addItem(str(value))
         valueItem.insertItem(0,"Select or type")
@@ -274,6 +282,7 @@ class tableSet(QtGui.QTableWidget):
         parClosed=0
         previous = "AND/OR"
         for row in range(0,self.rowCount()-1):
+            #print "previous: ",previous
             if self.cellWidget(row,1).currentText() == '(': 
                 if previous in ['QUERY',')']:
                     #print "malformed: ("
@@ -349,41 +358,55 @@ class tableSet(QtGui.QTableWidget):
         if cbox.column == 1:
             self.uniqueValuesLoad(cbox.row,3,self.PSQL.getUniqeValues(self.layerQuery,self.cellWidget(cbox.row,1).currentText(),50))
         if cbox.column == 0:
-            if cbox.currentText() == "Attribute filter":
+            if cbox.currentText() == "Attrib  filter":
                 nextAction = "bool"
                 self.setCellWidget(cbox.row,1,self.fieldsLoad(cbox.row,1))
                 self.setCellWidget(cbox.row,2,self.attributefiltersLoad())
                 self.setCellWidget(cbox.row,3,self.valueLoad())
+                self.cellWidget(cbox.row,2).show()
+                self.cellWidget(cbox.row,3).show()
             elif cbox.currentText() == "Spatial filter":
                 nextAction = "bool"
                 self.setCellWidget(cbox.row,1,self.oneValueLoad(self.layerQuery))
                 self.setCellWidget(cbox.row,2,self.spatialfiltersLoad())
                 self.setCellWidget(cbox.row,3,self.layerLoad())
+                self.cellWidget(cbox.row,2).show()
+                self.cellWidget(cbox.row,3).show()
             elif cbox.currentText() == "OR":
                 nextAction = "filter/group"
                 self.setCellWidget(cbox.row,1,self.boolLoad('OR'))
                 self.setCellWidget(cbox.row,2,self.oneValueLoad(""))
                 self.setCellWidget(cbox.row,3,self.oneValueLoad(""))
+                self.cellWidget(cbox.row,2).hide()
+                self.cellWidget(cbox.row,3).hide()
             elif cbox.currentText() == "AND":
                 nextAction = "filter/group"
                 self.setCellWidget(cbox.row,1,self.boolLoad('AND'))
                 self.setCellWidget(cbox.row,2,self.oneValueLoad(""))
                 self.setCellWidget(cbox.row,3,self.oneValueLoad(""))
+                self.cellWidget(cbox.row,2).hide()
+                self.cellWidget(cbox.row,3).hide()
             elif cbox.currentText() == "NOT":
                 nextAction = "filter/group"
                 self.setCellWidget(cbox.row,1,self.groupLoad('NOT'))
                 self.setCellWidget(cbox.row,2,self.oneValueLoad(""))
                 self.setCellWidget(cbox.row,3,self.oneValueLoad(""))
+                self.cellWidget(cbox.row,2).hide()
+                self.cellWidget(cbox.row,3).hide()
             elif cbox.currentText() == "(":
                 nextAction = "filter/group"
                 self.setCellWidget(cbox.row,1,self.groupLoad('('))
                 self.setCellWidget(cbox.row,2,self.oneValueLoad(""))
                 self.setCellWidget(cbox.row,3,self.oneValueLoad(""))
+                self.cellWidget(cbox.row,2).hide()
+                self.cellWidget(cbox.row,3).hide()
             elif cbox.currentText() == ")":
                 nextAction = "filter/group"
-                self.setCellWidget(cbox.row,1,self.groupLoad(')'))
+                self.setCellWidget(cbox.row,1,self.boolLoad(')'))
                 self.setCellWidget(cbox.row,2,self.oneValueLoad(""))
                 self.setCellWidget(cbox.row,3,self.oneValueLoad(""))
+                self.cellWidget(cbox.row,2).hide()
+                self.cellWidget(cbox.row,3).hide()
             elif cbox.currentText() == "Delete":
                 if cbox.row != (self.rowCount()-1):
                     self.delRow(cbox.row)
