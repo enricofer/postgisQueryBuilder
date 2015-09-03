@@ -191,7 +191,31 @@ class postgisQueryBuilder:
 
     def layerContextMenu(self,listItem):
         self.predefinedLayer = None
+        for rowSel in (self.dlg.LayerList.selectedItems()):
+            self.selectedLayer = rowSel.text()
+
         contextMenu = QMenu()
+
+        self.layerNameAction = contextMenu.addAction(QIcon(os.path.join(self.plugin_dir,"icons","useForQuery.png")),\
+                                                         self.selectedLayer)
+        contextMenu.addSeparator()
+        self.countFeatureAction = contextMenu.addAction(QIcon(os.path.join(self.plugin_dir,"icons","useForQuery.png")),\
+                                                         "Features Count: "+self.PSQL.getFeatureCount(self.selectedLayer))
+        self.relationTypeAction = contextMenu.addAction(QIcon(os.path.join(self.plugin_dir,"icons","useForQuery.png")),\
+                                                         "Relation Type: "+self.PSQL.getRelationType(self.selectedLayer))
+        self.geometryTypeAction = contextMenu.addAction(QIcon(os.path.join(self.plugin_dir,"icons","useForQuery.png")),\
+                                                         "Geometry Type: "+self.PSQL.getGeometryType(\
+                                                         self.selectedLayer,suggestion = self.dlg.GEOMETRYFIELD.currentText()))
+        self.autoKeyAction = contextMenu.addAction(QIcon(os.path.join(self.plugin_dir,"icons","useForQuery.png")),\
+                                                         "Detected key field: %s" % self.PSQL.guessKeyField(\
+                                                         self.selectedLayer,suggestion = self.dlg.KEYFIELD.currentText()) or "undefined")
+        self.autoGeometryAction = contextMenu.addAction(QIcon(os.path.join(self.plugin_dir,"icons","useForQuery.png")),\
+                                                         "Detected geom field: %s" % self.PSQL.guessGeometryField(\
+                                                         self.selectedLayer,suggestion = self.dlg.GEOMETRYFIELD.currentText()) or "undefined")
+        self.nativeSRIDAction = contextMenu.addAction(QIcon(os.path.join(self.plugin_dir,"icons","useForQuery.png")),\
+                                                         "Native SRID: EPSG:"+self.PSQL.getSRID(\
+                                                         self.selectedLayer,suggestion = self.dlg.GEOMETRYFIELD.currentText()))
+        contextMenu.addSeparator()
         self.useForQueryAction = contextMenu.addAction(QIcon(os.path.join(self.plugin_dir,"icons","useForQuery.png")),\
                                                          "Use as primary layer for query")
         self.useForQueryAction.triggered.connect(self.useForQuery)
@@ -204,15 +228,17 @@ class postgisQueryBuilder:
         self.layerGetTableAction = contextMenu.addAction(QIcon(os.path.join(self.plugin_dir,"icons","layerGetTable.png")),\
                                                          "View as data table")
         self.layerGetTableAction.triggered.connect(self.layerGetTable)
-        self.convertToTableAction = contextMenu.addAction(QIcon(os.path.join(self.plugin_dir,"icons","convertToTable.png")),\
-                                                         "Convert view to table")
-        self.convertToTableAction.triggered.connect(self.convertToTable)
-        self.layerDeleteAction = contextMenu.addAction(QIcon(os.path.join(self.plugin_dir,"icons","layerDelete.png")),\
-                                                         "Delete view/table")
-        self.layerDeleteAction.triggered.connect(self.layerDelete)
-        self.layerRefreshAction = contextMenu.addAction(QIcon(os.path.join(self.plugin_dir,"icons","layerRefresh.png")),\
-                                                         "Refresh materialized view")
-        self.layerRefreshAction.triggered.connect(self.layerRefresh)
+        if self.PSQL.isView(self.selectedLayer) or self.PSQL.isMaterializedView(self.selectedLayer):
+            self.convertToTableAction = contextMenu.addAction(QIcon(os.path.join(self.plugin_dir,"icons","convertToTable.png")),\
+                                                             "Convert view to table")
+            self.convertToTableAction.triggered.connect(self.convertToTable)
+            self.layerDeleteAction = contextMenu.addAction(QIcon(os.path.join(self.plugin_dir,"icons","layerDelete.png")),\
+                                                             "Delete view/table")
+            self.layerDeleteAction.triggered.connect(self.layerDelete)
+        if self.PSQL.isMaterializedView(self.selectedLayer):
+            self.layerRefreshAction = contextMenu.addAction(QIcon(os.path.join(self.plugin_dir,"icons","layerRefresh.png")),\
+                                                             "Refresh materialized view")
+            self.layerRefreshAction.triggered.connect(self.layerRefresh)
 
 
         contextMenu.exec_(QCursor.pos())
@@ -703,6 +729,7 @@ class postgisQueryBuilder:
         self.dlg.fieldsListB.clear()
         self.dlg.TableResult.clear()
         self.dlg.SPATIALRELNOT.setCheckState(Qt.Unchecked)
+        self.dlg.LAYERaAllFields.setCheckState(Qt.Unchecked)
         self.dlg.DISTANCE.clear()
 
     def getPSQLConnections(self):

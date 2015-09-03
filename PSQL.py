@@ -154,6 +154,33 @@ class PSQL:
         #print fields
         return fields
 
+    def getSRID(self,layer,suggestion = ""):
+        autoGeom = self.guessGeometryField(layer,suggestion)
+        sql="SELECT Find_SRID('%s', '%s', '%s');" % (self.schema,layer,autoGeom)
+        #sql='SELECT distinct(SRID(autoGeom)) as srid FROM "%s"."%s" group by srid;' % (autoGeom,self.schema,layer)
+        query = self.db.exec_(sql)
+        query.next()
+        res = unicode(query.value(0))
+        #print res
+        return res
+
+    def getGeometryType(self,layer,suggestion = ""):
+        autoGeom = self.guessGeometryField(layer,suggestion)
+        sql='''SELECT ST_GeometryType(%s) FROM "%s"."%s";''' % (autoGeom,self.schema,layer)
+        print sql
+        query = self.db.exec_(sql)
+        query.next()
+        res = unicode(query.value(0))
+        #print res
+        return res
+
+    def getFeatureCount(self,layer):
+        sql='select count(*) from "%s"."%s";' % (self.schema,layer)
+        query = self.db.exec_(sql)
+        query.next()
+        res = unicode(query.value(0))
+        #print res
+        return res
 
     def getFieldsType(self,layer,field):
         sql = "SELECT typname FROM pg_attribute a JOIN pg_class c on a.attrelid = c.oid JOIN pg_type t on a.atttypid = t.oid WHERE relname = '%s' and attname = '%s'" % (layer,field)
@@ -178,6 +205,7 @@ class PSQL:
                 "i.indrelid = '%s'::regclass AND i.indisprimary;" % layer
             query = self.db.exec_(sql)
             query.first()
+            print "key guess:",query.value(0)
             return query.value(0)
         else:
             if suggestion in self.getFieldsContent(layer):
@@ -308,6 +336,16 @@ class PSQL:
         query.exec_(sql)
         query.first()
         return query.isValid()
+
+    def getRelationType(self,layer):
+        if self.isTable(layer):
+            return "TABLE"
+        elif self.isView(layer):
+            return "VIEW"
+        elif self.isMaterializedView(layer):
+            return "MATERIALIZED VIEW"
+        else:
+            return ""
 
     def loadView(self,layer,GeomField,KeyField):
         uri = QgsDataSourceURI()

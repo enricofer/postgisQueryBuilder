@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>598</width>
-    <height>702</height>
+    <width>486</width>
+    <height>861</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -63,8 +63,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>580</width>
-        <height>525</height>
+        <width>468</width>
+        <height>684</height>
        </rect>
       </property>
       <attribute name="label">
@@ -182,12 +182,12 @@
               <widget class="QLabel" name="KEYFIELDLabel">
                <property name="maximumSize">
                 <size>
-                 <width>100</width>
+                 <width>140</width>
                  <height>16777215</height>
                 </size>
                </property>
                <property name="text">
-                <string>default pkey field:</string>
+                <string>default primary key field:</string>
                </property>
               </widget>
              </item>
@@ -224,6 +224,20 @@
                 <bool>true</bool>
                </property>
               </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QVBoxLayout" name="verticalLayout_20">
+             <item>
+              <widget class="QLabel" name="SRIDLabel">
+               <property name="text">
+                <string>default SRID</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QComboBox" name="SRID"/>
              </item>
             </layout>
            </item>
@@ -281,8 +295,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>580</width>
-        <height>525</height>
+        <width>468</width>
+        <height>684</height>
        </rect>
       </property>
       <attribute name="label">
@@ -737,76 +751,71 @@
             </layout>
            </item>
            <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_20">
-             <item>
-              <widget class="QPushButton" name="queryReadyButton">
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset>
-                 <normaloff>querybuilderlogo.png</normaloff>querybuilderlogo.png</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>30</width>
-                 <height>30</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <layout class="QHBoxLayout" name="horizontalLayout_15">
-               <item>
-                <widget class="QLabel" name="OPERATORLabel">
-                 <property name="text">
-                  <string>Operator</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QComboBox" name="OPERATOR"/>
-               </item>
-               <item>
-                <widget class="QLabel" name="DISTANCEOPLabel">
-                 <property name="text">
-                  <string>Operator</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QComboBox" name="DISTANCEOP"/>
-               </item>
-               <item>
-                <widget class="QLabel" name="DISTANCELabel">
-                 <property name="text">
-                  <string>Condition</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLineEdit" name="DISTANCE"/>
-               </item>
-               <item>
-                <widget class="QLabel" name="CONDITIONLabel">
-                 <property name="text">
-                  <string>Condition</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QComboBox" name="CONDITION">
-                 <property name="editable">
-                  <bool>true</bool>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-            </layout>
+            <layout class="QVBoxLayout" name="verticalLayout"/>
+           </item>
+           <item>
+            <widget class="QPushButton" name="queryReadyButton">
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normaloff>querybuilderlogo.png</normaloff>querybuilderlogo.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>30</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="flat">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="OPERATORLabel">
+             <property name="text">
+              <string>Operator</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="OPERATOR"/>
+           </item>
+           <item>
+            <widget class="QLabel" name="DISTANCEOPLabel">
+             <property name="text">
+              <string>Operator</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="DISTANCEOP"/>
+           </item>
+           <item>
+            <widget class="QLabel" name="DISTANCELabel">
+             <property name="text">
+              <string>Condition</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="DISTANCE"/>
+           </item>
+           <item>
+            <widget class="QLabel" name="CONDITIONLabel">
+             <property name="text">
+              <string>Condition</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="CONDITION">
+             <property name="editable">
+              <bool>true</bool>
+             </property>
+            </widget>
            </item>
           </layout>
          </item>
@@ -832,8 +841,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>580</width>
-        <height>525</height>
+        <width>468</width>
+        <height>684</height>
        </rect>
       </property>
       <attribute name="label">
@@ -906,8 +915,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>580</width>
-        <height>525</height>
+        <width>468</width>
+        <height>684</height>
        </rect>
       </property>
       <attribute name="label">
@@ -981,8 +990,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>580</width>
-        <height>525</height>
+        <width>468</width>
+        <height>684</height>
        </rect>
       </property>
       <attribute name="label">
@@ -1035,8 +1044,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>580</width>
-        <height>525</height>
+        <width>468</width>
+        <height>684</height>
        </rect>
       </property>
       <attribute name="label">
@@ -1098,7 +1107,7 @@
        </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>80</width>
+         <width>100</width>
          <height>20</height>
         </size>
        </property>
