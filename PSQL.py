@@ -118,10 +118,14 @@ class PSQL:
         sql = 'REFRESH MATERIALIZED VIEW "%s"."%s"' % (self.schema,mView)
         return self.submitCommand(sql)
 
-    def deleteLayer(self,layer):
-        if self.isTable(layer): sql = 'DROP TABLE "%s"."%s"' % (self.schema,layer)
-        elif self.isView (layer): sql = 'DROP VIEW "%s"."%s"' % (self.schema,layer)
-        elif self.isMaterializedView (layer): sql = 'DROP MATERIALIZED VIEW "%s"."%s"' % (self.schema,layer)
+    def deleteLayer(self,layer,cascade = None):
+        if cascade:
+            cascadeDirective = " CASCADE"
+        else:
+            cascadeDirective = ""
+        if self.isTable(layer): sql = 'DROP TABLE "%s"."%s"%s' % (self.schema,layer,cascadeDirective)
+        elif self.isView (layer): sql = 'DROP VIEW "%s"."%s"%s' % (self.schema,layer,cascadeDirective)
+        elif self.isMaterializedView (layer): sql = 'DROP MATERIALIZED VIEW "%s"."%s"%s' % (self.schema,layer,cascadeDirective)
         else: sql =""
         return self.submitCommand(sql)
 
@@ -276,11 +280,11 @@ class PSQL:
     def submitCommand(self,sql):
         query = QSqlQuery(self.db)
         query.exec_(sql)
-        print "ERROR TYPE: ",query.lastError().type()
-        if query.lastError().type() != QSqlError.NoError:
+        if query.lastError().type() == QSqlError.NoError:
             self.queryLogger("SQL_COMMAND",sql)
-            return ""
+            return None
         else:
+            print "ERROR TYPE: ",query.lastError().type(),"QUERY:",sql
             return query.lastError().text()
 
     def isTable(self,tName):

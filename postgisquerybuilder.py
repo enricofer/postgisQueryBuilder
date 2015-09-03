@@ -209,7 +209,7 @@ class postgisQueryBuilder:
         self.convertToTableAction.triggered.connect(self.convertToTable)
         self.layerDeleteAction = contextMenu.addAction(QIcon(os.path.join(self.plugin_dir,"icons","layerDelete.png")),\
                                                          "Delete view/table")
-        self.layerDeleteAction.triggered.connect(self.layerRefresh)
+        self.layerDeleteAction.triggered.connect(self.layerDelete)
         self.layerRefreshAction = contextMenu.addAction(QIcon(os.path.join(self.plugin_dir,"icons","layerRefresh.png")),\
                                                          "Refresh materialized view")
         self.layerRefreshAction.triggered.connect(self.layerRefresh)
@@ -253,26 +253,35 @@ class postgisQueryBuilder:
             if self.PSQL.isMaterializedView(rowSel.text()) or self.PSQL.isView(rowSel.text()):
                 q = 'CREATE TABLE "%s"."%s" as (SELECT * FROM "%s"."%s");' % (self.PSQL.schema,rowSel.text()+"_totable",self.PSQL.schema,rowSel.text())
                 res = self.PSQL.submitCommand(q)
-                if res != "":
+                if not res:
                     QMessageBox.information(None, "ERROR:", res)
 
     def convertToTable(self):
         for rowSel in (self.dlg.LayerList.selectedItems()):
             if self.PSQL.isMaterializedView(rowSel.text()) or self.PSQL.isView(rowSel.text()):
                 self.toTableDlg.ask(rowSel.text())
-                
 
-    def layerDelete(self):
+    def layerDelete(self, cascade = None):
         for rowSel in (self.dlg.LayerList.selectedItems()):
             msg = "Are you sure you want to delete layer '%s' from schema '%s' ?" % (rowSel.text(),self.PSQL.getSchema())
             reply = QMessageBox.question(None, 'Message', msg, QMessageBox.Yes, QMessageBox.No)
             if reply == QMessageBox.Yes:
-                result = self.PSQL.deleteLayer(rowSel.text())
-                #print result
-                if not (result == None or result == ""):
-                    QMessageBox.information(None, "ERROR:", result)
+                deleting = rowSel.text()
+                result = self.PSQL.deleteLayer(deleting)
+                if result:
+                    if "DROP ... CASCADE" in result:
+                        msg = result+"\n\nLayer '%s' has dependencies. Do you want to remove all recursively ?" % rowSel.text()
+                        reply = QMessageBox.question(None, 'Message', msg, QMessageBox.Yes, QMessageBox.No)
+                        if reply == QMessageBox.Yes:
+                            result = self.PSQL.deleteLayer(deleting,cascade = True)
+                            if result:
+                                QMessageBox.information(None, "ERROR:", result)
+                            else:
+                                print "CASCADE DELETED", deleting
+                    else:
+                        QMessageBox.information(None, "ERROR:", result)
                 else:
-                    #print "DELETED", rowSel.text()
+                    print "DELETED", deleting
                     pass
         self.populateLayerMenu()
 
