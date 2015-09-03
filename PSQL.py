@@ -150,6 +150,7 @@ class PSQL:
         #print fields
         return fields
 
+
     def getFieldsType(self,layer,field):
         sql = "SELECT typname FROM pg_attribute a JOIN pg_class c on a.attrelid = c.oid JOIN pg_type t on a.atttypid = t.oid WHERE relname = '%s' and attname = '%s'" % (layer,field)
         query = self.db.exec_(sql)
@@ -164,6 +165,55 @@ class PSQL:
             if self.getFieldsType(layer,field)== 'geometry':
                 return field
         return -1
+
+    def guessKeyField(self,layer,suggestion):
+        if self.isTable(layer):
+            sql = "SELECT a.attname, format_type(a.atttypid, a.atttypmod) " + \
+                "AS data_type FROM   pg_index i JOIN   pg_attribute a ON " + \
+                "a.attrelid = i.indrelid AND a.attnum = ANY(i.indkey) WHERE " + \
+                "i.indrelid = '%s'::regclass AND i.indisprimary;" % layer
+            query = self.db.exec_(sql)
+            query.first()
+            return query.value(0)
+        else:
+            if suggestion in self.getFieldsContent(layer):
+               return suggestion
+            else:
+                try:
+                    return self.getKeyFields(layer)[0]
+                except:
+                    return None
+
+    def guessGeometryField(self,layer,suggestion):
+        if suggestion in self.getFieldsContent(layer):
+           return suggestion
+        else:
+            try:
+                return self.getGeometryFields(layer)[0]
+            except:
+                return None
+
+    def getKeyFields(self,layer):
+        fields = self.getFieldsContent(layer)
+        geomFields = []
+        for field in fields:
+            if self.getFieldsType(layer,field)[:3]== 'int' or self.getFieldsType(layer,field)[:6]== 'serial':
+                geomFields.append(field)
+        if geomFields == []:
+            return None
+        else:
+            return geomFields
+
+    def getGeometryFields(self,layer):
+        fields = self.getFieldsContent(layer)
+        geomFields = []
+        for field in fields:
+            if self.getFieldsType(layer,field)== 'geometry':
+                geomFields.append(field)
+        if geomFields == []:
+            return None
+        else:
+            return geomFields
 
     def getUniqeValues(self,layer,field,range):
         sql = 'SELECT DISTINCT %s FROM "%s"' % (field,layer)
@@ -301,9 +351,9 @@ class PSQL:
             for column in range(0,len(tab[0])):
                 for row in range(1,len(tab)):
                     try:
-                        item = tab[row][column].encode('utf-8')
-                    except AttributeError:
                         item = unicode(tab[row][column])
+                    except:
+                        item = tab[row][column]
                     if item != None:
                         tableSlot.setItem(row-1, column, QTableWidgetItem(item))
             tableSlot.resizeColumnsToContents()
@@ -312,7 +362,7 @@ class PSQL:
     def getLayerInfo(self,layer):
         sql = 'SELECT COUNT(*) FROM "%s"' % (layer)
         query = self.db.exec_(sql)
-        query.fist()
+        query.first()
         result="Total geometries: %s \n\n" % query.value(0)
         sql = 'SELECT column_name, data_type FROM information_schema.columns WHERE table_name = "%s"' % (layer)
         query = self.db.exec_(sql)

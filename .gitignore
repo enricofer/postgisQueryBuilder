@@ -8,3 +8,4 @@ i18n/
 plugin_upload.py
 compile.bat
 compileXP.bat
+validSql.log

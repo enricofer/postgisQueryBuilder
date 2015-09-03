@@ -82,18 +82,23 @@ class postgisQueryBuilder:
         self.dlg.fieldsListA.clicked.connect(self.setFieldsList)
         self.dlg.fieldsListB.clicked.connect(self.setFieldsList)
         self.dlg.checkMaterialized.clicked.connect(self.setMaterialized)
-        self.dlg.AddToMapButton.clicked.connect(self.layerAddToMap)
-        self.dlg.GetInfoButton.clicked.connect(self.layerGetTable)
-        self.dlg.DeleteButton.clicked.connect(self.layerDelete)
-        self.dlg.RefreshButton.clicked.connect(self.layerRefresh)
-        self.dlg.convertToTableButton.clicked.connect(self.convertToTable)
+        #self.dlg.AddToMapButton.clicked.connect(self.layerAddToMap)
+        #self.dlg.GetInfoButton.clicked.connect(self.layerGetTable)
+        #self.dlg.DeleteButton.clicked.connect(self.layerDelete)
+        #self.dlg.RefreshButton.clicked.connect(self.layerRefresh)
+        #self.dlg.convertToTableButton.clicked.connect(self.convertToTable)
         self.dlg.JOIN.activated.connect(self.setJOIN)
         self.dlg.FIELDb.activated.connect(self.setFIELDb)
         self.dlg.tabWidget.currentChanged.connect(self.tabChangedHub)
-        self.dlg.KEYFIELD.textChanged.connect(self.keyGeomFieldsChanged)
-        self.dlg.GEOMETRYFIELD.textChanged.connect(self.keyGeomFieldsChanged)
+        self.dlg.KEYFIELD.activated.connect(self.keyGeomFieldsChanged)
+        self.dlg.KEYFIELD.editTextChanged.connect(self.keyGeomFieldsChanged)
+        self.dlg.GEOMETRYFIELD.activated.connect(self.keyGeomFieldsChanged)
+        self.dlg.GEOMETRYFIELD.editTextChanged.connect(self.keyGeomFieldsChanged)
         self.dlg.queryReadyButton.clicked.connect(self.focusOnQuery)
         self.dlg.LAYERaAllFields.clicked.connect(self.selectAllFields)
+        self.dlg.LayerList.itemDoubleClicked.connect(self.useForQuery)
+        self.dlg.LayerList.customContextMenuRequested.connect(self.layerContextMenu)
+        self.dlg.LayerList.itemSelectionChanged.connect(self.saveForQuery)
 
     def eventsDisconnect(self):
         self.dlg.QueryType.activated.disconnect(self.setQueryType)
@@ -111,19 +116,24 @@ class postgisQueryBuilder:
         self.dlg.DISTANCE.textChanged.disconnect(self.setDISTANCE)
         self.dlg.ButtonRun.clicked.disconnect(self.runQuery)
         self.dlg.ButtonReset.clicked.disconnect(self.resetForm)
-        self.dlg.AddToMapButton.clicked.disconnect(self.layerAddToMap)
-        self.dlg.GetInfoButton.clicked.disconnect(self.layerGetTable)
-        self.dlg.DeleteButton.clicked.disconnect(self.layerDelete)
-        self.dlg.RefreshButton.clicked.disconnect(self.layerRefresh)
-        self.dlg.convertToTableButton.clicked.disconnect(self.convertToTable)
+        #self.dlg.AddToMapButton.clicked.disconnect(self.layerAddToMap)
+        #self.dlg.GetInfoButton.clicked.disconnect(self.layerGetTable)
+        #self.dlg.DeleteButton.clicked.disconnect(self.layerDelete)
+        #self.dlg.RefreshButton.clicked.disconnect(self.layerRefresh)
+        #self.dlg.convertToTableButton.clicked.disconnect(self.convertToTable)
         self.dlg.JOIN.activated.disconnect(self.setJOIN)
         self.dlg.FIELDb.activated.disconnect(self.setFIELDb)
         self.dlg.fieldsListA.clicked.disconnect(self.setFieldsList)
         self.dlg.fieldsListB.clicked.disconnect(self.setFieldsList)
         self.dlg.tabWidget.currentChanged.disconnect(self.tabChangedHub)
-        self.dlg.KEYFIELD.textChanged.disconnect(self.keyGeomFieldsChanged)
-        self.dlg.GEOMETRYFIELD.textChanged.disconnect(self.keyGeomFieldsChanged)
+        self.dlg.KEYFIELD.activated.disconnect(self.keyGeomFieldsChanged)
+        self.dlg.KEYFIELD.editTextChanged.disconnect(self.keyGeomFieldsChanged)
+        self.dlg.GEOMETRYFIELD.activated.disconnect(self.keyGeomFieldsChanged)
+        self.dlg.GEOMETRYFIELD.editTextChanged.disconnect(self.keyGeomFieldsChanged)
         self.dlg.LAYERaAllFields.clicked.disconnect(self.selectAllFields)
+        self.dlg.LayerList.itemDoubleClicked.connect(self.useForQuery)
+        self.dlg.LayerList.customContextMenuRequested.disconnect(self.layerContextMenu)
+        self.dlg.LayerList.itemSelectionChanged.disconnect(self.saveForQuery)
 
     def initGui(self):
         # Create action that will start plugin configuration
@@ -143,8 +153,9 @@ class postgisQueryBuilder:
         self.PQBdockwidget.setAllowedAreas(Qt.RightDockWidgetArea | Qt.LeftDockWidgetArea)
         self.iface.addDockWidget( Qt.RightDockWidgetArea, self.PQBdockwidget)
         #defaults
-        self.dlg.GEOMETRYFIELD.setText("the_geom")
-        self.dlg.KEYFIELD.setText("ogc_fid")
+        #self.dlg.GEOMETRYFIELD.setText("the_geom")
+        #self.dlg.KEYFIELD.setText("ogc_fid")
+        self.predefinedLayer = None
         #hide Temp slots
         self.dlg.USERFIELD.hide()
         self.dlg.USERFIELDLabel.hide()
@@ -162,6 +173,8 @@ class postgisQueryBuilder:
         self.populateComboBox(self.dlg.DISTANCEOP,["=","<>",">","<","<=",">="],"Select",True)
         self.populateComboBox(self.dlg.JOIN,["INNER JOIN","CROSS JOIN","RIGHT OUTER JOIN","LEFT OUTER JOIN","FULL OUTER JOIN"],"Select",True)
         self.populateComboBox(self.dlg.SPATIALREL,self.querySet.getSpatialRelationships(),"Select spatial relationship",True)
+        self.populateComboBox(self.dlg.KEYFIELD,["ogc_fid","id","fid","gid","FID","GID","ID"],"",None)
+        self.populateComboBox(self.dlg.GEOMETRYFIELD,["the_geom","geom","GEOM","geometry"],"",None)
         self.dlg.tabWidget.setCurrentIndex(0)
         #self.recurseChild(self.dlg,"")
 
@@ -172,10 +185,62 @@ class postgisQueryBuilder:
 #            if rowCheckbox.checkState() == Qt.Checked:
 #                self.PSQL.loadView(rowCheckbox.text(),self.dlg.GEOMETRYFIELD.text(),self.dlg.KEYFIELD.text())
 #        self.uncheckList(self.dlg.LayerList)
-        
+
+    def layerForQuery(self,listItem):
+        print listItem
+
+    def layerContextMenu(self,listItem):
+        self.predefinedLayer = None
+        contextMenu = QMenu()
+        self.useForQueryAction = contextMenu.addAction(QIcon(os.path.join(self.plugin_dir,"icons","useForQuery.png")),\
+                                                         "Use as primary layer for query")
+        self.useForQueryAction.triggered.connect(self.useForQuery)
+        self.layerAddToMapAction = contextMenu.addAction(QIcon(os.path.join(self.plugin_dir,"icons","addToLayer.png")),\
+                                                         "Add layer to map canvas")
+        self.layerAddToMapAction.triggered.connect(self.layerAddToMap)
+        self.probeKeyGeomAction = contextMenu.addAction(QIcon(os.path.join(self.plugin_dir,"icons","probeKeyGeom.png")),\
+                                                         "Probe primary key and geometry fields")
+        self.probeKeyGeomAction.triggered.connect(self.probeKeyGeom)
+        self.layerGetTableAction = contextMenu.addAction(QIcon(os.path.join(self.plugin_dir,"icons","layerGetTable.png")),\
+                                                         "View as data table")
+        self.layerGetTableAction.triggered.connect(self.layerGetTable)
+        self.convertToTableAction = contextMenu.addAction(QIcon(os.path.join(self.plugin_dir,"icons","convertToTable.png")),\
+                                                         "Convert view to table")
+        self.convertToTableAction.triggered.connect(self.convertToTable)
+        self.layerDeleteAction = contextMenu.addAction(QIcon(os.path.join(self.plugin_dir,"icons","layerDelete.png")),\
+                                                         "Delete view/table")
+        self.layerDeleteAction.triggered.connect(self.layerRefresh)
+        self.layerRefreshAction = contextMenu.addAction(QIcon(os.path.join(self.plugin_dir,"icons","layerRefresh.png")),\
+                                                         "Refresh materialized view")
+        self.layerRefreshAction.triggered.connect(self.layerRefresh)
+
+
+        contextMenu.exec_(QCursor.pos())
+
+
+
+    def useForQuery(self):
+        for rowSel in (self.dlg.LayerList.selectedItems()):
+            self.predefinedLayer = rowSel.text()
+            self.dlg.tabWidget.setCurrentIndex(1)
+            break
+
+    def saveForQuery(self):
+        for rowSel in (self.dlg.LayerList.selectedItems()):
+            self.predefinedLayer = rowSel.text()
+            break
+
     def layerAddToMap(self):
         for rowSel in (self.dlg.LayerList.selectedItems()):
-            self.PSQL.loadView(rowSel.text(),self.dlg.GEOMETRYFIELD.text(),self.dlg.KEYFIELD.text())
+            keyGuess = self.PSQL.guessKeyField(rowSel.text(),self.dlg.KEYFIELD.currentText())
+            geomGuess = self.PSQL.guessGeometryField(rowSel.text(),self.dlg.GEOMETRYFIELD.currentText())
+            print "GUESS",rowSel.text(),keyGuess,geomGuess
+            self.PSQL.loadView(rowSel.text(),geomGuess,keyGuess)
+
+    def probeKeyGeom(self):
+        for rowSel in (self.dlg.LayerList.selectedItems()):
+            self.populateComboBox(self.dlg.KEYFIELD,self.PSQL.getKeyFields(rowSel.text()),"",None)
+            self.populateComboBox(self.dlg.GEOMETRYFIELD,self.PSQL.getGeometryFields(rowSel.text()),"",None)
 
     def layerGetTable(self):
         for rowSel in (self.dlg.LayerList.selectedItems()):
@@ -213,8 +278,9 @@ class postgisQueryBuilder:
 
     def layerRefresh(self):
         for rowSel in (self.dlg.LayerList.selectedItems()):
-            if self.PSQL.isMaterializedView(rowSel.text()): 
+            if self.PSQL.isMaterializedView(rowSel.text()):
                 self.PSQL.refreshMaterializedView(rowSel.text())
+            break
 
     def recurseChild(self,slot,tab):
         # for testing: prints qt object tree
@@ -272,8 +338,8 @@ class postgisQueryBuilder:
 
 
     def keyGeomFieldsChanged(self):
-        self.querySet.setParameter("GEOMETRYFIELD",self.dlg.GEOMETRYFIELD.text())
-        self.querySet.setParameter("KEYFIELD",self.dlg.KEYFIELD.text())
+        self.querySet.setParameter("GEOMETRYFIELD",self.dlg.GEOMETRYFIELD.currentText())
+        self.querySet.setParameter("KEYFIELD",self.dlg.KEYFIELD.currentText())
         test = None
         try:
             test = self.querySet.testQueryParametersCheckList()
@@ -322,18 +388,24 @@ class postgisQueryBuilder:
         #procedure to fill specified combobox with provided list
         combo.clear()
         model=QStandardItemModel(combo)
+        predefInList = None
         for elem in list:
             try:
                 item = QStandardItem(unicode(elem))
             except TypeError:
                 item = QStandardItem(str(elem))
             model.appendRow(item)
+            if elem == predef:
+                predefInList = elem
         if sort:
             model.sort(0)
         combo.setModel(model)
         if predef != "":
-            combo.insertItem(0,predef)
-            combo.setCurrentIndex(0)
+            if predefInList:
+                combo.setCurrentIndex(combo.findText(predefInList))
+            else:
+                combo.insertItem(0,predef)
+                combo.setCurrentIndex(0)
 
     def loadSVG(self,svgName):
         self.dlg.DiagPanel.show()
@@ -350,6 +422,9 @@ class postgisQueryBuilder:
         if self.dlg.LAYERa.currentText()[:6] == "Select":
             return
         self.querySet.setParameter("LAYERa",self.dlg.LAYERa.currentText())
+        #try to guess layer geometry field
+        autoGeometry = self.PSQL.guessGeometryField(self.dlg.LAYERa.currentText(),self.dlg.GEOMETRYFIELD.currentText())
+        self.querySet.setParameter("GEOMETRYFIELDa",autoGeometry)
         if self.querySet.testQueryParametersCheckList():
             self.queryGen()
         self.populateComboBox(self.dlg.FIELD,self.PSQL.getFieldsContent(self.dlg.LAYERa.currentText()),"Select field",True)
@@ -369,6 +444,9 @@ class postgisQueryBuilder:
         if self.dlg.LAYERb.currentText()[:6] == "Select":
             return
         self.querySet.setParameter("LAYERb",self.dlg.LAYERb.currentText())
+        #try to guess layer geometry field
+        autoGeometry = self.PSQL.guessGeometryField(self.dlg.LAYERb.currentText(),self.dlg.GEOMETRYFIELD.currentText())
+        self.querySet.setParameter("GEOMETRYFIELDb",autoGeometry)
         if self.querySet.testQueryParametersCheckList():
             self.queryGen()
         self.addListToFieldTable(self.dlg.fieldsListB,self.PSQL.getFieldsContent(self.dlg.LAYERb.currentText()),True)
@@ -551,6 +629,9 @@ class postgisQueryBuilder:
         self.dlg.SPATIALRELNOT.setCheckState(Qt.Unchecked)
         self.dlg.Helper.setText(theQ+":\n"+self.querySet.getDescription())
         self.loadSVG(theQ.replace(" ","_"))
+        if self.predefinedLayer:
+            self.dlg.LAYERa.setCurrentIndex(self.dlg.LAYERa.findText(self.predefinedLayer))
+            self.setLAYERa()
         
 
 
@@ -569,6 +650,7 @@ class postgisQueryBuilder:
         except AttributeError:
             pass
         else:
+            print "OR: ",self.predefinedLayer or "Select Layer"
             self.populateComboBox(self.dlg.LAYERa,tables,"Select Layer",True)
             self.populateComboBox(self.dlg.LAYERb,tables,"Select Layer",True)
         self.geoQuery = None

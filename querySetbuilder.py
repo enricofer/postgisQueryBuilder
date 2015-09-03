@@ -39,7 +39,7 @@ class querySet():
             'Returns the geometric center of geomA.',\
             'http://postgis.refractions.net/documentation/manual-svn/ST_Centroid.html',\
             ['LAYERa','fieldsListA'],\
-            'SELECT [[FIELDSET]],ST_Centroid("[[LAYERa]]".[[GEOMETRYFIELD]]) AS [[GEOMETRYFIELD]] FROM "[[SCHEMA]]"."[[LAYERa]]" [[WHERE]] [[ORDERBY]]',\
+            'SELECT [[FIELDSET]],ST_Centroid("[[LAYERa]]".[[GEOMETRYFIELDa]]) AS [[GEOMETRYFIELD]] FROM "[[SCHEMA]]"."[[LAYERa]]" [[WHERE]] [[ORDERBY]]',\
             '_Centroids_of_[[LAYERa]]'\
             ],\
             'ST_PointOnSurface':\
@@ -47,7 +47,7 @@ class querySet():
             'Returns a POINT guaranteed to lie on the surface of geomA.',\
             'http://postgis.refractions.net/documentation/manual-svn/ST_PointOnSurface.html',\
             ['LAYERa','fieldsListA'],\
-            'SELECT [[FIELDSET]],ST_PointOnSurface("[[LAYERa]]".[[GEOMETRYFIELD]]) AS [[GEOMETRYFIELD]] FROM "[[SCHEMA]]"."[[LAYERa]]" [[WHERE]] [[ORDERBY]]',\
+            'SELECT [[FIELDSET]],ST_PointOnSurface("[[LAYERa]]".[[GEOMETRYFIELDa]]) AS [[GEOMETRYFIELD]] FROM "[[SCHEMA]]"."[[LAYERa]]" [[WHERE]] [[ORDERBY]]',\
             '_Points_on_Surfaces_of_[[LAYERa]]'\
             ],\
             'ST_Union 2 layer':\
@@ -55,7 +55,7 @@ class querySet():
             'Returns a geometry that represents the point set union of geomA and geomB.',\
             'http://postgis.refractions.net/documentation/manual-svn/ST_Union.html',\
             ['LAYERa','LAYERb','fieldsListA'],\
-            'SELECT [[ONLYGEOMSET]],ST_Union("[[LAYERa]]".[[GEOMETRYFIELD]],"[[LAYERb]]".[[GEOMETRYFIELD]]) AS [[GEOMETRYFIELD]] FROM "[[SCHEMA]]"."[[LAYERa]]","[[SCHEMA]]"."[[LAYERb]] [[WHERE]] [[ORDERBY]]"',\
+            'SELECT [[ONLYGEOMSET]],ST_Union("[[LAYERa]]".[[GEOMETRYFIELDa]],"[[LAYERb]]".[[GEOMETRYFIELDb]]) AS [[GEOMETRYFIELD]] FROM "[[SCHEMA]]"."[[LAYERa]]","[[SCHEMA]]"."[[LAYERb]] [[WHERE]] [[ORDERBY]]"',\
             '_Union_of_[[LAYERa]]_and_[[LAYERb]]'\
             ],\
             'ST_Union 1 layer':\
@@ -63,7 +63,7 @@ class querySet():
             'Returns a geometry that represents the point set union of the Geometries in geomA.',\
             'http://postgis.refractions.net/documentation/manual-svn/ST_Union.html',\
             ['LAYERa','fieldsListA'],\
-            'SELECT [[FIELDSET]],ST_Union("[[LAYERa]]".[[GEOMETRYFIELD]]) AS [[GEOMETRYFIELD]] FROM "[[SCHEMA]]"."[[LAYERa]]" [[WHERE]] [[ORDERBY]] [[GROUPBYSET]]',\
+            'SELECT [[FIELDSET]],ST_Union("[[LAYERa]]".[[GEOMETRYFIELDa]]) AS [[GEOMETRYFIELD]] FROM "[[SCHEMA]]"."[[LAYERa]]" [[WHERE]] [[ORDERBY]] [[GROUPBYSET]]',\
             '_Union_of_[[LAYERa]]'\
             ],\
             'ST_Difference':\
@@ -71,7 +71,7 @@ class querySet():
             'Returns a geometry that represents that part of geometry A that does not intersect with geometry B.',\
             'http://postgis.refractions.net/documentation/manual-svn/ST_Difference.html',\
             ['LAYERa','LAYERb','fieldsListA'],\
-            'SELECT [[FIELDSET]],ST_Difference("[[LAYERa]]".[[GEOMETRYFIELD]],"[[LAYERb]]".[[GEOMETRYFIELD]]) AS [[GEOMETRYFIELD]] FROM "[[SCHEMA]]"."[[LAYERa]]","[[SCHEMA]]"."[[LAYERb]]"',\
+            'SELECT [[FIELDSET]],ST_Difference("[[LAYERa]]".[[GEOMETRYFIELDa]],"[[LAYERb]]".[[GEOMETRYFIELDb]]) AS [[GEOMETRYFIELD]] FROM "[[SCHEMA]]"."[[LAYERa]]","[[SCHEMA]]"."[[LAYERb]]"',\
             '_Diff_between_[[LAYERa]]_and_[[LAYERb]]'\
             ],\
             'ST_Intersection':\
@@ -79,7 +79,7 @@ class querySet():
             'Returns a geometry that represents the shared portion of geomA and geomB. The geography implementation does a transform to geometry to do the intersection and then transform back to WGS84.',\
             'http://postgis.refractions.net/documentation/manual-svn/ST_Intersection.html',\
             ['LAYERa','LAYERb','fieldsListA'],\
-            'SELECT [[FIELDSET]],ST_Intersection("[[LAYERa]]".[[GEOMETRYFIELD]],"[[LAYERb]]".[[GEOMETRYFIELD]]) AS [[GEOMETRYFIELD]] FROM "[[SCHEMA]]"."[[LAYERa]]","[[SCHEMA]]"."[[LAYERb]]"',\
+            'SELECT [[FIELDSET]],ST_Intersection("[[LAYERa]]".[[GEOMETRYFIELDa]],"[[LAYERb]]".[[GEOMETRYFIELDb]]) AS [[GEOMETRYFIELD]] FROM "[[SCHEMA]]"."[[LAYERa]]","[[SCHEMA]]"."[[LAYERb]]"',\
             '_Int_between_[[LAYERa]]_and_[[LAYERb]]'\
             ],\
             'ST_Buffer':\
@@ -87,24 +87,16 @@ class querySet():
             'For geometry: Returns a geometry that represents all points whose distance from this Geometry is less than or equal to distance. Calculations are in the Spatial Reference System of this Geometry. For geography: Uses a planar transform wrapper.',\
             'http://postgis.refractions.net/documentation/manual-svn/ST_Buffer.html',\
             ['LAYERa','fieldsListA','BUFFERRADIUS'],\
-            'SELECT [[FIELDSET]],ST_Buffer("[[LAYERa]]".[[GEOMETRYFIELD]],[[BUFFERRADIUS]]::double precision) AS [[GEOMETRYFIELD]] FROM "[[SCHEMA]]"."[[LAYERa]]"  [[WHERE]] [[ORDERBY]]',\
+            'SELECT [[FIELDSET]],ST_Buffer("[[LAYERa]]".[[GEOMETRYFIELDa]],[[BUFFERRADIUS]]::double precision) AS [[GEOMETRYFIELD]] FROM "[[SCHEMA]]"."[[LAYERa]]"  [[WHERE]] [[ORDERBY]]',\
             '_Buffer_of_[[LAYERa]]'\
             ],\
-            'ADD MEASUREMENTS':\
+            'ADD MEASURE FIELDS':\
             [\
             'Add area and perimeter measurements fields about LayerA geometries. For "geometry" type area is in SRID units. For "geography" area is in square meters.',\
             'http://postgis.org/docs/ST_Area.html',\
             ['LAYERa','fieldsListA'],\
-            'SELECT [[FIELDSET]], ST_Area("[[LAYERa]]".[[GEOMETRYFIELD]]) AS Area_geom, ST_Perimeter("[[LAYERa]]".[[GEOMETRYFIELD]]) AS Perimeter_geom FROM "[[SCHEMA]]"."[[LAYERa]]" [[WHERE]] [[ORDERBY]]',\
+            'SELECT [[FIELDSET]], ST_Area("[[LAYERa]]".[[GEOMETRYFIELDa]]) AS Area_geom, ST_Perimeter("[[LAYERa]]".[[GEOMETRYFIELDa]]) AS Perimeter_geom FROM "[[SCHEMA]]"."[[LAYERa]]" [[WHERE]] [[ORDERBY]]',\
             '_Measurements_of_[[LAYERa]] '\
-            ],\
-            'ADD DISTANCE FIELDS':\
-            [\
-            'Add maximum and minimum measure information between geometries of LayerA and LayerB. For geometry type Returns the 2-dimensional cartesian minimum and maximum distance (based on spatial ref) between two geometries in projected units. For geography type defaults to return spheroidal minimum distance between two geographies in meters." area is in square meters.',\
-            'http://postgis.org/docs/ST_Distance.html',\
-            ['LAYERa','LAYERb','fieldsListA'],\
-            'SELECT [[FIELDSET]], ST_Distance("[[LAYERa]]".[[GEOMETRYFIELD]],"[[LAYERb]]".[[GEOMETRYFIELD]]) AS MinDistance, ST_MaxDistance("[[LAYERa]]".[[GEOMETRYFIELD]],"[[LAYERb]]".[[GEOMETRYFIELD]]) AS MaxDistance FROM "[[SCHEMA]]"."[[LAYERa]]","[[SCHEMA]]"."[[LAYERb]] [[WHERE]] [[ORDERBY]]"',\
-            '_Distances_between_[[LAYERa]]_and_[[LAYERb]]'\
             ],\
             'FIELDS SELECTION':\
             [\
@@ -148,7 +140,7 @@ class querySet():
         self.fieldSet = list
     
     def resetParameters(self):
-        self.parameters = {"VIEWNAME":"","LAYERa":"","LAYERb":"",\
+        self.parameters = {"VIEWNAME":"","LAYERa":"","LAYERb":"","GEOMETRYFIELDa":None,"GEOMETRYFIELDb":None,\
                            "GEOMETRYFIELD":"the_geom","KEYFIELD":"ogc_fid","BUFFERRADIUS":"","FIELD":"","SIMPLEFIELD":"","FIELDb":"","JOIN":"",\
                            "ORDERBY":"","WHERE":"","OPERATOR":"","CONDITION":"","SPATIALREL":None,\
                            "SPATIALRELNOT":" ","FIDFIELD":"","FIELDSET":"","GROUPBYSET":"", "ONLYGEOMSET":"", "MATERIALIZED":"","DISTANCEOP":"","DISTANCE":"","SCHEMA":""}
@@ -221,6 +213,10 @@ class querySet():
             pass
 
     def buildFIELDSET(self):
+        if not self.parameters["GEOMETRYFIELDa"]:
+            self.parameters["GEOMETRYFIELDa"] = self.parameters["GEOMETRYFIELD"]
+        if not self.parameters["GEOMETRYFIELDb"]:
+            self.parameters["GEOMETRYFIELDb"] = self.parameters["GEOMETRYFIELD"]
         self.parameters["SCHEMA"] = self.schemaName
         self.parameters["FIELDSET"]=""
         self.parameters["GROUPBYSET"]=""

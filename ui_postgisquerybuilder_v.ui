@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>598</width>
-    <height>944</height>
+    <height>702</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -53,7 +53,7 @@
       <number>0</number>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <property name="tabSpacing">
       <number>0</number>
@@ -64,7 +64,7 @@
         <x>0</x>
         <y>0</y>
         <width>580</width>
-        <height>767</height>
+        <height>525</height>
        </rect>
       </property>
       <attribute name="label">
@@ -192,12 +192,9 @@
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="KEYFIELD">
-               <property name="maximumSize">
-                <size>
-                 <width>1000000</width>
-                 <height>16777215</height>
-                </size>
+              <widget class="QComboBox" name="KEYFIELD">
+               <property name="editable">
+                <bool>true</bool>
                </property>
               </widget>
              </item>
@@ -222,12 +219,9 @@
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="GEOMETRYFIELD">
-               <property name="maximumSize">
-                <size>
-                 <width>10000000</width>
-                 <height>16777215</height>
-                </size>
+              <widget class="QComboBox" name="GEOMETRYFIELD">
+               <property name="editable">
+                <bool>true</bool>
                </property>
               </widget>
              </item>
@@ -263,64 +257,20 @@
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout">
            <item>
-            <widget class="QListWidget" name="LayerList"/>
-           </item>
-           <item>
-            <layout class="QVBoxLayout" name="verticalLayout">
-             <property name="spacing">
-              <number>0</number>
+            <widget class="QListWidget" name="LayerList">
+             <property name="contextMenuPolicy">
+              <enum>Qt::CustomContextMenu</enum>
              </property>
-             <item>
-              <widget class="QPushButton" name="AddToMapButton">
-               <property name="text">
-                <string>Add to map</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="GetInfoButton">
-               <property name="text">
-                <string>Get table</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="convertToTableButton">
-               <property name="text">
-                <string>Convert to table</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="DeleteButton">
-               <property name="text">
-                <string>Delete</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="RefreshButton">
-               <property name="text">
-                <string>Refresh</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <spacer name="verticalSpacer">
-               <property name="orientation">
-                <enum>Qt::Vertical</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>0</width>
-                 <height>0</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-            </layout>
+            </widget>
            </item>
           </layout>
+         </item>
+         <item>
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>right click for contextual menu - double click for query</string>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
@@ -332,7 +282,7 @@
         <x>0</x>
         <y>0</y>
         <width>580</width>
-        <height>767</height>
+        <height>525</height>
        </rect>
       </property>
       <attribute name="label">
@@ -883,7 +833,7 @@
         <x>0</x>
         <y>0</y>
         <width>580</width>
-        <height>767</height>
+        <height>525</height>
        </rect>
       </property>
       <attribute name="label">
@@ -957,7 +907,7 @@
         <x>0</x>
         <y>0</y>
         <width>580</width>
-        <height>767</height>
+        <height>525</height>
        </rect>
       </property>
       <attribute name="label">
@@ -1032,7 +982,7 @@
         <x>0</x>
         <y>0</y>
         <width>580</width>
-        <height>767</height>
+        <height>525</height>
        </rect>
       </property>
       <attribute name="label">
@@ -1086,7 +1036,7 @@
         <x>0</x>
         <y>0</y>
         <width>580</width>
-        <height>767</height>
+        <height>525</height>
        </rect>
       </property>
       <attribute name="label">
