@@ -131,7 +131,7 @@ class postgisQueryBuilder:
         self.dlg.GEOMETRYFIELD.activated.disconnect(self.keyGeomFieldsChanged)
         self.dlg.GEOMETRYFIELD.editTextChanged.disconnect(self.keyGeomFieldsChanged)
         self.dlg.LAYERaAllFields.clicked.disconnect(self.selectAllFields)
-        self.dlg.LayerList.itemDoubleClicked.connect(self.useForQuery)
+        self.dlg.LayerList.itemDoubleClicked.disconnect(self.useForQuery)
         self.dlg.LayerList.customContextMenuRequested.disconnect(self.layerContextMenu)
         self.dlg.LayerList.itemSelectionChanged.disconnect(self.saveForQuery)
 
@@ -189,6 +189,7 @@ class postgisQueryBuilder:
     def layerForQuery(self,listItem):
         print listItem
 
+
     def layerContextMenu(self,listItem):
         self.predefinedLayer = None
         for rowSel in (self.dlg.LayerList.selectedItems()):
@@ -235,6 +236,10 @@ class postgisQueryBuilder:
             self.layerDeleteAction = contextMenu.addAction(QIcon(os.path.join(self.plugin_dir,"icons","layerDelete.png")),\
                                                              "Delete view/table")
             self.layerDeleteAction.triggered.connect(self.layerDelete)
+        if self.PSQL.isView(self.selectedLayer):
+            self.editViewAction = contextMenu.addAction(QIcon(os.path.join(self.plugin_dir,"icons","layerDelete.png")),\
+                                                             "Edit view definition")
+            self.editViewAction.triggered.connect(self.editViewDefinition)
         if self.PSQL.isMaterializedView(self.selectedLayer):
             self.layerRefreshAction = contextMenu.addAction(QIcon(os.path.join(self.plugin_dir,"icons","layerRefresh.png")),\
                                                              "Refresh materialized view")
@@ -244,78 +249,69 @@ class postgisQueryBuilder:
         contextMenu.exec_(QCursor.pos())
 
 
+    def editViewDefinition(self):
+        sqlView = 'CREATE OR REPLACE VIEW "%s"."%s" AS ' % (self.PSQL.getSchema(),self.selectedLayer) + self.PSQL.getViewDef(self.selectedLayer)
+        self.resetDialog()
+        self.dlg.QueryName.setText(self.selectedLayer)
+        self.dlg.checkCreateView.setChecked(True)
+        self.dlg.AddToMap.setChecked(False)
+        if self.PSQL.isMaterializedView(self.selectedLayer):
+            self.dlg.checkMaterialized.setChecked(True)
+        self.dlg.QueryResult.setPlainText(self.querySet.formatSqlStatement(sqlView))
+        self.dlg.tabWidget.setCurrentIndex(3)
+
 
     def useForQuery(self):
-        for rowSel in (self.dlg.LayerList.selectedItems()):
-            self.predefinedLayer = rowSel.text()
-            self.dlg.tabWidget.setCurrentIndex(1)
-            break
+        self.predefinedLayer = self.selectedLayer
+        self.dlg.tabWidget.setCurrentIndex(1)
 
     def saveForQuery(self):
         for rowSel in (self.dlg.LayerList.selectedItems()):
-            self.predefinedLayer = rowSel.text()
-            break
+            self.selectedLayer = rowSel.text()
+        self.predefinedLayer = self.selectedLayer
 
     def layerAddToMap(self):
-        for rowSel in (self.dlg.LayerList.selectedItems()):
-            keyGuess = self.PSQL.guessKeyField(rowSel.text(),self.dlg.KEYFIELD.currentText())
-            geomGuess = self.PSQL.guessGeometryField(rowSel.text(),self.dlg.GEOMETRYFIELD.currentText())
-            print "GUESS",rowSel.text(),keyGuess,geomGuess
-            self.PSQL.loadView(rowSel.text(),geomGuess,keyGuess)
+        keyGuess = self.PSQL.guessKeyField(self.selectedLayer,self.dlg.KEYFIELD.currentText())
+        geomGuess = self.PSQL.guessGeometryField(self.selectedLayer,self.dlg.GEOMETRYFIELD.currentText())
+        self.PSQL.loadView(self.selectedLayer,geomGuess,keyGuess)
 
     def probeKeyGeom(self):
-        for rowSel in (self.dlg.LayerList.selectedItems()):
-            self.populateComboBox(self.dlg.KEYFIELD,self.PSQL.getKeyFields(rowSel.text()),"",None)
-            self.populateComboBox(self.dlg.GEOMETRYFIELD,self.PSQL.getGeometryFields(rowSel.text()),"",None)
+        self.populateComboBox(self.dlg.KEYFIELD,self.PSQL.getKeyFields(self.selectedLayer),"",None)
+        self.populateComboBox(self.dlg.GEOMETRYFIELD,self.PSQL.getGeometryFields(self.selectedLayer),"",None)
 
     def layerGetTable(self):
-        for rowSel in (self.dlg.LayerList.selectedItems()):
-                self.PSQL.tableResultGen(rowSel.text(),"",self.dlg.TableResult)
-                self.dlg.tabWidget.setCurrentIndex(4)
-                break
-
-    def exconvertToTable(self):
-        for rowSel in (self.dlg.LayerList.selectedItems()):
-            if self.PSQL.isMaterializedView(rowSel.text()) or self.PSQL.isView(rowSel.text()):
-                q = 'CREATE TABLE "%s"."%s" as (SELECT * FROM "%s"."%s");' % (self.PSQL.schema,rowSel.text()+"_totable",self.PSQL.schema,rowSel.text())
-                res = self.PSQL.submitCommand(q)
-                if not res:
-                    QMessageBox.information(None, "ERROR:", res)
+        self.PSQL.tableResultGen(self.selectedLayer,"",self.dlg.TableResult)
+        self.dlg.tabWidget.setCurrentIndex(4)
 
     def convertToTable(self):
-        for rowSel in (self.dlg.LayerList.selectedItems()):
-            if self.PSQL.isMaterializedView(rowSel.text()) or self.PSQL.isView(rowSel.text()):
-                self.toTableDlg.ask(rowSel.text())
+        if self.PSQL.isMaterializedView(self.selectedLayer) or self.PSQL.isView(self.selectedLayer):
+            self.toTableDlg.ask(self.selectedLayer)
 
     def layerDelete(self, cascade = None):
-        for rowSel in (self.dlg.LayerList.selectedItems()):
-            msg = "Are you sure you want to delete layer '%s' from schema '%s' ?" % (rowSel.text(),self.PSQL.getSchema())
-            reply = QMessageBox.question(None, 'Message', msg, QMessageBox.Yes, QMessageBox.No)
-            if reply == QMessageBox.Yes:
-                deleting = rowSel.text()
-                result = self.PSQL.deleteLayer(deleting)
-                if result:
-                    if "DROP ... CASCADE" in result:
-                        msg = result+"\n\nLayer '%s' has dependencies. Do you want to remove all recursively ?" % rowSel.text()
-                        reply = QMessageBox.question(None, 'Message', msg, QMessageBox.Yes, QMessageBox.No)
-                        if reply == QMessageBox.Yes:
-                            result = self.PSQL.deleteLayer(deleting,cascade = True)
-                            if result:
-                                QMessageBox.information(None, "ERROR:", result)
-                            else:
-                                print "CASCADE DELETED", deleting
-                    else:
-                        QMessageBox.information(None, "ERROR:", result)
+        msg = "Are you sure you want to delete layer '%s' from schema '%s' ?" % (self.selectedLayer,self.PSQL.getSchema())
+        reply = QMessageBox.question(None, 'Message', msg, QMessageBox.Yes, QMessageBox.No)
+        if reply == QMessageBox.Yes:
+            result = self.PSQL.deleteLayer(self.selectedLayer)
+            if result:
+                if "DROP ... CASCADE" in result:
+                    msg = result+"\n\nLayer '%s' has dependencies. Do you want to remove all recursively ?" % rowSel.text()
+                    reply = QMessageBox.question(None, 'Message', msg, QMessageBox.Yes, QMessageBox.No)
+                    if reply == QMessageBox.Yes:
+                        result = self.PSQL.deleteLayer(self.selectedLayer,cascade = True)
+                        if result:
+                            QMessageBox.information(None, "ERROR:", result)
+                        else:
+                            print "CASCADE DELETED", self.selectedLayer
                 else:
-                    print "DELETED", deleting
-                    pass
+                    QMessageBox.information(None, "ERROR:", result)
+            else:
+                print "DELETED", self.selectedLayer
+                pass
         self.populateLayerMenu()
 
     def layerRefresh(self):
-        for rowSel in (self.dlg.LayerList.selectedItems()):
-            if self.PSQL.isMaterializedView(rowSel.text()):
-                self.PSQL.refreshMaterializedView(rowSel.text())
-            break
+        if self.PSQL.isMaterializedView(self.selectedLayer):
+            self.PSQL.refreshMaterializedView(self.selectedLayer)
 
     def recurseChild(self,slot,tab):
         # for testing: prints qt object tree
@@ -386,7 +382,7 @@ class postgisQueryBuilder:
 
     def tabChangedHub(self,tab):
         #print "TAB:",tab
-        if tab == 1:
+        if tab == 0:
             try:
                 self.updateLayerMenu()
             except:
@@ -607,6 +603,10 @@ class postgisQueryBuilder:
             self.queryGen()
 
     def setQueryName(self):
+        try:
+            self.querySet.testIfQueryDefined()
+        except:
+            return
         self.querySet.setParameter("VIEWNAME",self.dlg.QueryName.text())
         if self.querySet.testQueryParametersCheckList():
             self.dlg.QueryResult.setPlainText(self.querySet.getQueryParsed(self.dlg.checkCreateView.checkState()))
@@ -788,13 +788,19 @@ class postgisQueryBuilder:
         #method to run generated query
         if self.dlg.filterTable.testIfSintaxOk():
             if self.dlg.AddToMap.checkState():
-                if self.dlg.checkCreateView.checkState():
-                    self.PSQL.submitQuery(self.querySet.getParameter("VIEWNAME"),self.dlg.QueryResult.toPlainText())
-                    self.PSQL.loadView(self.querySet.getParameter("VIEWNAME"),self.querySet.getParameter("GEOMETRYFIELD"),self.querySet.getParameter("KEYFIELD"))
+                if self.dlg.checkCreateView.checkState(): #self.querySet.getParameter("VIEWNAME")
+                    self.PSQL.submitQuery(self.dlg.QueryName.text(),self.dlg.QueryResult.toPlainText())
+                    self.PSQL.loadView(self.dlg.QueryName.text(),self.querySet.getParameter("GEOMETRYFIELD"),self.querySet.getParameter("KEYFIELD"))
                 else:
-                    self.PSQL.loadSql(self.querySet.getParameter("VIEWNAME"),self.dlg.QueryResult.toPlainText(),self.querySet.getParameter("GEOMETRYFIELD"),self.querySet.getParameter("KEYFIELD"))
+                    self.PSQL.loadSql(self.dlg.QueryName.text(),self.dlg.QueryResult.toPlainText(),self.querySet.getParameter("GEOMETRYFIELD"),self.querySet.getParameter("KEYFIELD"))
             else:
-                rows = self.PSQL.tableResultGen(self.dlg.LAYERa.currentText(),self.dlg.QueryResult.toPlainText(),self.dlg.TableResult)
+                if self.dlg.checkCreateView.checkState():
+                    self.PSQL.submitQuery(self.dlg.QueryName.text(),self.dlg.QueryResult.toPlainText())
+                    sql = 'SELECT * FROM "%s"."%s"' % (self.PSQL.getSchema(),self.dlg.QueryName.text())
+                    print sql
+                    rows = self.PSQL.tableResultGen(self.dlg.LAYERa.currentText(),sql,self.dlg.TableResult)
+                else:
+                    rows = self.PSQL.tableResultGen(self.dlg.LAYERa.currentText(),self.dlg.QueryResult.toPlainText(),self.dlg.TableResult)
                 self.dlg.labelRowsNumber.setText("Total rows: "+str(rows))
                 self.dlg.tabWidget.setCurrentIndex(4)
         else:

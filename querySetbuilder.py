@@ -275,3 +275,6 @@ class querySet():
 
     def All(self):
         return self.querySet
+
+    def formatSqlStatement(self,sql):
+        return format(sql,reindent=True)

@@ -227,20 +227,6 @@
              </item>
             </layout>
            </item>
-           <item>
-            <layout class="QVBoxLayout" name="verticalLayout_20">
-             <item>
-              <widget class="QLabel" name="SRIDLabel">
-               <property name="text">
-                <string>default SRID</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QComboBox" name="SRID"/>
-             </item>
-            </layout>
-           </item>
           </layout>
          </item>
          <item>
@@ -269,6 +255,13 @@
           </widget>
          </item>
          <item>
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>right click for contextual menu - double click for query</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <layout class="QHBoxLayout" name="horizontalLayout">
            <item>
             <widget class="QListWidget" name="LayerList">
@@ -278,13 +271,6 @@
             </widget>
            </item>
           </layout>
-         </item>
-         <item>
-          <widget class="QLabel" name="label">
-           <property name="text">
-            <string>right click for contextual menu - double click for query</string>
-           </property>
-          </widget>
          </item>
         </layout>
        </item>

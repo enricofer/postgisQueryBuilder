@@ -167,7 +167,6 @@ class PSQL:
     def getGeometryType(self,layer,suggestion = ""):
         autoGeom = self.guessGeometryField(layer,suggestion)
         sql='''SELECT ST_GeometryType(%s) FROM "%s"."%s";''' % (autoGeom,self.schema,layer)
-        print sql
         query = self.db.exec_(sql)
         query.next()
         res = unicode(query.value(0))
@@ -301,7 +300,8 @@ class PSQL:
                 #print rows
                 rows += [fields]
             result["result"] = rows
-            self.queryLogger(name,sql)
+            if name != "__tmp":
+                self.queryLogger(name,sql)
         #print result
         return result
 
@@ -348,9 +348,11 @@ class PSQL:
             return ""
 
     def loadView(self,layer,GeomField,KeyField):
+        autoGeom = self.guessGeometryField(layer,GeomField)
+        autoKey = self.guessKeyField(layer,KeyField)
         uri = QgsDataSourceURI()
         uri.setConnection(self.PSQLHost,self.PSQLPort,self.PSQLDatabase,self.PSQLUsername,self.PSQLPassword)
-        uri.setDataSource(self.schema,layer,GeomField,"",KeyField)
+        uri.setDataSource(self.schema,layer,autoGeom,"",autoKey)
         vlayer = QgsVectorLayer(uri.uri(), layer, "postgres")
         if vlayer.isValid():
             QgsMapLayerRegistry.instance().addMapLayer(vlayer,True)
@@ -359,9 +361,13 @@ class PSQL:
             QMessageBox.information(None, "LAYER ERROR:", "The layer %s is not valid" % layer)
     
     def loadSql(self,layerName,sql,GeomField,KeyField):
+        self.submitQuery("__tmp",'CREATE VIEW "'+self.schema+'"."__tmp" AS '+sql)
+        autoGeom = self.guessGeometryField("__tmp",GeomField)
+        autoKey = self.guessKeyField("__tmp",KeyField)
+        self.deleteLayer("__tmp")
         uri = QgsDataSourceURI()
         uri.setConnection(self.PSQLHost,self.PSQLPort,self.PSQLDatabase,self.PSQLUsername,self.PSQLPassword)
-        uri.setDataSource("","("+sql+")",GeomField,"",KeyField)
+        uri.setDataSource("","("+sql+")",autoGeom,"",autoKey)
         vlayer = QgsVectorLayer(uri.uri(), layerName, "postgres")
         if vlayer.isValid():
             QgsMapLayerRegistry.instance().addMapLayer(vlayer,True)
@@ -373,7 +379,24 @@ class PSQL:
         out_file = open(os.path.join(os.path.dirname(__file__),"validSql.log"),"a")
         out_file.write(str(datetime.datetime.now())+"\n"+name+"\n"+sql+"\n"+"\n")
         out_file.close()
-    
+
+    def getViewDef(self,view):
+        if self.isView(view):
+            viewType = ""
+        elif self.isMaterializedView(view):
+            viewType = "mat"
+        else:
+            return None
+        sql = "SELECT definition FROM pg_%sviews WHERE %sviewname = '%s' AND schemaname = '%s'" % (viewType,viewType,view,self.schema)
+        print sql
+        query = self.db.exec_(sql)
+        query.next()
+        res = unicode(query.value(0))
+        #print res
+        return res
+
+
+
     def tableResultGen(self,tableName,sql,tableSlot):
         if sql != "":
             res=self.submitQuery(tableName,sql)

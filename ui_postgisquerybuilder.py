@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'Z:\dev\postgisQueryBuilder\ui_postgisquerybuilder_v.ui'
 #
-# Created: Thu Sep 03 12:03:35 2015
+# Created: Thu Sep 03 14:50:10 2015
 #      by: PyQt4 UI code generator 4.11.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -49,7 +49,7 @@ class Ui_postgisQueryBuilder(object):
         self.tabWidget.setMidLineWidth(0)
         self.tabWidget.setObjectName(_fromUtf8("tabWidget"))
         self.ConnectionSlot = QtGui.QWidget()
-        self.ConnectionSlot.setGeometry(QtCore.QRect(0, 0, 343, 525))
+        self.ConnectionSlot.setGeometry(QtCore.QRect(0, 0, 468, 684))
         self.ConnectionSlot.setObjectName(_fromUtf8("ConnectionSlot"))
         self.verticalLayout_19 = QtGui.QVBoxLayout(self.ConnectionSlot)
         self.verticalLayout_19.setContentsMargins(0, 3, 0, 3)
@@ -111,7 +111,7 @@ class Ui_postgisQueryBuilder(object):
         self.verticalLayout_4.setSpacing(3)
         self.verticalLayout_4.setObjectName(_fromUtf8("verticalLayout_4"))
         self.KEYFIELDLabel = QtGui.QLabel(self.ConnectionSlot)
-        self.KEYFIELDLabel.setMaximumSize(QtCore.QSize(100, 16777215))
+        self.KEYFIELDLabel.setMaximumSize(QtCore.QSize(140, 16777215))
         self.KEYFIELDLabel.setObjectName(_fromUtf8("KEYFIELDLabel"))
         self.verticalLayout_4.addWidget(self.KEYFIELDLabel)
         self.KEYFIELD = QtGui.QComboBox(self.ConnectionSlot)
@@ -142,6 +142,9 @@ class Ui_postgisQueryBuilder(object):
         self.label_2.setMaximumSize(QtCore.QSize(10000, 16777215))
         self.label_2.setObjectName(_fromUtf8("label_2"))
         self.verticalLayout_6.addWidget(self.label_2)
+        self.label = QtGui.QLabel(self.ConnectionSlot)
+        self.label.setObjectName(_fromUtf8("label"))
+        self.verticalLayout_6.addWidget(self.label)
         self.horizontalLayout = QtGui.QHBoxLayout()
         self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
         self.LayerList = QtGui.QListWidget(self.ConnectionSlot)
@@ -149,9 +152,6 @@ class Ui_postgisQueryBuilder(object):
         self.LayerList.setObjectName(_fromUtf8("LayerList"))
         self.horizontalLayout.addWidget(self.LayerList)
         self.verticalLayout_6.addLayout(self.horizontalLayout)
-        self.label = QtGui.QLabel(self.ConnectionSlot)
-        self.label.setObjectName(_fromUtf8("label"))
-        self.verticalLayout_6.addWidget(self.label)
         self.verticalLayout_19.addLayout(self.verticalLayout_6)
         self.tabWidget.addItem(self.ConnectionSlot, _fromUtf8(""))
         self.queryDefinitionSlot = QtGui.QWidget()
@@ -412,7 +412,7 @@ class Ui_postgisQueryBuilder(object):
         self.verticalLayout_17.addLayout(self.verticalLayout_7)
         self.tabWidget.addItem(self.queryDefinitionSlot, _fromUtf8(""))
         self.filterRecordSlot = QtGui.QWidget()
-        self.filterRecordSlot.setGeometry(QtCore.QRect(0, 0, 580, 525))
+        self.filterRecordSlot.setGeometry(QtCore.QRect(0, 0, 468, 684))
         self.filterRecordSlot.setObjectName(_fromUtf8("filterRecordSlot"))
         self.verticalLayout_16 = QtGui.QVBoxLayout(self.filterRecordSlot)
         self.verticalLayout_16.setContentsMargins(0, 3, 0, 3)
@@ -439,7 +439,7 @@ class Ui_postgisQueryBuilder(object):
         self.verticalLayout_16.addLayout(self.horizontalLayout_4)
         self.tabWidget.addItem(self.filterRecordSlot, _fromUtf8(""))
         self.SqlCodeSlot = QtGui.QWidget()
-        self.SqlCodeSlot.setGeometry(QtCore.QRect(0, 0, 580, 525))
+        self.SqlCodeSlot.setGeometry(QtCore.QRect(0, 0, 468, 684))
         self.SqlCodeSlot.setObjectName(_fromUtf8("SqlCodeSlot"))
         self.verticalLayout_15 = QtGui.QVBoxLayout(self.SqlCodeSlot)
         self.verticalLayout_15.setContentsMargins(0, 3, 0, 3)
@@ -467,7 +467,7 @@ class Ui_postgisQueryBuilder(object):
         self.verticalLayout_15.addLayout(self.verticalLayout_8)
         self.tabWidget.addItem(self.SqlCodeSlot, _fromUtf8(""))
         self.tableResultSlot = QtGui.QWidget()
-        self.tableResultSlot.setGeometry(QtCore.QRect(0, 0, 580, 525))
+        self.tableResultSlot.setGeometry(QtCore.QRect(0, 0, 468, 684))
         self.tableResultSlot.setObjectName(_fromUtf8("tableResultSlot"))
         self.verticalLayout_14 = QtGui.QVBoxLayout(self.tableResultSlot)
         self.verticalLayout_14.setContentsMargins(0, 3, 0, 3)
@@ -489,7 +489,7 @@ class Ui_postgisQueryBuilder(object):
         self.verticalLayout_14.addLayout(self.verticalLayout_13)
         self.tabWidget.addItem(self.tableResultSlot, _fromUtf8(""))
         self.historySlot = QtGui.QWidget()
-        self.historySlot.setGeometry(QtCore.QRect(0, 0, 580, 525))
+        self.historySlot.setGeometry(QtCore.QRect(0, 0, 468, 684))
         self.historySlot.setObjectName(_fromUtf8("historySlot"))
         self.verticalLayout_21 = QtGui.QVBoxLayout(self.historySlot)
         self.verticalLayout_21.setContentsMargins(0, 3, 0, 3)
@@ -519,7 +519,7 @@ class Ui_postgisQueryBuilder(object):
         self.verticalLayout_18.addLayout(self.horizontalLayout_9)
 
         self.retranslateUi(postgisQueryBuilder)
-        self.tabWidget.setCurrentIndex(1)
+        self.tabWidget.setCurrentIndex(0)
         self.tabWidget.layout().setSpacing(0)
         QtCore.QMetaObject.connectSlotsByName(postgisQueryBuilder)
 
@@ -529,7 +529,7 @@ class Ui_postgisQueryBuilder(object):
         self.DBSchemaLabel.setText(_translate("postgisQueryBuilder", "Schema", None))
         self.USERFIELDLabel.setText(_translate("postgisQueryBuilder", "User:", None))
         self.PASSWORDFIELDLabel.setText(_translate("postgisQueryBuilder", "Password:", None))
-        self.KEYFIELDLabel.setText(_translate("postgisQueryBuilder", "default pkey field:", None))
+        self.KEYFIELDLabel.setText(_translate("postgisQueryBuilder", "default primary key field:", None))
         self.GEOMETRYFIELDLabel.setText(_translate("postgisQueryBuilder", "default geometry field:", None))
         self.label_2.setText(_translate("postgisQueryBuilder", "Available relations list (T:table V:view M:materialized view)", None))
         self.label.setText(_translate("postgisQueryBuilder", "right click for contextual menu - double click for query", None))
