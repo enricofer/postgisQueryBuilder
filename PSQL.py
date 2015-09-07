@@ -139,6 +139,16 @@ class PSQL:
         sql = 'ALTER %s "%s"."%s" RENAME TO "%s";' % (obj,self.schema,oldLayer,newLayer)
         return self.submitCommand(sql, log = None)
 
+    def moveLayer(self,layer,destSchema):
+        if self.isTable(layer):
+            obj = "TABLE"
+        elif self.isView(layer):
+            obj = "VIEW"
+        else:
+            obj = "MATERIALIZED VIEW"
+        sql = 'ALTER %s "%s"."%s" SET SCHEMA "%s";' % (obj,self.schema,layer,destSchema)
+        return self.submitCommand(sql, log = None)
+
 
     def getFieldsContent(self,layer):
         sql="SELECT column_name FROM information_schema.columns WHERE table_name='%s' and table_schema='%s';" % (layer,self.schema)

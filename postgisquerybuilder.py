@@ -34,6 +34,7 @@ from querySetbuilder import querySet
 from TableSet import tableSet
 from convertToTable_dialog import convertToTableDialog
 from rename_dialog import renameDialog
+from move_dialog import moveDialog
 from PSQL import PSQL
 from PyQt4 import QtGui
 
@@ -233,6 +234,9 @@ class postgisQueryBuilder:
         self.renameObjectAction = contextMenu.addAction(QIcon(os.path.join(self.plugin_dir,"icons","renameObject.png")),\
                                                          "Rename object")
         self.renameObjectAction.triggered.connect(self.renameObject)
+        self.moveObjectAction = contextMenu.addAction(QIcon(os.path.join(self.plugin_dir,"icons","moveObject.png")),\
+                                                         "Move to another schema")
+        self.moveObjectAction.triggered.connect(self.moveObject)
         if self.PSQL.isView(self.selectedLayer) or self.PSQL.isMaterializedView(self.selectedLayer):
             self.convertToTableAction = contextMenu.addAction(QIcon(os.path.join(self.plugin_dir,"icons","convertToTable.png")),\
                                                              "Convert view to table")
@@ -296,6 +300,18 @@ class postgisQueryBuilder:
         newLayer = renameDialog.rename(self.selectedLayer)
         if newLayer:
             error = self.PSQL.renameLayer(self.selectedLayer,newLayer)
+            if error:
+                QMessageBox.information(None, "ERROR:", error)
+            else:
+                self.updateLayerMenu()
+
+    def moveObject(self):
+        schemas = self.PSQL.getSchemas()
+        schemas.remove(self.PSQL.getSchema())
+        schemas.insert(0,self.PSQL.getSchema())
+        newSchema = moveDialog.getNewSchema(schemas)
+        if newSchema:
+            error = self.PSQL.moveLayer(self.selectedLayer,newSchema)
             if error:
                 QMessageBox.information(None, "ERROR:", error)
             else:
