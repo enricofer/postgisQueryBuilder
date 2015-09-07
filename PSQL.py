@@ -273,9 +273,9 @@ class PSQL:
         query.exec_(sql)
         result={}
         if not query:
-            result["error"] = "Database Error: %s" % db.lastError().text()
+            result["error"] = "Database Error: %s" % self.db.lastError().text()
             result["result"] = []
-            QMessageBox.information(None, "SQL ERROR:", resultQuery) 
+            QMessageBox.information(None, "SQL ERROR:", result["error"])
         else:
             result["error"] = ""
             rows=[[]]
@@ -305,11 +305,12 @@ class PSQL:
         #print result
         return result
 
-    def submitCommand(self,sql):
+    def submitCommand(self,sql,log = True):
         query = QSqlQuery(self.db)
         query.exec_(sql)
         if query.lastError().type() == QSqlError.NoError:
-            self.queryLogger("SQL_COMMAND",sql)
+            if log:
+                self.queryLogger("SQL_COMMAND",sql)
             return None
         else:
             print "ERROR TYPE: ",query.lastError().type(),"QUERY:",sql
@@ -358,7 +359,10 @@ class PSQL:
             QgsMapLayerRegistry.instance().addMapLayer(vlayer,True)
             #self.queryLogger(layerName,"VIEW LOAD")
         else:
-            QMessageBox.information(None, "LAYER ERROR:", "The layer %s is not valid" % layer)
+            sqlerror = self.submitCommand(self.getViewDef(layer),log = None)
+            if not sqlerror:
+                sqlerror = "The query returns no features."
+            QMessageBox.information(None, "LAYER ERROR:", "%s\n\nThe layer %s is not valid" % (sqlerror,layer))
     
     def loadSql(self,layerName,sql,GeomField,KeyField):
         self.submitQuery("__tmp",'CREATE VIEW "'+self.schema+'"."__tmp" AS '+sql)
@@ -373,7 +377,10 @@ class PSQL:
             QgsMapLayerRegistry.instance().addMapLayer(vlayer,True)
             self.queryLogger(layerName,sql)
         else:
-            QMessageBox.information(None, "LAYER ERROR:", "The layer %s is not valid" % layerName)
+            sqlerror = self.submitCommand(sql,log = None)
+            if not sqlerror:
+                sqlerror = "The query returns no features."
+            QMessageBox.information(None, "LAYER ERROR:", "%s\n\nThe layer %s is not valid" % (sqlerror,layerName))
     
     def queryLogger (self,name,sql):
         out_file = open(os.path.join(os.path.dirname(__file__),"validSql.log"),"a")

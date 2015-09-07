@@ -31,6 +31,7 @@ class tableSet(QtGui.QTableWidget):
         self.signalMapper.mapped[QtGui.QWidget].connect(self.on_signalMapper_mapped)
         self.rowSize = 20
         self.opSlotSize = 75
+        self.conditionalOptions = ('=','>','<','>=','<=','<>','IS NULL','IS NOT NULL')
         #self.twg = twg
         #self.layerList = layerList
 
@@ -101,16 +102,15 @@ class tableSet(QtGui.QTableWidget):
         return fieldItem
 
 
-    def attributefiltersLoad(self):
+    def attributefiltersLoad(self,row,col):
         filterItem=QtGui.QComboBox()
-        filterItem.addItem("=")
-        filterItem.addItem("<>")
-        filterItem.addItem(">")
-        filterItem.addItem("<")
-        filterItem.addItem(">=")
-        filterItem.addItem("<=")
+        filterItem.addItems(self.conditionalOptions)
         filterItem.insertItem(0,"Select")
         filterItem.setCurrentIndex(0)
+        filterItem.activated.connect(self.signalMapper.map)
+        filterItem.row=row
+        filterItem.column=col
+        self.signalMapper.setMapping(filterItem, filterItem)
         return filterItem
 
     def spatialfiltersLoad(self):
@@ -318,7 +318,7 @@ class tableSet(QtGui.QTableWidget):
                     return None
                 parClosed += 1
                 previous = "NOT"
-            elif self.cellWidget(row,2).currentText() in ['=','>','<','>=','<=','<>'] or self.cellWidget(row,2).currentText()[:2]=="ST":
+            elif self.cellWidget(row,2).currentText() in self.conditionalOptions or self.cellWidget(row,2).currentText()[:2]=="ST":
                 if previous == "QUERY":
                     #print "malformed: QUERY"
                     return None
@@ -343,14 +343,17 @@ class tableSet(QtGui.QTableWidget):
         if not(self.testIfSintaxOk() and self.rowCount()>1):
             return ""
         for row in range(0,self.rowCount()-1):
-            if self.cellWidget(row,2).currentText() in ['=','>','<','>=','<=','<>']:
+            if self.cellWidget(row,2).currentText() in self.conditionalOptions:
                 fType = self.PSQL.getFieldsType(self.layerQuery,self.cellWidget(row,1).currentText())
                 fType = fType[:4]
                 #print fType
-                if ((fType == "char") or (fType == "text") or  (fType == "varc")):
-                    value = "'"+self.cellWidget(row,3).currentText()+"'"
+                if self.cellWidget(row,2).currentText() in ['IS NULL','IS NOT NULL']:
+                    value = ''
                 else:
-                    value = self.cellWidget(row,3).currentText()
+                    if ((fType == "char") or (fType == "text") or  (fType == "varc")):
+                        value = "'"+self.cellWidget(row,3).currentText()+"'"
+                    else:
+                        value = self.cellWidget(row,3).currentText()
                 whereStatement += '"%s"."%s" %s %s ' % (self.layerQuery,self.cellWidget(row,1).currentText(),self.cellWidget(row,2).currentText(),value)
             elif self.cellWidget(row,2).currentText()[:2]=="ST":
                 whereStatement += '%s("%s"."%s","%s"."%s") ' % (self.cellWidget(row,2).currentText(),\
@@ -372,13 +375,18 @@ class tableSet(QtGui.QTableWidget):
         #print cbox.currentText()
         #print "ROWS:",self.rowCount()
         nextAction=''
+        if cbox.column == 2:
+            if self.cellWidget(cbox.row,2).currentText() in ['IS NULL','IS NOT NULL']:
+                self.cellWidget(cbox.row,3).hide()
+            else:
+                self.cellWidget(cbox.row,3).show()
         if cbox.column == 1:
             self.uniqueValuesLoad(cbox.row,3,self.PSQL.getUniqeValues(self.layerQuery,self.cellWidget(cbox.row,1).currentText(),50))
         if cbox.column == 0:
             if cbox.currentText() == "Attrib  filter":
                 nextAction = "bool"
                 self.setCellWidget(cbox.row,1,self.fieldsLoad(cbox.row,1))
-                self.setCellWidget(cbox.row,2,self.attributefiltersLoad())
+                self.setCellWidget(cbox.row,2,self.attributefiltersLoad(cbox.row,2))
                 self.setCellWidget(cbox.row,3,self.valueLoad())
                 self.cellWidget(cbox.row,2).show()
                 self.cellWidget(cbox.row,3).show()
