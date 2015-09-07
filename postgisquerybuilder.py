@@ -805,6 +805,7 @@ class postgisQueryBuilder:
                     sql = 'SELECT * FROM "%s"."%s"' % (self.PSQL.getSchema(),self.dlg.QueryName.text())
                     print sql
                     rows = self.PSQL.tableResultGen(self.dlg.LAYERa.currentText(),sql,self.dlg.TableResult)
+                    self.PSQL.loadedLayerRefresh(self.dlg.QueryName.text())
                 else:
                     rows = self.PSQL.tableResultGen(self.dlg.LAYERa.currentText(),self.dlg.QueryResult.toPlainText(),self.dlg.TableResult)
                 self.dlg.labelRowsNumber.setText("Total rows: "+str(rows))

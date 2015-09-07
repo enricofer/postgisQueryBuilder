@@ -348,7 +348,30 @@ class PSQL:
         else:
             return ""
 
+    def loadedLayerList(self):
+        postgislayers = []
+        for layer in self.iface.legendInterface().layers():
+            if layer.type() == QgsMapLayer.VectorLayer and layer.dataProvider().name() == "postgres":
+                postgislayers.append(layer.name())
+        print postgislayers
+        return postgislayers
+
+    def layerRefFromName(self,layerName):
+        for layer in self.iface.legendInterface().layers():
+            if layer.name() == layerName:
+                return layer
+
+    def loadedLayerRefresh(self,layer):
+        if layer in self.loadedLayerList():
+            vlayer = self.layerRefFromName(layer)
+            vlayer.triggerRepaint()
+            return True
+        else:
+            return None
+
     def loadView(self,layer,GeomField,KeyField):
+        if self.loadedLayerRefresh(layer):
+            return #test if layer has been already loaded
         autoGeom = self.guessGeometryField(layer,GeomField)
         autoKey = self.guessKeyField(layer,KeyField)
         uri = QgsDataSourceURI()
