@@ -276,6 +276,23 @@ class tableSet(QtGui.QTableWidget):
         self.setCellWidget(row,0,self.actionCell(row,0))
         self.setRowHeight(row,self.rowSize)
 
+    def getSpatialFilterLayers(self, schema = None):
+        tmpSet = set()
+        for row in range(0,self.rowCount()-1):
+            if self.cellWidget(row,2).currentText()[:2]=="ST":
+                tmpSet.add(self.cellWidget(row,3).currentText())
+        layerList = list(tmpSet)
+        print layerList
+        sqlFrom = ""
+        for item in layerList:
+            if schema:
+                sqlFrom += '"%s"."%s",' % (schema,item)
+            else:
+                sqlFrom += '"%s",' % item
+        return sqlFrom
+
+
+
     def testIfSintaxOk(self):
         res= None
         parOpen=0

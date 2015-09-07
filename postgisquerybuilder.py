@@ -263,6 +263,7 @@ class postgisQueryBuilder:
 
     def useForQuery(self):
         self.predefinedLayer = self.selectedLayer
+        self.resetDialog()
         self.dlg.tabWidget.setCurrentIndex(1)
 
     def saveForQuery(self):
@@ -294,7 +295,7 @@ class postgisQueryBuilder:
             result = self.PSQL.deleteLayer(self.selectedLayer)
             if result:
                 if "DROP ... CASCADE" in result:
-                    msg = result+"\n\nLayer '%s' has dependencies. Do you want to remove all recursively ?" % rowSel.text()
+                    msg = result+"\n\nLayer '%s' has dependencies. Do you want to remove all recursively ?" % self.selectedLayer
                     reply = QMessageBox.question(None, 'Message', msg, QMessageBox.Yes, QMessageBox.No)
                     if reply == QMessageBox.Yes:
                         result = self.PSQL.deleteLayer(self.selectedLayer,cascade = True)
@@ -461,13 +462,14 @@ class postgisQueryBuilder:
         self.populateComboBox(self.dlg.FIELD,self.PSQL.getFieldsContent(self.dlg.LAYERa.currentText()),"Select field",True)
         if not self.PSQL.testIfFieldExist(self.dlg.LAYERa.currentText(),self.querySet.getParameter("KEYFIELD")):
             self.querySet.setFIDFIELD()
-        self.addListToFieldTable(self.dlg.fieldsListA,self.PSQL.getFieldsContent(self.dlg.LAYERa.currentText()),True)
+        self.addListToFieldTable(self.dlg.fieldsListA,self.PSQL.getFieldsContent(self.dlg.LAYERa.currentText()),True, exclude=autoGeometry)
         self.populateFilterTable()
         
 
     def selectAllFields(self):
         for row in range(0,self.dlg.fieldsListA.count()):
-            self.dlg.fieldsListA.item(row).setCheckState(self.dlg.LAYERaAllFields.checkState())
+            if self.dlg.fieldsListA.item(row).flags() & Qt.ItemIsEnabled:
+                self.dlg.fieldsListA.item(row).setCheckState(self.dlg.LAYERaAllFields.checkState())
         self.setFieldsList()
 
     def setLAYERb(self):
@@ -483,14 +485,14 @@ class postgisQueryBuilder:
         self.addListToFieldTable(self.dlg.fieldsListB,self.PSQL.getFieldsContent(self.dlg.LAYERb.currentText()),True)
         self.populateComboBox(self.dlg.FIELDb,self.PSQL.getFieldsContent(self.dlg.LAYERb.currentText()),"Select field",True)
 
-    def addListToFieldTable(self,fieldSlot,fl,check):
+    def addListToFieldTable(self,fieldSlot,fl,check,exclude = None):
         #called to populate field list for WHERE statement
         wdgt=fieldSlot
         wdgt.clear()
         #print "LAYERLIST:",check
         for row in fl:
             item=QListWidgetItem()
-            if check == True:
+            if check:
                 item.setFlags(item.flags() | Qt.ItemIsUserCheckable)
                 item.setCheckState(Qt.Unchecked)
             item.setText(row)
@@ -501,12 +503,15 @@ class postgisQueryBuilder:
                 item.setIcon(QIcon(":/plugins/postgisquerybuilder/iV.png"))
             elif self.PSQL.isMaterializedView(row):
                 item.setIcon(QIcon(":/plugins/postgisquerybuilder/iM.png"))
-            #exclude geometryfield from user options when postgis query
-            if self.geoQuery and row == self.querySet.getParameter("GEOMETRYFIELD"):
-                pass
-                #item.setFlags(item.flags() ^ Qt.ItemIsEnabled)
-            else:
-                wdgt.addItem(item)
+            #disable geometryfield and auto set checked/unchecked
+            wdgt.addItem(item)
+            if check and exclude and row == exclude: #self.geoQuery and
+                if self.geoQuery:
+                    item.setCheckState(Qt.Unchecked)
+                else:
+                    item.setCheckState(Qt.Checked)
+                item.setFlags(item.flags() & (~Qt.ItemIsEnabled))
+
                 #item.setFlags(item.flags() | Qt.ItemIsEnabled)
             
 
@@ -630,6 +635,7 @@ class postgisQueryBuilder:
         self.querySet.setParameter("VIEWNAME", qName)
         if self.dlg.filterTable.testIfSintaxOk():
             self.querySet.setParameter("WHERE", self.dlg.filterTable.getWhereStatement())
+            self.querySet.setParameter("SPATIALFROM", self.dlg.filterTable.getSpatialFilterLayers(schema = self.PSQL.getSchema()))
         else:
             self.querySet.setParameter("WHERE", "")
         if self.dlg.orderBy.currentText() != " ":

@@ -103,7 +103,7 @@ class querySet():
             'Field subset selection for specified layer ',\
             'http://postgis.org/docs/ST_Area.html',\
             ['LAYERa','fieldsListA'],\
-            'SELECT [[FIELDSET]] FROM "[[SCHEMA]]"."[[LAYERa]]" [[WHERE]] [[ORDERBY]]',\
+            'SELECT [[FIELDSET]] FROM [[SPATIALFROM]]"[[SCHEMA]]"."[[LAYERa]]" [[WHERE]] [[ORDERBY]]',\
             '_FieldsSubset_of_[[LAYERa]] '\
             ],\
             'JOIN analytical':\
@@ -142,7 +142,7 @@ class querySet():
     def resetParameters(self):
         self.parameters = {"VIEWNAME":"","LAYERa":"","LAYERb":"","GEOMETRYFIELDa":None,"GEOMETRYFIELDb":None,\
                            "GEOMETRYFIELD":"the_geom","KEYFIELD":"ogc_fid","BUFFERRADIUS":"","FIELD":"","SIMPLEFIELD":"","FIELDb":"","JOIN":"",\
-                           "ORDERBY":"","WHERE":"","OPERATOR":"","CONDITION":"","SPATIALREL":None,\
+                           "ORDERBY":"","WHERE":"","OPERATOR":"","CONDITION":"","SPATIALREL":None,"SPATIALFROM":"",\
                            "SPATIALRELNOT":" ","FIDFIELD":"","FIELDSET":"","GROUPBYSET":"", "ONLYGEOMSET":"", "MATERIALIZED":"","DISTANCEOP":"","DISTANCE":"","SCHEMA":""}
         self.currentQuery = ""
         self.fieldSet = []
