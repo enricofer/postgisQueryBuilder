@@ -127,7 +127,18 @@ class PSQL:
         elif self.isView (layer): sql = 'DROP VIEW "%s"."%s"%s' % (self.schema,layer,cascadeDirective)
         elif self.isMaterializedView (layer): sql = 'DROP MATERIALIZED VIEW "%s"."%s"%s' % (self.schema,layer,cascadeDirective)
         else: sql =""
-        return self.submitCommand(sql)
+        return self.submitCommand(sql, log = None)
+
+    def renameLayer(self,oldLayer,newLayer):
+        if self.isTable(oldLayer):
+            obj = "TABLE"
+        elif self.isView(oldLayer):
+            obj = "VIEW"
+        else:
+            obj = "MATERIALIZED VIEW"
+        sql = 'ALTER %s "%s"."%s" RENAME TO "%s";' % (obj,self.schema,oldLayer,newLayer)
+        return self.submitCommand(sql, log = None)
+
 
     def getFieldsContent(self,layer):
         sql="SELECT column_name FROM information_schema.columns WHERE table_name='%s' and table_schema='%s';" % (layer,self.schema)

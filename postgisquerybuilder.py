@@ -33,6 +33,7 @@ from postgisquerybuilderdialog import postgisQueryBuilderDialog
 from querySetbuilder import querySet
 from TableSet import tableSet
 from convertToTable_dialog import convertToTableDialog
+from rename_dialog import renameDialog
 from PSQL import PSQL
 from PyQt4 import QtGui
 
@@ -224,11 +225,14 @@ class postgisQueryBuilder:
                                                          "Add layer to map canvas")
         self.layerAddToMapAction.triggered.connect(self.layerAddToMap)
         self.probeKeyGeomAction = contextMenu.addAction(QIcon(os.path.join(self.plugin_dir,"icons","probeKeyGeom.png")),\
-                                                         "Probe primary key and geometry fields")
+                                                         "Auto detect primary key and geometry fields")
         self.probeKeyGeomAction.triggered.connect(self.probeKeyGeom)
         self.layerGetTableAction = contextMenu.addAction(QIcon(os.path.join(self.plugin_dir,"icons","layerGetTable.png")),\
                                                          "View as data table")
         self.layerGetTableAction.triggered.connect(self.layerGetTable)
+        self.renameObjectAction = contextMenu.addAction(QIcon(os.path.join(self.plugin_dir,"icons","renameObject.png")),\
+                                                         "Rename object")
+        self.renameObjectAction.triggered.connect(self.renameObject)
         if self.PSQL.isView(self.selectedLayer) or self.PSQL.isMaterializedView(self.selectedLayer):
             self.convertToTableAction = contextMenu.addAction(QIcon(os.path.join(self.plugin_dir,"icons","convertToTable.png")),\
                                                              "Convert view to table")
@@ -287,6 +291,15 @@ class postgisQueryBuilder:
     def convertToTable(self):
         if self.PSQL.isMaterializedView(self.selectedLayer) or self.PSQL.isView(self.selectedLayer):
             self.toTableDlg.ask(self.selectedLayer)
+
+    def renameObject(self):
+        newLayer = renameDialog.rename(self.selectedLayer)
+        if newLayer:
+            error = self.PSQL.renameLayer(self.selectedLayer,newLayer)
+            if error:
+                QMessageBox.information(None, "ERROR:", error)
+            else:
+                self.updateLayerMenu()
 
     def layerDelete(self, cascade = None):
         msg = "Are you sure you want to delete layer '%s' from schema '%s' ?" % (self.selectedLayer,self.PSQL.getSchema())
