@@ -82,7 +82,15 @@ class PSQL:
         self.schema = schema
 
     def getSchema(self):
-        return self.schema 
+        return self.schema
+
+    def addSchema(self,newSchema):
+        try:
+            self.db
+        except:
+            return "error: DB disconnected"
+        sql = 'CREATE SCHEMA "%s"' % newSchema
+        return self.submitCommand(sql, log = None)
         
     def getExtendedTableName(self,tableName):
         return '"%s"."%s"' % (self.schema,tableName)

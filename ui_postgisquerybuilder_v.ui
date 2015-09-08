@@ -93,6 +93,9 @@
            <property name="spacing">
             <number>6</number>
            </property>
+           <property name="sizeConstraint">
+            <enum>QLayout::SetDefaultConstraint</enum>
+           </property>
            <item>
             <layout class="QVBoxLayout" name="verticalLayout_2">
              <property name="spacing">
@@ -106,7 +109,17 @@
               </widget>
              </item>
              <item>
-              <widget class="QComboBox" name="PSQLConnection"/>
+              <widget class="QComboBox" name="PSQLConnection">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="toolTip">
+                <string>select working postgres connection</string>
+               </property>
+              </widget>
              </item>
             </layout>
            </item>
@@ -116,14 +129,70 @@
               <number>3</number>
              </property>
              <item>
-              <widget class="QLabel" name="DBSchemaLabel">
-               <property name="text">
-                <string>Schema</string>
+              <layout class="QHBoxLayout" name="horizontalLayout_15">
+               <property name="spacing">
+                <number>0</number>
                </property>
-              </widget>
+               <item>
+                <widget class="QLabel" name="DBSchemaLabel">
+                 <property name="text">
+                  <string>Schema</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QToolButton" name="schemaAdd">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>17</width>
+                   <height>17</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>17</width>
+                   <height>17</height>
+                  </size>
+                 </property>
+                 <property name="sizeIncrement">
+                  <size>
+                   <width>0</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <pointsize>6</pointsize>
+                  </font>
+                 </property>
+                 <property name="toolTip">
+                  <string>add new schema</string>
+                 </property>
+                 <property name="text">
+                  <string notr="true">+</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
              </item>
              <item>
-              <widget class="QComboBox" name="DBSchema"/>
+              <widget class="QComboBox" name="DBSchema">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="toolTip">
+                <string>select working schema</string>
+               </property>
+              </widget>
              </item>
             </layout>
            </item>
@@ -250,7 +319,7 @@
             </size>
            </property>
            <property name="text">
-            <string>Available relations list (T:table V:view M:materialized view)</string>
+            <string>Available DB objects list (T:table V:view M:materialized view)</string>
            </property>
           </widget>
          </item>

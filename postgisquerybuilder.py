@@ -101,6 +101,7 @@ class postgisQueryBuilder:
         self.dlg.LayerList.itemDoubleClicked.connect(self.useForQuery)
         self.dlg.LayerList.customContextMenuRequested.connect(self.layerContextMenu)
         self.dlg.LayerList.itemSelectionChanged.connect(self.saveForQuery)
+        self.dlg.schemaAdd.clicked.connect(self.addNewSchema)
 
     def eventsDisconnect(self):
         self.dlg.QueryType.activated.disconnect(self.setQueryType)
@@ -136,6 +137,7 @@ class postgisQueryBuilder:
         self.dlg.LayerList.itemDoubleClicked.disconnect(self.useForQuery)
         self.dlg.LayerList.customContextMenuRequested.disconnect(self.layerContextMenu)
         self.dlg.LayerList.itemSelectionChanged.disconnect(self.saveForQuery)
+        self.dlg.schemaAdd.clicked.disconnect(self.addNewSchema)
 
     def initGui(self):
         # Create action that will start plugin configuration
@@ -220,7 +222,7 @@ class postgisQueryBuilder:
                                                          self.selectedLayer,suggestion = self.dlg.GEOMETRYFIELD.currentText()))
         contextMenu.addSeparator()
         self.useForQueryAction = contextMenu.addAction(QIcon(os.path.join(self.plugin_dir,"icons","useForQuery.png")),\
-                                                         "Use as primary layer for query")
+                                                         "Use for query")
         self.useForQueryAction.triggered.connect(self.useForQuery)
         self.layerAddToMapAction = contextMenu.addAction(QIcon(os.path.join(self.plugin_dir,"icons","addToLayer.png")),\
                                                          "Add layer to map canvas")
@@ -352,7 +354,16 @@ class postgisQueryBuilder:
 
     def uncheckList(self,slot):
         for row in range(0,slot.count()):
-            self.dlg.LayerList.item(row).setCheckState(Qt.Unchecked);
+            self.dlg.LayerList.item(row).setCheckState(Qt.Unchecked)
+
+    def addNewSchema(self):
+        newSchema = renameDialog.rename("new_schema")
+        error = self.PSQL.addSchema(newSchema)
+        if error:
+            QMessageBox.information(None, "ERROR:", error)
+        else:
+            self.populateComboBox(self.dlg.DBSchema,self.PSQL.getSchemas(),"Select schema",True)
+
 
     def disableDialogSlot(self,slot):
         for child in self.dlg.tabWidget.widget(1).children():

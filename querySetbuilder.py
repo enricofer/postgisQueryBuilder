@@ -60,7 +60,7 @@ class querySet():
             ],\
             'ST_Union 1 layer':\
             [\
-            'Returns a geometry that represents the point set union of the Geometries in geomA.',\
+            'Returns a geometry that represents the point set union of the Geometries in geomA. Geometries are dissolved by attribute selecting dissolving field',\
             'http://postgis.refractions.net/documentation/manual-svn/ST_Union.html',\
             ['LAYERa','fieldsListA'],\
             'SELECT [[FIELDSET]],ST_Union("[[LAYERa]]".[[GEOMETRYFIELDa]]) AS [[GEOMETRYFIELD]] FROM "[[SCHEMA]]"."[[LAYERa]]" [[WHERE]] [[ORDERBY]] [[GROUPBYSET]]',\
@@ -105,6 +105,14 @@ class querySet():
             ['LAYERa','fieldsListA'],\
             'SELECT [[FIELDSET]] FROM [[SPATIALFROM]]"[[SCHEMA]]"."[[LAYERa]]" [[WHERE]] [[ORDERBY]]',\
             '_FieldsSubset_of_[[LAYERa]] '\
+            ],\
+            'Validate geometries':\
+            [\
+            'Mark and report invalid geometries',\
+            'http://postgis.net/docs/ST_IsValidDetail.html',\
+            ['LAYERa'],\
+            'SELECT [[KEYFIELD]],reason(ST_IsValidDetail("[[LAYERa]]".[[GEOMETRYFIELDa]])) AS reason, location(ST_IsValidDetail("[[LAYERa]]".[[GEOMETRYFIELDa]])) AS [[GEOMETRYFIELDa]] FROM "[[SCHEMA]]"."[[LAYERa]]" WHERE NOT ST_IsValid("[[LAYERa]]".[[GEOMETRYFIELDa]])',\
+            '_Invalid_geometries_of_[[LAYERa]] '\
             ],\
             'JOIN analytical':\
             [\
