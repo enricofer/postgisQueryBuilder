@@ -233,6 +233,7 @@ class tableSet(QtGui.QTableWidget):
     def oneValueLoad(self,value):
         item = QtGui.QComboBox()
         item.addItem(value)
+        item.setCurrentIndex(0)
         if value == "":
             item.hide()
             item.setDisabled(True)
@@ -279,10 +280,27 @@ class tableSet(QtGui.QTableWidget):
     def getSpatialFilterLayers(self, schema = None):
         tmpSet = set()
         for row in range(0,self.rowCount()-1):
-            if self.cellWidget(row,2).currentText()[:2]=="ST":
-                tmpSet.add(self.cellWidget(row,3).currentText())
+
+            try:
+                cw1 = self.cellWidget(row,1).currentText()
+            except:
+                cw1 = ""
+
+            try:
+                cw2 = self.cellWidget(row,2).currentText()
+            except:
+                cw2 = ""
+
+            try:
+                cw3 = self.cellWidget(row,3).currentText()
+            except:
+                cw3 = ""
+
+
+            if cw2[:2]=="ST":
+                tmpSet.add(cw3)
         layerList = list(tmpSet)
-        print layerList
+        #print layerList
         sqlFrom = ""
         for item in layerList:
             if schema:
@@ -299,42 +317,67 @@ class tableSet(QtGui.QTableWidget):
         parClosed=0
         previous = "AND/OR"
         for row in range(0,self.rowCount()-1):
+
+            try:
+                cw1 = self.cellWidget(row,1).currentText()
+            except:
+                cw1 = ""
+
+            try:
+                cw2 = self.cellWidget(row,2).currentText()
+            except:
+                cw2 = ""
+
+            try:
+                cw3 = self.cellWidget(row,3).currentText()
+            except:
+                cw3 = ""
+
+            #print cw1,cw2,cw3
+
             #print "previous: ",previous
-            if self.cellWidget(row,1).currentText() == '(': 
+            if cw1 == '(':
                 if previous in ['QUERY',')']:
                     #print "malformed: ("
                     return None
                 parOpen += 1
                 previous = "("
-            elif self.cellWidget(row,1).currentText() == ')': 
+            elif cw1 == ')':
                 if previous in ['AND/OR','(']:
                     #print "malformed: )"
                     return None
                 parClosed += 1
                 previous = ")"
-            elif self.cellWidget(row,1).currentText() == 'NOT': 
-                if previous in ['QUERY',')','(']:
-                    #print "malformed: )"
+            elif cw1 == 'NOT':
+                if previous in ['QUERY',')']:
+                    #print "malformed: NOT"
                     return None
-                parClosed += 1
                 previous = "NOT"
-            elif self.cellWidget(row,2).currentText() in self.conditionalOptions or self.cellWidget(row,2).currentText()[:2]=="ST":
+            elif cw2 in self.conditionalOptions:
+                if previous == "QUERY":
+                    #print "malformed: QUERY"
+                    return None
+                if cw2 in ['IS NULL','IS NOT NULL']:
+                    self.cellWidget(row,3).hide()
+                    cw3 = ""
+                previous = "QUERY"
+            elif cw2[:2]=="ST":
                 if previous == "QUERY":
                     #print "malformed: QUERY"
                     return None
                 previous = "QUERY"
-            elif self.cellWidget(row,1).currentText() == 'AND' or self.cellWidget(row,1).currentText() == 'OR':
+            elif cw1 == 'AND' or cw1 == 'OR':
                 if previous == "AND/OR":
                     #print "malformed: AND/OR"
                     return None
                 previous = "AND/OR"
-            for column in range (1,3):
-                if self.cellWidget(row,column).currentText()[:6] == 'Select':
-                    #print "malformed: Select"
-                    return None
+            if cw1[:6] == 'Select' or cw2[:6] == 'Select' or cw3[:6] == 'Select':
+                #print "malformed: Select"
+                return None
         if parOpen != parClosed:
             #print "malformed: ()"
             return None
+        #print "wellformed"
         return True
 
 
@@ -343,26 +386,42 @@ class tableSet(QtGui.QTableWidget):
         if not(self.testIfSintaxOk() and self.rowCount()>1):
             return ""
         for row in range(0,self.rowCount()-1):
-            if self.cellWidget(row,2).currentText() in self.conditionalOptions:
-                fType = self.PSQL.getFieldsType(self.layerQuery,self.cellWidget(row,1).currentText())
+
+            try:
+                cw1 = self.cellWidget(row,1).currentText()
+            except:
+                cw1 = ""
+
+            try:
+                cw2 = self.cellWidget(row,2).currentText()
+            except:
+                cw2 = ""
+
+            try:
+                cw3 = self.cellWidget(row,3).currentText()
+            except:
+                cw3 = ""
+
+            if cw2 in self.conditionalOptions:
+                fType = self.PSQL.getFieldsType(self.layerQuery,cw1)
                 fType = fType[:4]
                 #print fType
-                if self.cellWidget(row,2).currentText() in ['IS NULL','IS NOT NULL']:
+                if cw2 in ['IS NULL','IS NOT NULL']:
                     value = ''
                 else:
                     if ((fType == "char") or (fType == "text") or  (fType == "varc")):
-                        value = "'"+self.cellWidget(row,3).currentText()+"'"
+                        value = "'"+cw3+"'"
                     else:
-                        value = self.cellWidget(row,3).currentText()
-                whereStatement += '"%s"."%s" %s %s ' % (self.layerQuery,self.cellWidget(row,1).currentText(),self.cellWidget(row,2).currentText(),value)
-            elif self.cellWidget(row,2).currentText()[:2]=="ST":
-                whereStatement += '%s("%s"."%s","%s"."%s") ' % (self.cellWidget(row,2).currentText(),\
+                        value = cw3
+                whereStatement += '"%s"."%s" %s %s ' % (self.layerQuery,cw1,cw2,value)
+            elif cw2[:2]=="ST":
+                whereStatement += '%s("%s"."%s","%s"."%s") ' % (cw2,\
                                                                 self.layerQuery,\
                                                                 self.PSQL.getGeometryField(self.layerQuery),\
-                                                                self.cellWidget(row,3).currentText(),\
-                                                                self.PSQL.getGeometryField(self.cellWidget(row,3).currentText()))
+                                                                cw3,\
+                                                                self.PSQL.getGeometryField(cw3))
             else:
-                whereStatement += self.cellWidget(row,1).currentText()+" "
+                whereStatement += cw1+" "
         if whereStatement != "": 
             whereStatement = " WHERE " + whereStatement
         return whereStatement
@@ -374,7 +433,10 @@ class tableSet(QtGui.QTableWidget):
         #print "row: {0} column: {1} text: {2}".format(cbox.row,cbox.column,cbox.currentText())
         #print cbox.currentText()
         #print "ROWS:",self.rowCount()
+
         nextAction=''
+        noAdd = None
+
         if cbox.column == 2:
             if self.cellWidget(cbox.row,2).currentText() in ['IS NULL','IS NOT NULL']:
                 self.cellWidget(cbox.row,3).hide()
@@ -388,61 +450,62 @@ class tableSet(QtGui.QTableWidget):
                 self.setCellWidget(cbox.row,1,self.fieldsLoad(cbox.row,1))
                 self.setCellWidget(cbox.row,2,self.attributefiltersLoad(cbox.row,2))
                 self.setCellWidget(cbox.row,3,self.valueLoad())
-                self.cellWidget(cbox.row,2).show()
-                self.cellWidget(cbox.row,3).show()
             elif cbox.currentText() == "Spatial filter":
                 nextAction = "bool"
                 self.setCellWidget(cbox.row,1,self.oneValueLoad(self.layerQuery))
                 self.setCellWidget(cbox.row,2,self.spatialfiltersLoad())
                 self.setCellWidget(cbox.row,3,self.layerLoad())
-                self.cellWidget(cbox.row,2).show()
-                self.cellWidget(cbox.row,3).show()
             elif cbox.currentText() == "OR":
                 nextAction = "filter/group"
                 self.setCellWidget(cbox.row,1,self.boolLoad('OR'))
-                self.setCellWidget(cbox.row,2,self.oneValueLoad(""))
-                self.setCellWidget(cbox.row,3,self.oneValueLoad(""))
-                self.cellWidget(cbox.row,2).hide()
-                self.cellWidget(cbox.row,3).hide()
+                self.setCellWidget(cbox.row,2,None)
+                self.setCellWidget(cbox.row,3,None)
             elif cbox.currentText() == "AND":
                 nextAction = "filter/group"
                 self.setCellWidget(cbox.row,1,self.boolLoad('AND'))
-                self.setCellWidget(cbox.row,2,self.oneValueLoad(""))
-                self.setCellWidget(cbox.row,3,self.oneValueLoad(""))
-                self.cellWidget(cbox.row,2).hide()
-                self.cellWidget(cbox.row,3).hide()
+                self.setCellWidget(cbox.row,2,None)
+                self.setCellWidget(cbox.row,3,None)
             elif cbox.currentText() == "NOT":
                 nextAction = "filter/group"
                 self.setCellWidget(cbox.row,1,self.groupLoad('NOT'))
-                self.setCellWidget(cbox.row,2,self.oneValueLoad(""))
-                self.setCellWidget(cbox.row,3,self.oneValueLoad(""))
-                self.cellWidget(cbox.row,2).hide()
-                self.cellWidget(cbox.row,3).hide()
+                self.setCellWidget(cbox.row,2,None)
+                self.setCellWidget(cbox.row,3,None)
             elif cbox.currentText() == "(":
                 nextAction = "filter/group"
                 self.setCellWidget(cbox.row,1,self.groupLoad('('))
-                self.setCellWidget(cbox.row,2,self.oneValueLoad(""))
-                self.setCellWidget(cbox.row,3,self.oneValueLoad(""))
-                self.cellWidget(cbox.row,2).hide()
-                self.cellWidget(cbox.row,3).hide()
+                self.setCellWidget(cbox.row,2,None)
+                self.setCellWidget(cbox.row,3,None)
             elif cbox.currentText() == ")":
                 nextAction = "filter/group"
                 self.setCellWidget(cbox.row,1,self.boolLoad(')'))
-                self.setCellWidget(cbox.row,2,self.oneValueLoad(""))
-                self.setCellWidget(cbox.row,3,self.oneValueLoad(""))
-                self.cellWidget(cbox.row,2).hide()
-                self.cellWidget(cbox.row,3).hide()
+                self.setCellWidget(cbox.row,2,None)
+                self.setCellWidget(cbox.row,3,None)
+            elif cbox.currentText() == "":
+                self.setCellWidget(cbox.row,1,None)
+                self.setCellWidget(cbox.row,2,None)
+                self.setCellWidget(cbox.row,3,None)
+                #if self.testIfSintaxOk(): print "wellformed query:"
+                #else: print "malformed query:"
+                #self.getWhereStatement()
             elif cbox.currentText() == "Delete":
                 if cbox.row != (self.rowCount()-1):
                     self.delRow(cbox.row)
+                    self.getWhereStatement()
+                    return
+                else:
+                    cbox.setCurrentIndex(0)
+                    return
+                    #self.setCellWidget(cbox.row,0,self.actionCell(self.rowCount()-1,0))
             elif cbox.currentText() == "Insert":
                 if cbox.row != (self.rowCount()-1):
-                    self.insRow(cbox.row)
-            elif cbox.currentText() == "":
-                #if self.testIfSintaxOk(): print "wellformed query:"
-                #else: print "malformed query:"
-                self.getWhereStatement()
-                return None
+                    self.insRow(cbox.row+1)
+                    cbox.setCurrentIndex(0)
+                    self.getWhereStatement()
+                    return
+                else:
+                    cbox.setCurrentIndex(0)
+                    return
+
             if cbox.row == (self.rowCount()-1):
                 self.insertRow((self.rowCount()))
                 self.setRowHeight(self.rowCount()-1,self.rowSize)
@@ -450,9 +513,10 @@ class tableSet(QtGui.QTableWidget):
                     self.setCellWidget(self.rowCount()-1,0,self.actionFilterCell(self.rowCount()-1,0))
                 elif nextAction == "bool":
                     self.setCellWidget(self.rowCount()-1,0,self.actionBoolCell(self.rowCount()-1,0))
-                cbox.removeItem(0)
+                if self.cellWidget(cbox.row,0).currentText() != "":
+                    cbox.removeItem(0)
                 cbox.setCurrentIndex(0)
             else:
                 cbox.setCurrentIndex(0)
-                #cbox.setItemText(0,"")
+
         self.getWhereStatement()
