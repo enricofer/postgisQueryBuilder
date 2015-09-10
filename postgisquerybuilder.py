@@ -236,6 +236,9 @@ class postgisQueryBuilder:
         self.renameObjectAction = contextMenu.addAction(QIcon(os.path.join(self.plugin_dir,"icons","renameObject.png")),\
                                                          "Rename object")
         self.renameObjectAction.triggered.connect(self.renameObject)
+        self.layerDeleteAction = contextMenu.addAction(QIcon(os.path.join(self.plugin_dir,"icons","layerDelete.png")),\
+                                                         "Delete view/table")
+        self.layerDeleteAction.triggered.connect(self.layerDelete)
         self.moveObjectAction = contextMenu.addAction(QIcon(os.path.join(self.plugin_dir,"icons","moveObject.png")),\
                                                          "Move to another schema")
         self.moveObjectAction.triggered.connect(self.moveObject)
@@ -243,9 +246,6 @@ class postgisQueryBuilder:
             self.convertToTableAction = contextMenu.addAction(QIcon(os.path.join(self.plugin_dir,"icons","convertToTable.png")),\
                                                              "Convert view to table")
             self.convertToTableAction.triggered.connect(self.convertToTable)
-            self.layerDeleteAction = contextMenu.addAction(QIcon(os.path.join(self.plugin_dir,"icons","layerDelete.png")),\
-                                                             "Delete view/table")
-            self.layerDeleteAction.triggered.connect(self.layerDelete)
         if self.PSQL.isView(self.selectedLayer):
             self.editViewAction = contextMenu.addAction(QIcon(os.path.join(self.plugin_dir,"icons","layerDelete.png")),\
                                                              "Edit view definition")
