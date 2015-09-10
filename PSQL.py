@@ -111,7 +111,28 @@ class PSQL:
                 layers.append(query.value(0))
         layers.sort()
         return layers
-        
+
+    def scanLayersForPrimaryKey(self):
+        keysViews = set()
+        for layer in self.getLayers():
+            if not self.isTable(layer):
+                for key in self.getKeyFields(layer):
+                    keysViews.add(key)
+        keysTables = set()
+        for layer in self.getLayers():
+            if self.isTable(layer):
+                key = self.guessKeyField(layer)
+                keysTables.add(key)
+                keysViews.discard(key)
+        return list(keysTables)+list(keysViews)
+
+    def scanLayersForGeometry(self):
+        geoms = set()
+        for layer in self.getLayers():
+            for geom in self.getGeometryFields(layer):
+                geoms.add(geom)
+        return list(geoms)
+
 
     def testIfFieldExist(self,layer,fieldname):
         fields=self.getFieldsContent(layer)
@@ -184,7 +205,7 @@ class PSQL:
         return fields
 
     def getSRID(self,layer,suggestion = ""):
-        autoGeom = self.guessGeometryField(layer,suggestion)
+        autoGeom = self.guessGeometryField(layer,suggestion=suggestion)
         sql="SELECT Find_SRID('%s', '%s', '%s');" % (self.schema,layer,autoGeom)
         #sql='SELECT distinct(SRID(autoGeom)) as srid FROM "%s"."%s" group by srid;' % (autoGeom,self.schema,layer)
         query = self.db.exec_(sql)
@@ -194,7 +215,7 @@ class PSQL:
         return res
 
     def getGeometryType(self,layer,suggestion = ""):
-        autoGeom = self.guessGeometryField(layer,suggestion)
+        autoGeom = self.guessGeometryField(layer,suggestion=suggestion)
         sql='''SELECT ST_GeometryType(%s) FROM "%s"."%s";''' % (autoGeom,self.schema,layer)
         query = self.db.exec_(sql)
         query.next()
@@ -225,7 +246,7 @@ class PSQL:
                 return field
         return -1
 
-    def guessKeyField(self,layer,suggestion):
+    def guessKeyField(self,layer,suggestion = None):
         if self.isTable(layer):
             sql = "SELECT a.attname, format_type(a.atttypid, a.atttypmod) " + \
                 "AS data_type FROM   pg_index i JOIN   pg_attribute a ON " + \
@@ -233,7 +254,6 @@ class PSQL:
                 "i.indrelid = '%s'::regclass AND i.indisprimary;" % layer
             query = self.db.exec_(sql)
             query.first()
-            print "key guess:",query.value(0)
             return query.value(0)
         else:
             if suggestion in self.getFieldsContent(layer):
@@ -244,7 +264,7 @@ class PSQL:
                 except:
                     return None
 
-    def guessGeometryField(self,layer,suggestion):
+    def guessGeometryField(self,layer,suggestion = None):
         if suggestion in self.getFieldsContent(layer):
            return suggestion
         else:
@@ -402,7 +422,7 @@ class PSQL:
         if self.loadedLayerRefresh(layer):
             return #test if layer has been already loaded
         autoGeom = self.guessGeometryField(layer,GeomField)
-        autoKey = self.guessKeyField(layer,KeyField)
+        autoKey = self.guessKeyField(layer,suggestion=KeyField)
         uri = QgsDataSourceURI()
         uri.setConnection(self.PSQLHost,self.PSQLPort,self.PSQLDatabase,self.PSQLUsername,self.PSQLPassword)
         uri.setDataSource(self.schema,layer,autoGeom,"",autoKey)
@@ -418,8 +438,8 @@ class PSQL:
     
     def loadSql(self,layerName,sql,GeomField,KeyField):
         self.submitQuery("__tmp",'CREATE VIEW "'+self.schema+'"."__tmp" AS '+sql)
-        autoGeom = self.guessGeometryField("__tmp",GeomField)
-        autoKey = self.guessKeyField("__tmp",KeyField)
+        autoGeom = self.guessGeometryField("__tmp",suggestion=GeomField)
+        autoKey = self.guessKeyField("__tmp",suggestion=KeyField)
         self.deleteLayer("__tmp")
         uri = QgsDataSourceURI()
         uri.setConnection(self.PSQLHost,self.PSQLPort,self.PSQLDatabase,self.PSQLUsername,self.PSQLPassword)

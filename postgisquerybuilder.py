@@ -282,8 +282,8 @@ class postgisQueryBuilder:
         self.predefinedLayer = self.selectedLayer
 
     def layerAddToMap(self):
-        keyGuess = self.PSQL.guessKeyField(self.selectedLayer,self.dlg.KEYFIELD.currentText())
-        geomGuess = self.PSQL.guessGeometryField(self.selectedLayer,self.dlg.GEOMETRYFIELD.currentText())
+        keyGuess = self.PSQL.guessKeyField(self.selectedLayer,suggestion=self.dlg.KEYFIELD.currentText())
+        geomGuess = self.PSQL.guessGeometryField(self.selectedLayer,suggestion=self.dlg.GEOMETRYFIELD.currentText())
         self.PSQL.loadView(self.selectedLayer,geomGuess,keyGuess)
 
     def probeKeyGeom(self):
@@ -495,7 +495,7 @@ class postgisQueryBuilder:
             return
         self.querySet.setParameter("LAYERa",self.dlg.LAYERa.currentText())
         #try to guess layer geometry field
-        autoGeometry = self.PSQL.guessGeometryField(self.dlg.LAYERa.currentText(),self.dlg.GEOMETRYFIELD.currentText())
+        autoGeometry = self.PSQL.guessGeometryField(self.dlg.LAYERa.currentText(),suggestion=self.dlg.GEOMETRYFIELD.currentText())
         self.querySet.setParameter("GEOMETRYFIELDa",autoGeometry)
         if self.querySet.testQueryParametersCheckList():
             self.queryGen()
@@ -518,7 +518,7 @@ class postgisQueryBuilder:
             return
         self.querySet.setParameter("LAYERb",self.dlg.LAYERb.currentText())
         #try to guess layer geometry field
-        autoGeometry = self.PSQL.guessGeometryField(self.dlg.LAYERb.currentText(),self.dlg.GEOMETRYFIELD.currentText())
+        autoGeometry = self.PSQL.guessGeometryField(self.dlg.LAYERb.currentText(),suggestion=self.dlg.GEOMETRYFIELD.currentText())
         self.querySet.setParameter("GEOMETRYFIELDb",autoGeometry)
         if self.querySet.testQueryParametersCheckList():
             self.queryGen()
@@ -814,6 +814,8 @@ class postgisQueryBuilder:
             self.resetDialog()
             #self.dlg.tabWidget.setCurrentIndex(1)
             self.querySet.setSchema(self.dlg.DBSchema.currentText())
+            self.populateComboBox(self.dlg.GEOMETRYFIELD,self.PSQL.scanLayersForGeometry(),"",None)
+            self.populateComboBox(self.dlg.KEYFIELD,self.PSQL.scanLayersForPrimaryKey(),"",None)
             self.populateLayerMenu()
 
     def populateFilterTable(self):
