@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>340</width>
-    <height>75</height>
+    <height>77</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,11 @@
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="QComboBox" name="moveCombo"/>
+      <widget class="QComboBox" name="moveCombo">
+       <property name="editable">
+        <bool>true</bool>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QDialogButtonBox" name="buttonBox">

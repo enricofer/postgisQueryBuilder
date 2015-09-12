@@ -69,15 +69,10 @@ class postgisQueryBuilder:
         self.dlg.LAYERa.activated.connect(self.setLAYERa)
         self.dlg.LAYERb.activated.connect(self.setLAYERb)
         self.dlg.FIELD.activated.connect(self.setFIELD)
-        self.dlg.OPERATOR.activated.connect(self.setOPERATOR)
-        self.dlg.DISTANCEOP.activated.connect(self.setDISTANCEOP)
         self.dlg.SPATIALREL.activated.connect(self.setSPATIALREL)
         self.dlg.SPATIALRELNOT.stateChanged.connect(self.setSPATIALRELNOT)
         self.dlg.checkCreateView.clicked.connect(self.checkCreateView)
         self.dlg.BUFFERRADIUS.textChanged.connect(self.setBUFFERRADIUS)
-        self.dlg.CONDITION.activated.connect(self.setCONDITION)
-        self.dlg.CONDITION.editTextChanged.connect(self.setCONDITION)
-        self.dlg.DISTANCE.textChanged.connect(self.setDISTANCE)
         self.dlg.ButtonRun.clicked.connect(self.runQuery)
         self.dlg.ButtonReset.clicked.connect(self.resetForm)
         self.dlg.ButtonHelp.clicked.connect(self.helpDialog)
@@ -96,7 +91,6 @@ class postgisQueryBuilder:
         self.dlg.KEYFIELD.editTextChanged.connect(self.keyGeomFieldsChanged)
         self.dlg.GEOMETRYFIELD.activated.connect(self.keyGeomFieldsChanged)
         self.dlg.GEOMETRYFIELD.editTextChanged.connect(self.keyGeomFieldsChanged)
-        self.dlg.queryReadyButton.clicked.connect(self.focusOnQuery)
         self.dlg.LAYERaAllFields.clicked.connect(self.selectAllFields)
         self.dlg.LayerList.itemDoubleClicked.connect(self.useForQuery)
         self.dlg.LayerList.customContextMenuRequested.connect(self.layerContextMenu)
@@ -108,15 +102,10 @@ class postgisQueryBuilder:
         self.dlg.LAYERa.activated.disconnect(self.setLAYERa)
         self.dlg.LAYERb.activated.disconnect(self.setLAYERb)
         self.dlg.FIELD.activated.disconnect(self.setFIELD)
-        self.dlg.OPERATOR.activated.disconnect(self.setOPERATOR)
-        self.dlg.DISTANCEOP.activated.disconnect(self.setDISTANCEOP)
         self.dlg.SPATIALREL.activated.disconnect(self.setSPATIALREL)
         self.dlg.SPATIALRELNOT.stateChanged.disconnect(self.setSPATIALRELNOT)
         self.dlg.checkCreateView.clicked.disconnect(self.checkCreateView)
         self.dlg.BUFFERRADIUS.textChanged.disconnect(self.setBUFFERRADIUS)
-        self.dlg.CONDITION.activated.disconnect(self.setCONDITION)
-        self.dlg.CONDITION.editTextChanged.disconnect(self.setCONDITION)
-        self.dlg.DISTANCE.textChanged.disconnect(self.setDISTANCE)
         self.dlg.ButtonRun.clicked.disconnect(self.runQuery)
         self.dlg.ButtonReset.clicked.disconnect(self.resetForm)
         #self.dlg.AddToMapButton.clicked.disconnect(self.layerAddToMap)
@@ -173,8 +162,6 @@ class postgisQueryBuilder:
 
     def populateGui(self):
         self.populateComboBox(self.dlg.QueryType,self.querySet.getQueryLabels(),"Select query type",True)
-        self.populateComboBox(self.dlg.OPERATOR,["=","<>",">","<","<=",">="],"Select",True)
-        self.populateComboBox(self.dlg.DISTANCEOP,["=","<>",">","<","<=",">="],"Select",True)
         self.populateComboBox(self.dlg.JOIN,["INNER JOIN","CROSS JOIN","RIGHT OUTER JOIN","LEFT OUTER JOIN","FULL OUTER JOIN"],"Select",True)
         self.populateComboBox(self.dlg.SPATIALREL,self.querySet.getSpatialRelationships(),"Select spatial relationship",True)
         self.populateComboBox(self.dlg.KEYFIELD,["ogc_fid","id","fid","gid","FID","GID","ID"],"",None)
@@ -234,10 +221,10 @@ class postgisQueryBuilder:
                                                          "View as data table")
         self.layerGetTableAction.triggered.connect(self.layerGetTable)
         self.renameObjectAction = contextMenu.addAction(QIcon(os.path.join(self.plugin_dir,"icons","renameObject.png")),\
-                                                         "Rename object")
+                                                         "Rename")
         self.renameObjectAction.triggered.connect(self.renameObject)
         self.layerDeleteAction = contextMenu.addAction(QIcon(os.path.join(self.plugin_dir,"icons","layerDelete.png")),\
-                                                         "Delete view/table")
+                                                         "Delete")
         self.layerDeleteAction.triggered.connect(self.layerDelete)
         self.moveObjectAction = contextMenu.addAction(QIcon(os.path.join(self.plugin_dir,"icons","moveObject.png")),\
                                                          "Move to another schema")
@@ -311,7 +298,7 @@ class postgisQueryBuilder:
         schemas = self.PSQL.getSchemas()
         schemas.remove(self.PSQL.getSchema())
         schemas.insert(0,self.PSQL.getSchema())
-        newSchema = moveDialog.getNewSchema(schemas)
+        newSchema = moveDialog.getNewSchema(self)
         if newSchema:
             error = self.PSQL.moveLayer(self.selectedLayer,newSchema)
             if error:
@@ -407,7 +394,6 @@ class postgisQueryBuilder:
 
     def setMaterialized(self):
         self.queryGen()
-
 
     def keyGeomFieldsChanged(self):
         self.querySet.setParameter("GEOMETRYFIELD",self.dlg.GEOMETRYFIELD.currentText())
@@ -581,8 +567,6 @@ class postgisQueryBuilder:
             self.tDelimiter = "'"
         else:
             self.tDelimiter = ""
-        self.populateComboBox(self.dlg.OPERATOR,["=","<>",">","<","<=",">="],"Select",True)
-        self.populateComboBox(self.dlg.CONDITION,self.PSQL.getUniqeValues(self.querySet.getParameter("LAYERa"),self.dlg.FIELD.currentText(),100),"",True)
         if self.querySet.testQueryParametersCheckList():
             self.queryGen()
 
@@ -590,25 +574,6 @@ class postgisQueryBuilder:
         if self.dlg.FIELDb.currentText()[:6] == "Select":
             return
         self.querySet.setParameter("FIELDb",'"'+self.dlg.LAYERb.currentText()+'"."'+self.dlg.FIELDb.currentText()+'"')
-        if self.querySet.testQueryParametersCheckList():
-            self.queryGen()
-
-    def setDISTANCEOP(self):
-        if self.dlg.DISTANCEOP.currentText()[:6] == "Select":
-            return
-        self.querySet.setParameter("DISTANCEOP",self.dlg.DISTANCEOP.currentText())
-        if self.querySet.testQueryParametersCheckList():
-            self.queryGen()
-
-    def setDISTANCE(self):
-        self.querySet.setParameter("DISTANCE",self.dlg.DISTANCE.text())
-        if self.querySet.testQueryParametersCheckList():
-            self.queryGen()
-
-    def setOPERATOR(self):
-        if self.dlg.OPERATOR.currentText()[:6] == "Select":
-            return
-        self.querySet.setParameter("OPERATOR",self.dlg.OPERATOR.currentText())
         if self.querySet.testQueryParametersCheckList():
             self.queryGen()
 
@@ -621,16 +586,6 @@ class postgisQueryBuilder:
             
     def setBUFFERRADIUS(self):
         self.querySet.setParameter("BUFFERRADIUS",self.dlg.BUFFERRADIUS.text())
-        if self.querySet.testQueryParametersCheckList():
-            self.queryGen()
-            
-    def setCONDITION(self):
-        self.querySet.setParameter("CONDITION",self.tDelimiter+self.dlg.CONDITION.currentText()+self.tDelimiter)
-        if self.querySet.testQueryParametersCheckList():
-            self.queryGen()
-
-    def setCONDITIONtext(self):
-        self.querySet.setParameter("CONDITION",self.dlg.CONDITION.currentText())
         if self.querySet.testQueryParametersCheckList():
             self.queryGen()
 
@@ -666,7 +621,6 @@ class postgisQueryBuilder:
         self.enableDialogSlot("QueryResult")
         self.enableDialogSlot("checkCreateView")
         self.enableDialogSlot("AddToMap")
-        self.dlg.queryReadyButton.show()
         try:
             qName = self.querySet.getNameParsed()
         except:
@@ -720,8 +674,6 @@ class postgisQueryBuilder:
         self.eventsDisconnect()
         self.clearAllDialogs()
         self.querySet.resetParameters()
-        self.dlg.queryReadyButton.hide()
-        self.hideDialogSlot("queryReadyButton")
         #self.disableQueryDefSlot()
         self.hideQueryDefSlot()
         self.loadSVG("Select_query_type")
@@ -739,27 +691,27 @@ class postgisQueryBuilder:
         self.eventsConnect()
 
     def hideQueryDefSlot(self):
-        toHide=["BUFFERRADIUS","FIELD","OPERATOR","CONDITION",\
+        toHide=["BUFFERRADIUS","FIELD",\
                 "SPATIALREL","SPATIALRELNOT","LAYERaLabel","BUFFERRADIUSLabel",\
-                "FIELD","FIELDLabel","OPERATORLabel","CONDITIONLabel","SPATIALRELLabel",
+                "FIELD","FIELDLabel","SPATIALRELLabel",
                 "SPATIALRELNOTLabel","fieldsListALabel","fieldsListBLabel",\
-                "DISTANCEOP","DISTANCE","DISTANCEOPLabel","DISTANCELabel","FIELDb","FIELDbLabel","JOIN","JOINLabel",\
+                "FIELDb","FIELDbLabel","JOIN","JOINLabel",\
                 "LAYERa","LAYERb","LAYERbLabel","summaryBox","LAYERaAllFields","fieldsListA","fieldsListB"]
         for slot in toHide:
             self.hideDialogSlot(slot)
 
     def clearQueryDefSlot(self):
         toClear=["LAYERa","LAYERb","BUFFERRADIUS","FIELD","FIELDb",\
-                  "OPERATOR","CONDITION","SPATIALREL","fieldsListA","fieldsListB",\
-                  "DISTANCEOP","DISTANCE","JOIN"]
+                  "SPATIALREL","fieldsListA","fieldsListB",\
+                  "JOIN"]
         for slot in toClear:
             self.clearDialogSlot(slot)
 
     def disableQueryDefSlot(self):
         toDisable=["LAYERa","LAYERb","BUFFERRADIUS","FIELD","FIELDb",\
-                    "OPERATOR","CONDITION","SPATIALREL",\
+                    "SPATIALREL",\
                     "SPATIALRELNOT","fieldsListA","fieldsListB",
-                    "DISTANCEOP","DISTANCE","JOIN"]
+                    "JOIN"]
         for slot in toDisable:
             self.disableDialogSlot(slot)
 
@@ -768,7 +720,6 @@ class postgisQueryBuilder:
         self.dlg.LAYERb.clear()
         self.dlg.BUFFERRADIUS.clear()
         self.dlg.FIELD.clear()
-        self.dlg.CONDITION.clear()
         self.dlg.QueryResult.clear()
         self.dlg.QueryName.clear()
         self.dlg.fieldsListA.clear()
@@ -776,13 +727,11 @@ class postgisQueryBuilder:
         self.dlg.TableResult.clear()
         self.dlg.SPATIALRELNOT.setCheckState(Qt.Unchecked)
         self.dlg.LAYERaAllFields.setCheckState(Qt.Unchecked)
-        self.dlg.DISTANCE.clear()
 
     def getPSQLConnections(self):
         conn = self.PSQL.getConnections()
         self.populateComboBox(self.dlg.PSQLConnection,conn,"Select connection",True)
         self.hideQueryDefSlot()
-        self.dlg.queryReadyButton.hide()
         self.dlg.PSQLConnection.activated.connect(self.setConnection)
 
     def closeDialog(self):

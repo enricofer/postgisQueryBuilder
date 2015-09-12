@@ -37,6 +37,7 @@ class moveDialog(QtGui.QDialog, Ui_moveDialog):
         self.buttonBox.accepted.connect(self.acceptRename)
         self.buttonBox.rejected.connect(self.rejectRename)
         self.acceptedFlag = None
+        self.createFlag = None
 
     def acceptRename(self):
         self.acceptedFlag = True
@@ -45,11 +46,15 @@ class moveDialog(QtGui.QDialog, Ui_moveDialog):
         self.acceptedFlag = None
 
     @staticmethod
-    def getNewSchema(schemas):
+    def getNewSchema(parent):
+        schemas = parent.PSQL.getSchemas()
         dialog = moveDialog()
         dialog.moveCombo.addItems(schemas)
         result = dialog.exec_()
-        dialog.show()
+        #dialog.show()
+        if not dialog.moveCombo.currentText() in schemas:
+            parent.PSQL.addSchema(dialog.moveCombo.currentText())
+            parent.dlg.DBSchema.addItem(dialog.moveCombo.currentText())
         if dialog.acceptedFlag:
             return (dialog.moveCombo.currentText())
         else:

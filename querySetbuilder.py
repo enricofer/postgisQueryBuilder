@@ -90,7 +90,7 @@ class querySet():
             'SELECT [[FIELDSET]],ST_Buffer("[[LAYERa]]".[[GEOMETRYFIELDa]],[[BUFFERRADIUS]]::double precision) AS [[GEOMETRYFIELD]] FROM "[[SCHEMA]]"."[[LAYERa]]"  [[WHERE]] [[ORDERBY]]',\
             '_Buffer_of_[[LAYERa]]'\
             ],\
-            'ADD MEASURE FIELDS':\
+            'MEASURE FEATURES':\
             [\
             'Add area and perimeter measurements fields about LayerA geometries. For "geometry" type area is in SRID units. For "geography" area is in square meters.',\
             'http://postgis.org/docs/ST_Area.html',\
@@ -106,7 +106,7 @@ class querySet():
             'SELECT [[FIELDSET]] FROM [[SPATIALFROM]]"[[SCHEMA]]"."[[LAYERa]]" [[WHERE]] [[ORDERBY]]',\
             '_FieldsSubset_of_[[LAYERa]] '\
             ],\
-            'Validate geometries':\
+            'VALIDATE GEOMETRIES':\
             [\
             'Mark and report invalid geometries',\
             'http://postgis.net/docs/ST_IsValidDetail.html',\

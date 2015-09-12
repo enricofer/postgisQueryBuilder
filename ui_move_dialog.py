@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'C:\Users\DEMO\Dropbox\dev\postgisQueryBuilder\ui_move_dialog.ui'
+# Form implementation generated from reading ui file 'Z:\dev\postgisQueryBuilder\ui_move_dialog.ui'
 #
-# Created: Mon Sep 07 22:56:06 2015
-#      by: PyQt4 UI code generator 4.10.2
+# Created: Fri Sep 11 13:16:41 2015
+#      by: PyQt4 UI code generator 4.11.3
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -26,12 +26,13 @@ except AttributeError:
 class Ui_moveDialog(object):
     def setupUi(self, moveDialog):
         moveDialog.setObjectName(_fromUtf8("moveDialog"))
-        moveDialog.resize(340, 75)
+        moveDialog.resize(340, 77)
         self.horizontalLayout = QtGui.QHBoxLayout(moveDialog)
         self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
         self.verticalLayout = QtGui.QVBoxLayout()
         self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
         self.moveCombo = QtGui.QComboBox(moveDialog)
+        self.moveCombo.setEditable(True)
         self.moveCombo.setObjectName(_fromUtf8("moveCombo"))
         self.verticalLayout.addWidget(self.moveCombo)
         self.buttonBox = QtGui.QDialogButtonBox(moveDialog)

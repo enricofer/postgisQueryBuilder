@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>486</width>
-    <height>861</height>
+    <height>631</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -23,9 +23,6 @@
    <string>postgisQueryBuilder</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_18">
-   <property name="sizeConstraint">
-    <enum>QLayout::SetMinimumSize</enum>
-   </property>
    <item>
     <widget class="QToolBox" name="tabWidget">
      <property name="sizePolicy">
@@ -53,7 +50,7 @@
       <number>0</number>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <property name="tabSpacing">
       <number>0</number>
@@ -64,11 +61,11 @@
         <x>0</x>
         <y>0</y>
         <width>468</width>
-        <height>684</height>
+        <height>456</height>
        </rect>
       </property>
       <attribute name="label">
-       <string>Connection defaults</string>
+       <string>CONNECTION</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_19">
        <property name="leftMargin">
@@ -351,13 +348,16 @@
         <x>0</x>
         <y>0</y>
         <width>468</width>
-        <height>684</height>
+        <height>456</height>
        </rect>
       </property>
       <attribute name="label">
-       <string>Query definition</string>
+       <string>QUERY</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_17">
+       <property name="sizeConstraint">
+        <enum>QLayout::SetMaximumSize</enum>
+       </property>
        <property name="leftMargin">
         <number>0</number>
        </property>
@@ -374,6 +374,9 @@
         <layout class="QVBoxLayout" name="verticalLayout_7">
          <property name="spacing">
           <number>2</number>
+         </property>
+         <property name="sizeConstraint">
+          <enum>QLayout::SetMinimumSize</enum>
          </property>
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_8">
@@ -407,6 +410,12 @@
          </item>
          <item>
           <widget class="QGroupBox" name="summaryBox">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="title">
             <string>Summary</string>
            </property>
@@ -564,7 +573,7 @@
          <item>
           <widget class="QListWidget" name="fieldsListA">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -572,13 +581,13 @@
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>50</height>
+             <height>40</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
              <width>16777215</width>
-             <height>100</height>
+             <height>100000</height>
             </size>
            </property>
           </widget>
@@ -622,7 +631,7 @@
          <item>
           <widget class="QListWidget" name="fieldsListB">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -630,13 +639,13 @@
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>50</height>
+             <height>40</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
              <width>16777215</width>
-             <height>50</height>
+             <height>60</height>
             </size>
            </property>
           </widget>
@@ -646,6 +655,9 @@
            <property name="spacing">
             <number>2</number>
            </property>
+           <property name="sizeConstraint">
+            <enum>QLayout::SetFixedSize</enum>
+           </property>
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_11">
              <property name="spacing">
@@ -654,7 +666,7 @@
              <item>
               <widget class="QLabel" name="BUFFERRADIUSLabel">
                <property name="sizePolicy">
-                <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
@@ -670,15 +682,18 @@
             </layout>
            </item>
            <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_14"/>
-           </item>
-           <item>
             <layout class="QHBoxLayout" name="horizontalLayout_12">
              <property name="spacing">
               <number>3</number>
              </property>
              <item>
               <widget class="QLabel" name="SPATIALRELLabel">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
                <property name="text">
                 <string>Relationship between A and B</string>
                </property>
@@ -722,6 +737,12 @@
              </property>
              <item>
               <widget class="QLabel" name="FIELDLabel">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
                <property name="minimumSize">
                 <size>
                  <width>65</width>
@@ -752,6 +773,12 @@
              </property>
              <item>
               <widget class="QLabel" name="JOINLabel">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
                <property name="minimumSize">
                 <size>
                  <width>65</width>
@@ -782,6 +809,12 @@
              </property>
              <item>
               <widget class="QLabel" name="FIELDbLabel">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
                <property name="minimumSize">
                 <size>
                  <width>65</width>
@@ -805,84 +838,20 @@
              </item>
             </layout>
            </item>
-           <item>
-            <layout class="QVBoxLayout" name="verticalLayout"/>
-           </item>
-           <item>
-            <widget class="QPushButton" name="queryReadyButton">
-             <property name="text">
-              <string/>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>querybuilderlogo.png</normaloff>querybuilderlogo.png</iconset>
-             </property>
-             <property name="iconSize">
-              <size>
-               <width>30</width>
-               <height>30</height>
-              </size>
-             </property>
-             <property name="flat">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="OPERATORLabel">
-             <property name="text">
-              <string>Operator</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QComboBox" name="OPERATOR"/>
-           </item>
-           <item>
-            <widget class="QLabel" name="DISTANCEOPLabel">
-             <property name="text">
-              <string>Operator</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QComboBox" name="DISTANCEOP"/>
-           </item>
-           <item>
-            <widget class="QLabel" name="DISTANCELabel">
-             <property name="text">
-              <string>Condition</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLineEdit" name="DISTANCE"/>
-           </item>
-           <item>
-            <widget class="QLabel" name="CONDITIONLabel">
-             <property name="text">
-              <string>Condition</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QComboBox" name="CONDITION">
-             <property name="editable">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
           </layout>
          </item>
          <item>
-          <spacer name="verticalSpacer_3">
+          <spacer name="verticalSpacer">
            <property name="orientation">
             <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Expanding</enum>
            </property>
            <property name="sizeHint" stdset="0">
             <size>
              <width>20</width>
-             <height>40</height>
+             <height>100</height>
             </size>
            </property>
           </spacer>
@@ -897,11 +866,11 @@
         <x>0</x>
         <y>0</y>
         <width>468</width>
-        <height>684</height>
+        <height>456</height>
        </rect>
       </property>
       <attribute name="label">
-       <string>Filter records</string>
+       <string>FILTER</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_16">
        <property name="leftMargin">
@@ -971,11 +940,11 @@
         <x>0</x>
         <y>0</y>
         <width>468</width>
-        <height>684</height>
+        <height>456</height>
        </rect>
       </property>
       <attribute name="label">
-       <string>SQL code</string>
+       <string>SQL</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_15">
        <property name="leftMargin">
@@ -1046,11 +1015,11 @@
         <x>0</x>
         <y>0</y>
         <width>468</width>
-        <height>684</height>
+        <height>456</height>
        </rect>
       </property>
       <attribute name="label">
-       <string>Table result</string>
+       <string>TABLE</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_14">
        <property name="leftMargin">
@@ -1100,11 +1069,11 @@
         <x>0</x>
         <y>0</y>
         <width>468</width>
-        <height>684</height>
+        <height>456</height>
        </rect>
       </property>
       <attribute name="label">
-       <string>History</string>
+       <string>HISTORY</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_21">
        <property name="leftMargin">
