@@ -258,6 +258,7 @@ class postgisQueryBuilder:
         self.dlg.AddToMap.setChecked(False)
         if self.PSQL.isMaterializedView(self.selectedLayer):
             self.dlg.checkMaterialized.setChecked(True)
+        self.dlg.checkAutoCompiled.setChecked(False)
         self.dlg.QueryResult.setPlainText(self.querySet.formatSqlStatement(sqlView))
         self.dlg.tabWidget.setCurrentIndex(3)
 
@@ -620,6 +621,8 @@ class postgisQueryBuilder:
     def queryGen(self):
         if self.dlg.checkCreateView.checkState():
             self.enableDialogSlot("QueryName")
+        if not self.querySet.testIfQueryDefined():
+            return
         if self.dlg.checkAutoCompiled.checkState():
             if self.dlg.checkMaterialized.checkState():
                 self.querySet.setParameter("MATERIALIZED","MATERIALIZED")

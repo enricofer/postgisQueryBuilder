@@ -169,6 +169,8 @@ class querySet():
         self.QueryParametersCheckList[key]=True
     
     def testQueryParametersCheckList(self):
+        if self.currentQuery == "":
+            return None
         res = True
         for key,value in self.QueryParametersCheckList.iteritems():
             #print key,value
@@ -275,6 +277,8 @@ class querySet():
             return ""
 
     def testIfQueryDefined(self):
+        if self.currentQuery == "":
+            return None
         test = True
         for requestedPar in self.getRequiredParameters():
             if self.parameters[requestedPar] == "":
