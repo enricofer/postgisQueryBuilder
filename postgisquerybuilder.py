@@ -108,6 +108,7 @@ class postgisQueryBuilder:
         self.dlg.BUFFERRADIUS.textChanged.disconnect(self.setBUFFERRADIUS)
         self.dlg.ButtonRun.clicked.disconnect(self.runQuery)
         self.dlg.ButtonReset.clicked.disconnect(self.resetForm)
+        self.dlg.ButtonHelp.clicked.disconnect(self.helpDialog)
         #self.dlg.AddToMapButton.clicked.disconnect(self.layerAddToMap)
         #self.dlg.GetInfoButton.clicked.disconnect(self.layerGetTable)
         #self.dlg.DeleteButton.clicked.disconnect(self.layerDelete)
@@ -389,8 +390,10 @@ class postgisQueryBuilder:
             self.queryGen()
 
     def helpDialog(self):
+        print "called help"
         if self.dlg.QueryType.currentText() != "Select query type":
-            webbrowser.open_new(self.querySet.getHelp())
+            QDesktopServices.openUrl(QUrl(self.querySet.getHelp()))
+            #webbrowser.open_new(self.querySet.getHelp())
 
     def setMaterialized(self):
         self.queryGen()
