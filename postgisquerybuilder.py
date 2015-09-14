@@ -66,6 +66,7 @@ class postgisQueryBuilder:
 
     def eventsConnect(self):
         self.dlg.QueryType.activated.connect(self.setQueryType)
+        self.dlg.checkAutoCompiled.stateChanged.connect(self.queryGen)
         self.dlg.LAYERa.activated.connect(self.setLAYERa)
         self.dlg.LAYERb.activated.connect(self.setLAYERb)
         self.dlg.FIELD.activated.connect(self.setFIELD)
@@ -99,6 +100,7 @@ class postgisQueryBuilder:
 
     def eventsDisconnect(self):
         self.dlg.QueryType.activated.disconnect(self.setQueryType)
+        self.dlg.checkAutoCompiled.stateChanged.disconnect(self.queryGen)
         self.dlg.LAYERa.activated.disconnect(self.setLAYERa)
         self.dlg.LAYERb.activated.disconnect(self.setLAYERb)
         self.dlg.FIELD.activated.disconnect(self.setFIELD)
@@ -167,6 +169,7 @@ class postgisQueryBuilder:
         self.populateComboBox(self.dlg.SPATIALREL,self.querySet.getSpatialRelationships(),"Select spatial relationship",True)
         self.populateComboBox(self.dlg.KEYFIELD,["ogc_fid","id","fid","gid","FID","GID","ID"],"",None)
         self.populateComboBox(self.dlg.GEOMETRYFIELD,["the_geom","geom","GEOM","geometry"],"",None)
+        self.dlg.checkAutoCompiled.setChecked(True)
         self.dlg.tabWidget.setCurrentIndex(0)
         #self.recurseChild(self.dlg,"")
 
@@ -617,30 +620,33 @@ class postgisQueryBuilder:
     def queryGen(self):
         if self.dlg.checkCreateView.checkState():
             self.enableDialogSlot("QueryName")
-        if self.dlg.checkMaterialized.checkState():
-            self.querySet.setParameter("MATERIALIZED","MATERIALIZED")
-        else:
-            self.querySet.setParameter("MATERIALIZED","")
-        self.enableDialogSlot("QueryResult")
-        self.enableDialogSlot("checkCreateView")
-        self.enableDialogSlot("AddToMap")
-        try:
-            qName = self.querySet.getNameParsed()
-        except:
-            return
-        self.dlg.QueryName.setText(qName)
-        self.querySet.setParameter("VIEWNAME", qName)
-        if self.dlg.filterTable.testIfSintaxOk():
-            self.querySet.setParameter("WHERE", self.dlg.filterTable.getWhereStatement())
-            self.querySet.setParameter("SPATIALFROM", self.dlg.filterTable.getSpatialFilterLayers(schema = self.PSQL.getSchema()))
-        else:
-            self.querySet.setParameter("WHERE", "")
-        if self.dlg.orderBy.currentText() != " ":
-            self.querySet.setParameter("ORDERBY", 'ORDER BY "'+self.dlg.orderBy.currentText()+'"')
-        else:
-            self.querySet.setParameter("ORDERBY", "")
-        self.dlg.QueryResult.setPlainText(self.querySet.getQueryParsed(self.dlg.checkCreateView.checkState()))
-        self.dlg.QueryName.textChanged.connect(self.setQueryName)
+        if self.dlg.checkAutoCompiled.checkState():
+            if self.dlg.checkMaterialized.checkState():
+                self.querySet.setParameter("MATERIALIZED","MATERIALIZED")
+            else:
+                self.querySet.setParameter("MATERIALIZED","")
+            self.enableDialogSlot("QueryResult")
+            self.enableDialogSlot("checkCreateView")
+            self.enableDialogSlot("AddToMap")
+
+            try:
+                qName = self.querySet.getNameParsed()
+            except:
+                qName = self.dlg.QueryName.text()
+            self.dlg.QueryName.setText(qName)
+            self.querySet.setParameter("VIEWNAME", qName)
+
+            if self.dlg.filterTable.testIfSintaxOk():
+                self.querySet.setParameter("WHERE", self.dlg.filterTable.getWhereStatement())
+                self.querySet.setParameter("SPATIALFROM", self.dlg.filterTable.getSpatialFilterLayers(schema = self.PSQL.getSchema()))
+            else:
+                self.querySet.setParameter("WHERE", "")
+            if self.dlg.orderBy.currentText() != " ":
+                self.querySet.setParameter("ORDERBY", 'ORDER BY "'+self.dlg.orderBy.currentText()+'"')
+            else:
+                self.querySet.setParameter("ORDERBY", "")
+            self.dlg.QueryResult.setPlainText(self.querySet.getQueryParsed(self.dlg.checkCreateView.checkState()))
+            self.dlg.QueryName.textChanged.connect(self.setQueryName)
 
     def setQueryType(self,line):
         theQ = self.dlg.QueryType.currentText()

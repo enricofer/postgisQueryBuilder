@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'Z:\dev\postgisQueryBuilder\ui_postgisquerybuilder_testing.ui'
+# Form implementation generated from reading ui file 'Z:\dev\postgisQueryBuilder\ui_postgisquerybuilder.ui'
 #
-# Created: Mon Sep 14 09:59:53 2015
+# Created: Mon Sep 14 12:22:20 2015
 #      by: PyQt4 UI code generator 4.11.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -486,6 +486,7 @@ class Ui_postgisQueryBuilder(object):
         self.verticalLayout_8 = QtGui.QVBoxLayout()
         self.verticalLayout_8.setObjectName(_fromUtf8("verticalLayout_8"))
         self.horizontalLayout_5 = QtGui.QHBoxLayout()
+        self.horizontalLayout_5.setSpacing(3)
         self.horizontalLayout_5.setObjectName(_fromUtf8("horizontalLayout_5"))
         self.checkCreateView = QtGui.QCheckBox(self.SqlCodeSlot)
         self.checkCreateView.setObjectName(_fromUtf8("checkCreateView"))
@@ -495,6 +496,9 @@ class Ui_postgisQueryBuilder(object):
         self.horizontalLayout_5.addWidget(self.checkMaterialized)
         spacerItem2 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.horizontalLayout_5.addItem(spacerItem2)
+        self.checkAutoCompiled = QtGui.QCheckBox(self.SqlCodeSlot)
+        self.checkAutoCompiled.setObjectName(_fromUtf8("checkAutoCompiled"))
+        self.horizontalLayout_5.addWidget(self.checkAutoCompiled)
         self.verticalLayout_8.addLayout(self.horizontalLayout_5)
         self.QueryName = QtGui.QLineEdit(self.SqlCodeSlot)
         self.QueryName.setMaximumSize(QtCore.QSize(16777215, 20))
@@ -558,7 +562,7 @@ class Ui_postgisQueryBuilder(object):
         self.verticalLayout_18.addLayout(self.horizontalLayout_9)
 
         self.retranslateUi(postgisQueryBuilder)
-        self.tabWidget.setCurrentIndex(1)
+        self.tabWidget.setCurrentIndex(3)
         self.tabWidget.layout().setSpacing(0)
         QtCore.QMetaObject.connectSlotsByName(postgisQueryBuilder)
 
@@ -592,6 +596,7 @@ class Ui_postgisQueryBuilder(object):
         self.tabWidget.setItemText(self.tabWidget.indexOf(self.filterRecordSlot), _translate("postgisQueryBuilder", "FILTER", None))
         self.checkCreateView.setText(_translate("postgisQueryBuilder", "As view", None))
         self.checkMaterialized.setText(_translate("postgisQueryBuilder", "Materialized", None))
+        self.checkAutoCompiled.setText(_translate("postgisQueryBuilder", "Autocompiled", None))
         self.tabWidget.setItemText(self.tabWidget.indexOf(self.SqlCodeSlot), _translate("postgisQueryBuilder", "SQL", None))
         self.TableResult.setSortingEnabled(True)
         self.tabWidget.setItemText(self.tabWidget.indexOf(self.tableResultSlot), _translate("postgisQueryBuilder", "TABLE", None))
