@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>486</width>
-    <height>666</height>
+    <height>796</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -61,7 +61,7 @@
         <x>0</x>
         <y>0</y>
         <width>468</width>
-        <height>491</height>
+        <height>619</height>
        </rect>
       </property>
       <attribute name="label">
@@ -348,13 +348,16 @@
         <x>0</x>
         <y>0</y>
         <width>468</width>
-        <height>491</height>
+        <height>619</height>
        </rect>
       </property>
       <attribute name="label">
        <string>QUERY</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_17">
+       <property name="sizeConstraint">
+        <enum>QLayout::SetMaximumSize</enum>
+       </property>
        <property name="leftMargin">
         <number>0</number>
        </property>
@@ -373,12 +376,18 @@
           <number>2</number>
          </property>
          <property name="sizeConstraint">
-          <enum>QLayout::SetMaximumSize</enum>
+          <enum>QLayout::SetDefaultConstraint</enum>
          </property>
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_8">
            <item>
             <widget class="QComboBox" name="QueryType">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="maxVisibleItems">
               <number>20</number>
              </property>
@@ -407,6 +416,12 @@
          </item>
          <item>
           <widget class="QGroupBox" name="summaryBox">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="title">
             <string>Summary</string>
            </property>
@@ -529,6 +544,9 @@
            <property name="spacing">
             <number>2</number>
            </property>
+           <property name="sizeConstraint">
+            <enum>QLayout::SetMinimumSize</enum>
+           </property>
            <item>
             <widget class="QLabel" name="LAYERaLabel">
              <property name="text">
@@ -564,9 +582,9 @@
          <item>
           <widget class="QListWidget" name="fieldsListA">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+            <sizepolicy hsizetype="Expanding" vsizetype="Ignored">
              <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
+             <verstretch>50</verstretch>
             </sizepolicy>
            </property>
            <property name="minimumSize">
@@ -578,7 +596,7 @@
            <property name="maximumSize">
             <size>
              <width>16777215</width>
-             <height>100</height>
+             <height>2000</height>
             </size>
            </property>
           </widget>
@@ -588,8 +606,17 @@
            <property name="spacing">
             <number>2</number>
            </property>
+           <property name="sizeConstraint">
+            <enum>QLayout::SetDefaultConstraint</enum>
+           </property>
            <item>
             <widget class="QLabel" name="LAYERbLabel">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -654,6 +681,9 @@
              <property name="spacing">
               <number>3</number>
              </property>
+             <property name="sizeConstraint">
+              <enum>QLayout::SetFixedSize</enum>
+             </property>
              <item>
               <widget class="QLabel" name="BUFFERRADIUSLabel">
                <property name="sizePolicy">
@@ -668,7 +698,14 @@
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="BUFFERRADIUS"/>
+              <widget class="QLineEdit" name="BUFFERRADIUS">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+              </widget>
              </item>
             </layout>
            </item>
@@ -676,6 +713,9 @@
             <layout class="QHBoxLayout" name="horizontalLayout_12">
              <property name="spacing">
               <number>3</number>
+             </property>
+             <property name="sizeConstraint">
+              <enum>QLayout::SetFixedSize</enum>
              </property>
              <item>
               <widget class="QLabel" name="SPATIALRELLabel">
@@ -726,6 +766,9 @@
              <property name="spacing">
               <number>3</number>
              </property>
+             <property name="sizeConstraint">
+              <enum>QLayout::SetFixedSize</enum>
+             </property>
              <item>
               <widget class="QLabel" name="FIELDLabel">
                <property name="sizePolicy">
@@ -762,10 +805,13 @@
              <property name="spacing">
               <number>3</number>
              </property>
+             <property name="sizeConstraint">
+              <enum>QLayout::SetFixedSize</enum>
+             </property>
              <item>
               <widget class="QLabel" name="JOINLabel">
                <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
@@ -784,7 +830,7 @@
              <item>
               <widget class="QComboBox" name="JOIN">
                <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
@@ -797,6 +843,9 @@
             <layout class="QHBoxLayout" name="horizontalLayout_19">
              <property name="spacing">
               <number>3</number>
+             </property>
+             <property name="sizeConstraint">
+              <enum>QLayout::SetFixedSize</enum>
              </property>
              <item>
               <widget class="QLabel" name="FIELDbLabel">
@@ -829,23 +878,20 @@
              </item>
             </layout>
            </item>
-           <item>
-            <spacer name="verticalSpacer">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>40</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
-            <layout class="QVBoxLayout" name="verticalLayout"/>
-           </item>
           </layout>
+         </item>
+         <item>
+          <spacer name="verticalSpacer">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>0</height>
+            </size>
+           </property>
+          </spacer>
          </item>
         </layout>
        </item>
@@ -857,7 +903,7 @@
         <x>0</x>
         <y>0</y>
         <width>468</width>
-        <height>491</height>
+        <height>619</height>
        </rect>
       </property>
       <attribute name="label">
@@ -931,7 +977,7 @@
         <x>0</x>
         <y>0</y>
         <width>468</width>
-        <height>491</height>
+        <height>619</height>
        </rect>
       </property>
       <attribute name="label">
@@ -1006,7 +1052,7 @@
         <x>0</x>
         <y>0</y>
         <width>468</width>
-        <height>491</height>
+        <height>619</height>
        </rect>
       </property>
       <attribute name="label">
@@ -1060,7 +1106,7 @@
         <x>0</x>
         <y>0</y>
         <width>468</width>
-        <height>491</height>
+        <height>619</height>
        </rect>
       </property>
       <attribute name="label">

@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>486</width>
-    <height>631</height>
+    <height>666</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -61,7 +61,7 @@
         <x>0</x>
         <y>0</y>
         <width>468</width>
-        <height>456</height>
+        <height>491</height>
        </rect>
       </property>
       <attribute name="label">
@@ -348,16 +348,13 @@
         <x>0</x>
         <y>0</y>
         <width>468</width>
-        <height>456</height>
+        <height>491</height>
        </rect>
       </property>
       <attribute name="label">
        <string>QUERY</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_17">
-       <property name="sizeConstraint">
-        <enum>QLayout::SetMaximumSize</enum>
-       </property>
        <property name="leftMargin">
         <number>0</number>
        </property>
@@ -376,7 +373,7 @@
           <number>2</number>
          </property>
          <property name="sizeConstraint">
-          <enum>QLayout::SetMinimumSize</enum>
+          <enum>QLayout::SetMaximumSize</enum>
          </property>
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_8">
@@ -410,12 +407,6 @@
          </item>
          <item>
           <widget class="QGroupBox" name="summaryBox">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
            <property name="title">
             <string>Summary</string>
            </property>
@@ -573,7 +564,7 @@
          <item>
           <widget class="QListWidget" name="fieldsListA">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -587,7 +578,7 @@
            <property name="maximumSize">
             <size>
              <width>16777215</width>
-             <height>100000</height>
+             <height>100</height>
             </size>
            </property>
           </widget>
@@ -656,7 +647,7 @@
             <number>2</number>
            </property>
            <property name="sizeConstraint">
-            <enum>QLayout::SetFixedSize</enum>
+            <enum>QLayout::SetDefaultConstraint</enum>
            </property>
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_11">
@@ -838,23 +829,23 @@
              </item>
             </layout>
            </item>
+           <item>
+            <spacer name="verticalSpacer">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <layout class="QVBoxLayout" name="verticalLayout"/>
+           </item>
           </layout>
-         </item>
-         <item>
-          <spacer name="verticalSpacer">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeType">
-            <enum>QSizePolicy::Expanding</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>100</height>
-            </size>
-           </property>
-          </spacer>
          </item>
         </layout>
        </item>
@@ -866,7 +857,7 @@
         <x>0</x>
         <y>0</y>
         <width>468</width>
-        <height>456</height>
+        <height>491</height>
        </rect>
       </property>
       <attribute name="label">
@@ -940,7 +931,7 @@
         <x>0</x>
         <y>0</y>
         <width>468</width>
-        <height>456</height>
+        <height>491</height>
        </rect>
       </property>
       <attribute name="label">
@@ -1015,7 +1006,7 @@
         <x>0</x>
         <y>0</y>
         <width>468</width>
-        <height>456</height>
+        <height>491</height>
        </rect>
       </property>
       <attribute name="label">
@@ -1069,7 +1060,7 @@
         <x>0</x>
         <y>0</y>
         <width>468</width>
-        <height>456</height>
+        <height>491</height>
        </rect>
       </property>
       <attribute name="label">
