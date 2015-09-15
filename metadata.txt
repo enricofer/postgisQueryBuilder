@@ -12,7 +12,7 @@
 name=postgisQueryBuilder
 qgisMinimumVersion=2.0
 description=User friendly postgis query generation. Tutorial on website.
-version=1.5.2
+version=1.6.0
 author=Enrico Ferreguti
 email=enricofer@gmail.com
 
@@ -21,12 +21,12 @@ email=enricofer@gmail.com
 # Optional items:
 
 # Uncomment the following line and add your changelog entries:
-# changelog=v1.5.2 unicode encoding fixed, user-password request
+# changelog=v1.6.0 vertical dockable widget UI, New function on db objects, geometry validation, auto detecting of primary key and geometry fields
 
 # tags are comma separated with spaces allowed
 tags=postgis, help, view, views, query, builder, sql, spatial join, spatial filter, postgresql
 
-homepage=http://geogear.wordpress.com
+homepage=https://geogear.wordpress.com/postgisquerybuilder-v1-6-cheatsheet/
 tracker=https://github.com/enricofer/postgisQueryBuilder/issues
 repository=https://github.com/enricofer/postgisQueryBuilder
 icon=querybuilderlogoB.png

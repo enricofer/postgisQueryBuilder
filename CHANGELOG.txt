@@ -39,3 +39,10 @@ Order by field added
 
 v1.5.1
 layer ops on "available layer" issue on schemas different from 'public' fixed
+
+v1.6.0
+UI redesigned to fit in a vertical dockable widget
+New function on db objects: layer information rename, move to another schema, editing views sql definition
+geometry validation
+auto detecting of primary key and geometry fields
+many bug fixes

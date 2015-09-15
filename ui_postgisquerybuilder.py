@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'Z:\dev\postgisQueryBuilder\ui_postgisquerybuilder.ui'
 #
-# Created: Mon Sep 14 12:22:20 2015
+# Created: Tue Sep 15 10:45:00 2015
 #      by: PyQt4 UI code generator 4.11.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -559,6 +559,10 @@ class Ui_postgisQueryBuilder(object):
         self.ButtonReset.setMaximumSize(QtCore.QSize(100, 16777215))
         self.ButtonReset.setObjectName(_fromUtf8("ButtonReset"))
         self.horizontalLayout_9.addWidget(self.ButtonReset)
+        self.HelpLink = QtGui.QPushButton(postgisQueryBuilder)
+        self.HelpLink.setMaximumSize(QtCore.QSize(100, 16777215))
+        self.HelpLink.setObjectName(_fromUtf8("HelpLink"))
+        self.horizontalLayout_9.addWidget(self.HelpLink)
         self.verticalLayout_18.addLayout(self.horizontalLayout_9)
 
         self.retranslateUi(postgisQueryBuilder)
@@ -604,5 +608,6 @@ class Ui_postgisQueryBuilder(object):
         self.ButtonRun.setText(_translate("postgisQueryBuilder", "Run query", None))
         self.AddToMap.setText(_translate("postgisQueryBuilder", "Add to map", None))
         self.ButtonReset.setText(_translate("postgisQueryBuilder", "reset form", None))
+        self.HelpLink.setText(_translate("postgisQueryBuilder", "Help", None))
 
 from TableSet import tableSet

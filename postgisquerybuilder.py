@@ -97,6 +97,7 @@ class postgisQueryBuilder:
         self.dlg.LayerList.customContextMenuRequested.connect(self.layerContextMenu)
         self.dlg.LayerList.itemSelectionChanged.connect(self.saveForQuery)
         self.dlg.schemaAdd.clicked.connect(self.addNewSchema)
+        self.dlg.HelpLink.clicked.connect(self.helpLinkOpen)
 
     def eventsDisconnect(self):
         self.dlg.QueryType.activated.disconnect(self.setQueryType)
@@ -130,6 +131,7 @@ class postgisQueryBuilder:
         self.dlg.LayerList.customContextMenuRequested.disconnect(self.layerContextMenu)
         self.dlg.LayerList.itemSelectionChanged.disconnect(self.saveForQuery)
         self.dlg.schemaAdd.clicked.disconnect(self.addNewSchema)
+        self.dlg.HelpLink.clicked.disconnect(self.helpLinkOpen)
 
     def initGui(self):
         # Create action that will start plugin configuration
@@ -398,6 +400,9 @@ class postgisQueryBuilder:
         if self.dlg.QueryType.currentText() != "Select query type":
             QDesktopServices.openUrl(QUrl(self.querySet.getHelp()))
             #webbrowser.open_new(self.querySet.getHelp())
+
+    def helpLinkOpen(self):
+        QDesktopServices.openUrl(QUrl("https://geogear.wordpress.com/postgisquerybuilder-v1-6-cheatsheet/"))
 
     def setMaterialized(self):
         self.queryGen()
