@@ -15,6 +15,8 @@ description=User friendly postgis query generation. Tutorial on website.
 version=1.6.0
 author=Enrico Ferreguti
 email=enricofer@gmail.com
+about=The postgisQueryBuilder QGis plugin is aimed to to provide a friendly environment to perform spatial analysis in postgresql/postgis without having to deal with SQL code. It is not intented to replace the Qgis built-in DBManager that have a wide usage that covers all aspects of Qgis/Postgis interaction. It can be used in educational environments for a live analysis of the structure of the common spatial queries. The plugin can manage postgresql views and can be used for deploying spatial analysis frameworks based on chains of spatial relations.
+
 
 # end of mandatory metadata
 
