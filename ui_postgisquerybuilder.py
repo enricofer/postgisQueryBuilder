@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'Z:\dev\postgisQueryBuilder\ui_postgisquerybuilder.ui'
 #
-# Created: Tue Sep 15 10:45:00 2015
+# Created: Tue Sep 15 12:34:33 2015
 #      by: PyQt4 UI code generator 4.11.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -27,7 +27,7 @@ class Ui_postgisQueryBuilder(object):
     def setupUi(self, postgisQueryBuilder):
         postgisQueryBuilder.setObjectName(_fromUtf8("postgisQueryBuilder"))
         postgisQueryBuilder.setEnabled(True)
-        postgisQueryBuilder.resize(486, 796)
+        postgisQueryBuilder.resize(354, 796)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -478,7 +478,7 @@ class Ui_postgisQueryBuilder(object):
         self.verticalLayout_16.addLayout(self.horizontalLayout_4)
         self.tabWidget.addItem(self.filterRecordSlot, _fromUtf8(""))
         self.SqlCodeSlot = QtGui.QWidget()
-        self.SqlCodeSlot.setGeometry(QtCore.QRect(0, 0, 468, 619))
+        self.SqlCodeSlot.setGeometry(QtCore.QRect(0, 0, 336, 619))
         self.SqlCodeSlot.setObjectName(_fromUtf8("SqlCodeSlot"))
         self.verticalLayout_15 = QtGui.QVBoxLayout(self.SqlCodeSlot)
         self.verticalLayout_15.setContentsMargins(0, 3, 0, 3)
@@ -553,7 +553,7 @@ class Ui_postgisQueryBuilder(object):
         self.AddToMap.setChecked(True)
         self.AddToMap.setObjectName(_fromUtf8("AddToMap"))
         self.horizontalLayout_9.addWidget(self.AddToMap)
-        spacerItem3 = QtGui.QSpacerItem(100, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
+        spacerItem3 = QtGui.QSpacerItem(0, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.horizontalLayout_9.addItem(spacerItem3)
         self.ButtonReset = QtGui.QPushButton(postgisQueryBuilder)
         self.ButtonReset.setMaximumSize(QtCore.QSize(100, 16777215))
