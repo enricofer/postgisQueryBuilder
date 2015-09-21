@@ -456,6 +456,7 @@ class postgisQueryBuilder:
     
     def populateComboBox(self,combo,list,predef,sort):
         #procedure to fill specified combobox with provided list
+        combo.blockSignals (True)
         combo.clear()
         model=QStandardItemModel(combo)
         predefInList = None
@@ -476,6 +477,7 @@ class postgisQueryBuilder:
             else:
                 combo.insertItem(0,predef)
                 combo.setCurrentIndex(0)
+        combo.blockSignals (False)
 
     def loadSVG(self,svgName):
         self.dlg.DiagPanel.show()
@@ -746,6 +748,10 @@ class postgisQueryBuilder:
         self.dlg.LAYERaAllFields.setCheckState(Qt.Unchecked)
 
     def getPSQLConnections(self):
+        try:
+            self.dlg.PSQLConnection.activated.disconnect(self.setConnection)
+        except:
+            pass
         conn = self.PSQL.getConnections()
         self.populateComboBox(self.dlg.PSQLConnection,conn,"Select connection",True)
         self.hideQueryDefSlot()
@@ -757,10 +763,13 @@ class postgisQueryBuilder:
 
     def resetForm(self):
         self.resetDialog()
+        self.getPSQLConnections()
         self.populateGui()
-        self.dlg.tabWidget.setCurrentIndex(1)
+        self.dlg.tabWidget.setCurrentIndex(0)
 
     def setConnection(self):
+        if self.dlg.PSQLConnection.currentText()[:6] == "Select":
+            return
         self.PSQL.setConnection(self.dlg.PSQLConnection.currentText())
         #print "SCHEMAS",self.PSQL.getSchemas()
         schemas = self.PSQL.getSchemas()

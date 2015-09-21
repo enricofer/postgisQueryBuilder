@@ -309,11 +309,12 @@ class PSQL:
         return values
 
     def getSchemas(self):
-        sql="select schema_name from information_schema.schemata where schema_name <> 'information_schema' and schema_name !~ E'^pg_'"
+        sql="select nspname from pg_catalog.pg_namespace where nspname <> 'information_schema' and nspname !~ E'^pg_'"
         query = self.db.exec_(sql)
         schemas=[]
         while (query.next()):
             schemas.append(query.value(0))
+        print schemas
         return schemas
 
 

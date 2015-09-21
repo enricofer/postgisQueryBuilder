@@ -46,3 +46,7 @@ New function on db objects: layer information rename, move to another schema, ed
 geometry validation
 auto detecting of primary key and geometry fields
 many bug fixes
+
+v1.6.1
+Fixed exception that raised selecting null connections
+Select only user doesn't view db schemas issue fixed
