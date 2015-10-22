@@ -298,7 +298,8 @@ class PSQL:
             return geomFields
 
     def getUniqeValues(self,layer,field,range):
-        sql = 'SELECT DISTINCT %s FROM "%s"' % (field,layer)
+        sql = 'SELECT DISTINCT "%s" FROM "%s"."%s" ORDER BY "%s"' % (field,self.schema,layer,field)
+        print sql
         query = self.db.exec_(sql)
         values = []
         conta = 0

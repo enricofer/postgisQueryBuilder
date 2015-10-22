@@ -56,7 +56,6 @@ class tableSet(QtGui.QTableWidget):
         self.setRowHeight(0,self.rowSize)
 
     def setCurrentSchema(self,schema):
-        print "ROWCOUNT",self.rowCount()
         self.currentSchema = schema
         self.populateLayerList(schema)
         if self.rowCount()>1 and self.cellWidget(self.rowCount()-2,5).currentText() == 'Spatial filter':
@@ -259,11 +258,9 @@ class tableSet(QtGui.QTableWidget):
         return valueItem
         
     def uniqueValuesLoad(self,row,col,uniqueValueList):
-        print "unique"
         valueItem = self.cellWidget(row,col)
         valueItem.clear()
         for value in uniqueValueList:
-            print value
             try :
                 #valueItem.addItem(value.encode('utf8','ignore'))
                 valueItem.addItem(unicode(value))

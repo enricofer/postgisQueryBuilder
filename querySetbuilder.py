@@ -71,7 +71,7 @@ class querySet():
             'Returns a geometry that represents that part of geometry A that does not intersect with geometry B.',\
             'http://postgis.refractions.net/documentation/manual-svn/ST_Difference.html',\
             ['LAYERa','SCHEMAb','LAYERb','fieldsListA'],\
-            'SELECT [[FIELDSET]],ST_Difference("[[LAYERa]]".[[GEOMETRYFIELDa]],"[[LAYERb]]".[[GEOMETRYFIELDb]]) AS [[GEOMETRYFIELD]] FROM "[[SCHEMA]]"."[[LAYERa]]","[[SCHEMAb]]"."[[LAYERb]]"',\
+            'SELECT [[FIELDSET]],ST_Difference("[[LAYERa]]".[[GEOMETRYFIELDa]],"[[LAYERb]]".[[GEOMETRYFIELDb]]) AS [[GEOMETRYFIELD]] FROM "[[SCHEMA]]"."[[LAYERa]]","[[SCHEMAb]]"."[[LAYERb]]"  [[WHERE]] [[ORDERBY]]',\
             '_Diff_between_[[LAYERa]]_and_[[LAYERb]]'\
             ],\
             'ST_Intersection':\
@@ -79,7 +79,7 @@ class querySet():
             'Returns a geometry that represents the shared portion of geomA and geomB. The geography implementation does a transform to geometry to do the intersection and then transform back to WGS84.',\
             'http://postgis.refractions.net/documentation/manual-svn/ST_Intersection.html',\
             ['LAYERa','SCHEMAb','LAYERb','fieldsListA'],\
-            'SELECT [[FIELDSET]],ST_Intersection("[[LAYERa]]".[[GEOMETRYFIELDa]],"[[LAYERb]]".[[GEOMETRYFIELDb]]) AS [[GEOMETRYFIELD]] FROM "[[SCHEMA]]"."[[LAYERa]]","[[SCHEMAb]]"."[[LAYERb]]"',\
+            'SELECT [[FIELDSET]],ST_Intersection("[[LAYERa]]".[[GEOMETRYFIELDa]],"[[LAYERb]]".[[GEOMETRYFIELDb]]) AS [[GEOMETRYFIELD]] FROM "[[SCHEMA]]"."[[LAYERa]]","[[SCHEMAb]]"."[[LAYERb]]"  [[WHERE]] [[ORDERBY]]',\
             '_Int_between_[[LAYERa]]_and_[[LAYERb]]'\
             ],\
             'ST_Buffer':\

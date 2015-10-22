@@ -715,7 +715,6 @@ class postgisQueryBuilder:
         except AttributeError:
             pass
         else:
-            print "OR: ",self.predefinedLayer or "Select Layer"
             self.populateComboBox(self.dlg.LAYERa,tables,"Select Layer",True)
             self.populateComboBox(self.dlg.LAYERb,tables,"Select Layer",True)
         self.geoQuery = None
