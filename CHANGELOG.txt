@@ -50,3 +50,8 @@ many bug fixes
 v1.6.1
 Fixed exception that raised selecting null connections
 Select only user doesn't view db schemas issue fixed
+
+v1.7.0
+Alternative schema support in query definition
+Alternative schema support in spatial filters
+Fixed issue loading unique values in attribute filter slot
