@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'Z:\dev\postgisQueryBuilder\ui_postgisquerybuilder.ui'
 #
-# Created: Tue Sep 15 12:34:33 2015
+# Created: Thu Oct 22 11:48:50 2015
 #      by: PyQt4 UI code generator 4.11.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -48,7 +48,7 @@ class Ui_postgisQueryBuilder(object):
         self.tabWidget.setMidLineWidth(0)
         self.tabWidget.setObjectName(_fromUtf8("tabWidget"))
         self.ConnectionSlot = QtGui.QWidget()
-        self.ConnectionSlot.setGeometry(QtCore.QRect(0, 0, 468, 619))
+        self.ConnectionSlot.setGeometry(QtCore.QRect(0, 0, 336, 619))
         self.ConnectionSlot.setObjectName(_fromUtf8("ConnectionSlot"))
         self.verticalLayout_19 = QtGui.QVBoxLayout(self.ConnectionSlot)
         self.verticalLayout_19.setContentsMargins(0, 3, 0, 3)
@@ -184,7 +184,7 @@ class Ui_postgisQueryBuilder(object):
         self.verticalLayout_19.addLayout(self.verticalLayout_6)
         self.tabWidget.addItem(self.ConnectionSlot, _fromUtf8(""))
         self.queryDefinitionSlot = QtGui.QWidget()
-        self.queryDefinitionSlot.setGeometry(QtCore.QRect(0, 0, 468, 619))
+        self.queryDefinitionSlot.setGeometry(QtCore.QRect(0, 0, 336, 619))
         self.queryDefinitionSlot.setObjectName(_fromUtf8("queryDefinitionSlot"))
         self.verticalLayout_17 = QtGui.QVBoxLayout(self.queryDefinitionSlot)
         self.verticalLayout_17.setSizeConstraint(QtGui.QLayout.SetMaximumSize)
@@ -304,6 +304,9 @@ class Ui_postgisQueryBuilder(object):
         self.LAYERbLabel.setMinimumSize(QtCore.QSize(0, 20))
         self.LAYERbLabel.setObjectName(_fromUtf8("LAYERbLabel"))
         self.horizontalLayout_10.addWidget(self.LAYERbLabel)
+        self.SCHEMAb = QtGui.QComboBox(self.queryDefinitionSlot)
+        self.SCHEMAb.setObjectName(_fromUtf8("SCHEMAb"))
+        self.horizontalLayout_10.addWidget(self.SCHEMAb)
         self.LAYERb = QtGui.QComboBox(self.queryDefinitionSlot)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
@@ -451,7 +454,7 @@ class Ui_postgisQueryBuilder(object):
         self.verticalLayout_17.addLayout(self.verticalLayout_7)
         self.tabWidget.addItem(self.queryDefinitionSlot, _fromUtf8(""))
         self.filterRecordSlot = QtGui.QWidget()
-        self.filterRecordSlot.setGeometry(QtCore.QRect(0, 0, 468, 619))
+        self.filterRecordSlot.setGeometry(QtCore.QRect(0, 0, 336, 619))
         self.filterRecordSlot.setObjectName(_fromUtf8("filterRecordSlot"))
         self.verticalLayout_16 = QtGui.QVBoxLayout(self.filterRecordSlot)
         self.verticalLayout_16.setContentsMargins(0, 3, 0, 3)
@@ -470,11 +473,17 @@ class Ui_postgisQueryBuilder(object):
         self.labelOrderby.setObjectName(_fromUtf8("labelOrderby"))
         self.horizontalLayout_4.addWidget(self.labelOrderby)
         self.orderBy = QtGui.QComboBox(self.filterRecordSlot)
-        self.orderBy.setMinimumSize(QtCore.QSize(100, 0))
+        self.orderBy.setMinimumSize(QtCore.QSize(0, 0))
         self.orderBy.setObjectName(_fromUtf8("orderBy"))
         self.horizontalLayout_4.addWidget(self.orderBy)
         spacerItem1 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.horizontalLayout_4.addItem(spacerItem1)
+        self.label_3 = QtGui.QLabel(self.filterRecordSlot)
+        self.label_3.setObjectName(_fromUtf8("label_3"))
+        self.horizontalLayout_4.addWidget(self.label_3)
+        self.FILTERSCHEMA = QtGui.QComboBox(self.filterRecordSlot)
+        self.FILTERSCHEMA.setObjectName(_fromUtf8("FILTERSCHEMA"))
+        self.horizontalLayout_4.addWidget(self.FILTERSCHEMA)
         self.verticalLayout_16.addLayout(self.horizontalLayout_4)
         self.tabWidget.addItem(self.filterRecordSlot, _fromUtf8(""))
         self.SqlCodeSlot = QtGui.QWidget()
@@ -510,7 +519,7 @@ class Ui_postgisQueryBuilder(object):
         self.verticalLayout_15.addLayout(self.verticalLayout_8)
         self.tabWidget.addItem(self.SqlCodeSlot, _fromUtf8(""))
         self.tableResultSlot = QtGui.QWidget()
-        self.tableResultSlot.setGeometry(QtCore.QRect(0, 0, 468, 619))
+        self.tableResultSlot.setGeometry(QtCore.QRect(0, 0, 336, 619))
         self.tableResultSlot.setObjectName(_fromUtf8("tableResultSlot"))
         self.verticalLayout_14 = QtGui.QVBoxLayout(self.tableResultSlot)
         self.verticalLayout_14.setContentsMargins(0, 3, 0, 3)
@@ -532,7 +541,7 @@ class Ui_postgisQueryBuilder(object):
         self.verticalLayout_14.addLayout(self.verticalLayout_13)
         self.tabWidget.addItem(self.tableResultSlot, _fromUtf8(""))
         self.historySlot = QtGui.QWidget()
-        self.historySlot.setGeometry(QtCore.QRect(0, 0, 468, 619))
+        self.historySlot.setGeometry(QtCore.QRect(0, 0, 336, 619))
         self.historySlot.setObjectName(_fromUtf8("historySlot"))
         self.verticalLayout_21 = QtGui.QVBoxLayout(self.historySlot)
         self.verticalLayout_21.setContentsMargins(0, 3, 0, 3)
@@ -566,7 +575,7 @@ class Ui_postgisQueryBuilder(object):
         self.verticalLayout_18.addLayout(self.horizontalLayout_9)
 
         self.retranslateUi(postgisQueryBuilder)
-        self.tabWidget.setCurrentIndex(3)
+        self.tabWidget.setCurrentIndex(2)
         self.tabWidget.layout().setSpacing(0)
         QtCore.QMetaObject.connectSlotsByName(postgisQueryBuilder)
 
@@ -597,6 +606,7 @@ class Ui_postgisQueryBuilder(object):
         self.FIELDbLabel.setText(_translate("postgisQueryBuilder", "Join field of B", None))
         self.tabWidget.setItemText(self.tabWidget.indexOf(self.queryDefinitionSlot), _translate("postgisQueryBuilder", "QUERY", None))
         self.labelOrderby.setText(_translate("postgisQueryBuilder", "Order by:", None))
+        self.label_3.setText(_translate("postgisQueryBuilder", "Schema:", None))
         self.tabWidget.setItemText(self.tabWidget.indexOf(self.filterRecordSlot), _translate("postgisQueryBuilder", "FILTER", None))
         self.checkCreateView.setText(_translate("postgisQueryBuilder", "As view", None))
         self.checkMaterialized.setText(_translate("postgisQueryBuilder", "Materialized", None))

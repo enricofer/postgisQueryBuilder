@@ -95,8 +95,10 @@ class PSQL:
     def getExtendedTableName(self,tableName):
         return '"%s"."%s"' % (self.schema,tableName)
 
-    def getLayers(self):
-        sql="select table_name from information_schema.tables where table_schema='%s';" % self.schema 
+    def getLayers(self,schema=None):
+        if not schema:
+            schema = self.schema
+        sql="select table_name from information_schema.tables where table_schema='%s';" % schema
         query = self.db.exec_(sql)
         layers=[]
         exclusionList = ["spatial_ref_sys","geography_columns","geometry_columns","raster_columns","raster_overviews"]
@@ -104,7 +106,7 @@ class PSQL:
             if not query.value(0) in exclusionList : 
                 if self.getGeometryField(query.value(0)) != -1:
                     layers.append(query.value(0))
-        sql="SELECT matviewname FROM pg_matviews where schemaname='%s';"  % self.schema
+        sql="SELECT matviewname FROM pg_matviews where schemaname='%s';"  % schema
         query = self.db.exec_(sql)
         while (query.next()):
             if self.getGeometryField(query.value(0)) != -1:

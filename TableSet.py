@@ -37,13 +37,16 @@ class tableSet(QtGui.QTableWidget):
 
     def populateFilterTable(self,PSQL,layerQuery):
         self.PSQL = PSQL
-        self.layerList = self.PSQL.getLayers()
+        self.currentSchema = self.PSQL.schema
+        self.populateLayerList(None)
         self.layerQuery = layerQuery
         self.layerQueryFields = self.PSQL.getFieldsContent(layerQuery)
         self.clearContents()
         #self.layerList = layerList
         self.setRowCount(1)
-        self.setColumnCount(4)
+        self.setColumnCount(6)
+        self.hideColumn(4)
+        self.hideColumn(5)
         objSlotSize = int((self.width()-self.opSlotSize*2)/2)
         self.setColumnWidth(0,self.opSlotSize)
         self.setColumnWidth(1,objSlotSize) #int(self.width()/3*2)
@@ -51,6 +54,17 @@ class tableSet(QtGui.QTableWidget):
         self.setColumnWidth(3,objSlotSize) #int(self.width()/3)
         self.setCellWidget(0,0,self.actionFilterCell(0,0))
         self.setRowHeight(0,self.rowSize)
+
+    def setCurrentSchema(self,schema):
+        print "ROWCOUNT",self.rowCount()
+        self.currentSchema = schema
+        self.populateLayerList(schema)
+        if self.rowCount()>1 and self.cellWidget(self.rowCount()-2,5).currentText() == 'Spatial filter':
+            self.setCellWidget(self.rowCount()-2,3,self.layerLoad())
+            self.setCellWidget(self.rowCount()-2,4,self.oneValueLoad(self.currentSchema))
+
+    def populateLayerList(self,currentSchema):
+        self.layerList = self.PSQL.getLayers(schema = currentSchema)
         
     def resizeEvent(self,ev):
         objSlotSize = int((self.width()-self.opSlotSize*2)/2)
@@ -245,9 +259,11 @@ class tableSet(QtGui.QTableWidget):
         return valueItem
         
     def uniqueValuesLoad(self,row,col,uniqueValueList):
+        print "unique"
         valueItem = self.cellWidget(row,col)
         valueItem.clear()
         for value in uniqueValueList:
+            print value
             try :
                 #valueItem.addItem(value.encode('utf8','ignore'))
                 valueItem.addItem(unicode(value))
@@ -296,17 +312,18 @@ class tableSet(QtGui.QTableWidget):
             except:
                 cw3 = ""
 
+            try:
+                cw4 = self.cellWidget(row,4).currentText()
+            except:
+                cw4 = ""
 
             if cw2[:2]=="ST":
-                tmpSet.add(cw3)
+                tmpSet.add('"%s"."%s"' % (cw4,cw3))
         layerList = list(tmpSet)
         #print layerList
         sqlFrom = ""
         for item in layerList:
-            if schema:
-                sqlFrom += '"%s"."%s",' % (schema,item)
-            else:
-                sqlFrom += '"%s",' % item
+            sqlFrom += '%s,' % (item)
         return sqlFrom
 
 
@@ -445,6 +462,9 @@ class tableSet(QtGui.QTableWidget):
         if cbox.column == 1:
             self.uniqueValuesLoad(cbox.row,3,self.PSQL.getUniqeValues(self.layerQuery,self.cellWidget(cbox.row,1).currentText(),50))
         if cbox.column == 0:
+            #remember row type
+            self.setCellWidget(cbox.row,5,self.oneValueLoad(cbox.currentText()))
+            #parse row type
             if cbox.currentText() == "Attrib  filter":
                 nextAction = "bool"
                 self.setCellWidget(cbox.row,1,self.fieldsLoad(cbox.row,1))
@@ -455,6 +475,7 @@ class tableSet(QtGui.QTableWidget):
                 self.setCellWidget(cbox.row,1,self.oneValueLoad(self.layerQuery))
                 self.setCellWidget(cbox.row,2,self.spatialfiltersLoad())
                 self.setCellWidget(cbox.row,3,self.layerLoad())
+                self.setCellWidget(cbox.row,4,self.oneValueLoad(self.currentSchema))
             elif cbox.currentText() == "OR":
                 nextAction = "filter/group"
                 self.setCellWidget(cbox.row,1,self.boolLoad('OR'))

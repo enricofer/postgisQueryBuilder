@@ -68,6 +68,8 @@ class postgisQueryBuilder:
         self.dlg.QueryType.activated.connect(self.setQueryType)
         self.dlg.checkAutoCompiled.stateChanged.connect(self.queryGen)
         self.dlg.LAYERa.activated.connect(self.setLAYERa)
+        self.dlg.SCHEMAb.activated.connect(self.setSCHEMAb)
+        self.dlg.FILTERSCHEMA.activated.connect(self.setFILTERSCHEMA)
         self.dlg.LAYERb.activated.connect(self.setLAYERb)
         self.dlg.FIELD.activated.connect(self.setFIELD)
         self.dlg.SPATIALREL.activated.connect(self.setSPATIALREL)
@@ -103,6 +105,8 @@ class postgisQueryBuilder:
         self.dlg.QueryType.activated.disconnect(self.setQueryType)
         self.dlg.checkAutoCompiled.stateChanged.disconnect(self.queryGen)
         self.dlg.LAYERa.activated.disconnect(self.setLAYERa)
+        self.dlg.SCHEMAb.activated.disconnect(self.setSCHEMAb)
+        self.dlg.FILTERSCHEMA.activated.disconnect(self.setFILTERSCHEMA)
         self.dlg.LAYERb.activated.disconnect(self.setLAYERb)
         self.dlg.FIELD.activated.disconnect(self.setFIELD)
         self.dlg.SPATIALREL.activated.disconnect(self.setSPATIALREL)
@@ -512,6 +516,15 @@ class postgisQueryBuilder:
                 self.dlg.fieldsListA.item(row).setCheckState(self.dlg.LAYERaAllFields.checkState())
         self.setFieldsList()
 
+    def setSCHEMAb(self):
+        #called when SCHEMAb is activated
+        self.querySet.setParameter("SCHEMAb",self.dlg.SCHEMAb.currentText())
+        self.populateComboBox(self.dlg.LAYERb,self.PSQL.getLayers(schema = self.dlg.SCHEMAb.currentText()),"Select layer",True)
+
+    def setFILTERSCHEMA(self):
+        #called when FILTERSCHEMA is activated
+        self.dlg.filterTable.setCurrentSchema(self.dlg.FILTERSCHEMA.currentText())
+
     def setLAYERb(self):
         #called when LAYERb is activated
         if self.dlg.LAYERb.currentText()[:6] == "Select":
@@ -715,7 +728,7 @@ class postgisQueryBuilder:
                 "FIELD","FIELDLabel","SPATIALRELLabel",
                 "SPATIALRELNOTLabel","fieldsListALabel","fieldsListBLabel",\
                 "FIELDb","FIELDbLabel","JOIN","JOINLabel",\
-                "LAYERa","LAYERb","LAYERbLabel","summaryBox","LAYERaAllFields","fieldsListA","fieldsListB"]
+                "LAYERa","SCHEMAb","LAYERb","LAYERbLabel","summaryBox","LAYERaAllFields","fieldsListA","fieldsListB"]
         for slot in toHide:
             self.hideDialogSlot(slot)
 
@@ -780,6 +793,9 @@ class postgisQueryBuilder:
                 self.dlg.DBSchema.setCurrentIndex(r)
                 self.dlg.DBSchema.removeItem(0)
                 self.loadPSQLLayers()
+        #clone dbschema in schemab
+        self.populateComboBox(self.dlg.SCHEMAb,[self.dlg.DBSchema.itemText(i) for i in range(self.dlg.DBSchema.count())],self.dlg.DBSchema.currentText(),True)
+        self.populateComboBox(self.dlg.FILTERSCHEMA,[self.dlg.DBSchema.itemText(i) for i in range(self.dlg.DBSchema.count())],self.dlg.DBSchema.currentText(),True)
 
 
     def loadPSQLLayers(self):
@@ -791,6 +807,9 @@ class postgisQueryBuilder:
             self.querySet.setSchema(self.dlg.DBSchema.currentText())
             self.populateComboBox(self.dlg.GEOMETRYFIELD,self.PSQL.scanLayersForGeometry(),"",None)
             self.populateComboBox(self.dlg.KEYFIELD,self.PSQL.scanLayersForPrimaryKey(),"",None)
+            #sync schemab con dbschema
+            self.dlg.SCHEMAb.setCurrentIndex(self.dlg.DBSchema.currentIndex())
+            self.querySet.setParameter("SCHEMAb",self.dlg.SCHEMAb.currentText())
             self.populateLayerMenu()
 
     def populateFilterTable(self):

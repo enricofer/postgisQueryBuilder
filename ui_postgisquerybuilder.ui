@@ -50,7 +50,7 @@
       <number>0</number>
      </property>
      <property name="currentIndex">
-      <number>3</number>
+      <number>2</number>
      </property>
      <property name="tabSpacing">
       <number>0</number>
@@ -60,7 +60,7 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>468</width>
+        <width>336</width>
         <height>619</height>
        </rect>
       </property>
@@ -347,7 +347,7 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>468</width>
+        <width>336</width>
         <height>619</height>
        </rect>
       </property>
@@ -629,6 +629,9 @@
             </widget>
            </item>
            <item>
+            <widget class="QComboBox" name="SCHEMAb"/>
+           </item>
+           <item>
             <widget class="QComboBox" name="LAYERb">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -902,7 +905,7 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>468</width>
+        <width>336</width>
         <height>619</height>
        </rect>
       </property>
@@ -948,7 +951,7 @@
           <widget class="QComboBox" name="orderBy">
            <property name="minimumSize">
             <size>
-             <width>100</width>
+             <width>0</width>
              <height>0</height>
             </size>
            </property>
@@ -966,6 +969,16 @@
             </size>
            </property>
           </spacer>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_3">
+           <property name="text">
+            <string>Schema:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="FILTERSCHEMA"/>
          </item>
         </layout>
        </item>
@@ -1061,7 +1074,7 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>468</width>
+        <width>336</width>
         <height>619</height>
        </rect>
       </property>
@@ -1115,7 +1128,7 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>468</width>
+        <width>336</width>
         <height>619</height>
        </rect>
       </property>

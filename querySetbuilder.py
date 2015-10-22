@@ -54,8 +54,8 @@ class querySet():
             [\
             'Returns a geometry that represents the point set union of geomA and geomB.',\
             'http://postgis.refractions.net/documentation/manual-svn/ST_Union.html',\
-            ['LAYERa','LAYERb','fieldsListA'],\
-            'SELECT [[ONLYGEOMSET]],ST_Union("[[LAYERa]]".[[GEOMETRYFIELDa]],"[[LAYERb]]".[[GEOMETRYFIELDb]]) AS [[GEOMETRYFIELD]] FROM "[[SCHEMA]]"."[[LAYERa]]","[[SCHEMA]]"."[[LAYERb]] [[WHERE]] [[ORDERBY]]"',\
+            ['LAYERa','SCHEMAb','LAYERb','fieldsListA'],\
+            'SELECT [[ONLYGEOMSET]],ST_Union("[[LAYERa]]".[[GEOMETRYFIELDa]],"[[LAYERb]]".[[GEOMETRYFIELDb]]) AS [[GEOMETRYFIELD]] FROM "[[SCHEMA]]"."[[LAYERa]]","[[SCHEMAb]]"."[[LAYERb]] [[WHERE]] [[ORDERBY]]"',\
             '_Union_of_[[LAYERa]]_and_[[LAYERb]]'\
             ],\
             'ST_Union 1 layer':\
@@ -70,16 +70,16 @@ class querySet():
             [\
             'Returns a geometry that represents that part of geometry A that does not intersect with geometry B.',\
             'http://postgis.refractions.net/documentation/manual-svn/ST_Difference.html',\
-            ['LAYERa','LAYERb','fieldsListA'],\
-            'SELECT [[FIELDSET]],ST_Difference("[[LAYERa]]".[[GEOMETRYFIELDa]],"[[LAYERb]]".[[GEOMETRYFIELDb]]) AS [[GEOMETRYFIELD]] FROM "[[SCHEMA]]"."[[LAYERa]]","[[SCHEMA]]"."[[LAYERb]]"',\
+            ['LAYERa','SCHEMAb','LAYERb','fieldsListA'],\
+            'SELECT [[FIELDSET]],ST_Difference("[[LAYERa]]".[[GEOMETRYFIELDa]],"[[LAYERb]]".[[GEOMETRYFIELDb]]) AS [[GEOMETRYFIELD]] FROM "[[SCHEMA]]"."[[LAYERa]]","[[SCHEMAb]]"."[[LAYERb]]"',\
             '_Diff_between_[[LAYERa]]_and_[[LAYERb]]'\
             ],\
             'ST_Intersection':\
             [\
             'Returns a geometry that represents the shared portion of geomA and geomB. The geography implementation does a transform to geometry to do the intersection and then transform back to WGS84.',\
             'http://postgis.refractions.net/documentation/manual-svn/ST_Intersection.html',\
-            ['LAYERa','LAYERb','fieldsListA'],\
-            'SELECT [[FIELDSET]],ST_Intersection("[[LAYERa]]".[[GEOMETRYFIELDa]],"[[LAYERb]]".[[GEOMETRYFIELDb]]) AS [[GEOMETRYFIELD]] FROM "[[SCHEMA]]"."[[LAYERa]]","[[SCHEMA]]"."[[LAYERb]]"',\
+            ['LAYERa','SCHEMAb','LAYERb','fieldsListA'],\
+            'SELECT [[FIELDSET]],ST_Intersection("[[LAYERa]]".[[GEOMETRYFIELDa]],"[[LAYERb]]".[[GEOMETRYFIELDb]]) AS [[GEOMETRYFIELD]] FROM "[[SCHEMA]]"."[[LAYERa]]","[[SCHEMAb]]"."[[LAYERb]]"',\
             '_Int_between_[[LAYERa]]_and_[[LAYERb]]'\
             ],\
             'ST_Buffer':\
@@ -118,16 +118,16 @@ class querySet():
             [\
             'Returns the result of analytical join of Layer A and Layer B where field A meet field B',\
             'http://www.tutorialspoint.com/postgresql/postgresql_using_joins.htm',\
-            ['LAYERa','LAYERb','FIELD','FIELDb','JOIN','fieldsListA','fieldsListB'],\
-            'SELECT [[FIELDSET]] FROM "[[SCHEMA]]"."[[LAYERa]]" [[JOIN]] "[[SCHEMA]]"."[[LAYERb]]" ON "[[LAYERa]]".[[FIELD]] = "[[LAYERb]]".[[FIELDb]] [[WHERE]] [[ORDERBY]]',\
+            ['LAYERa','SCHEMAb','LAYERb','FIELD','FIELDb','JOIN','fieldsListA','fieldsListB'],\
+            'SELECT [[FIELDSET]] FROM "[[SCHEMA]]"."[[LAYERa]]" [[JOIN]] "[[SCHEMAb]]"."[[LAYERb]]" ON "[[LAYERa]]".[[FIELD]] = "[[LAYERb]]".[[FIELDb]] [[WHERE]] [[ORDERBY]]',\
             '_analytical_join_of_[[LAYERa]]_and_[[LAYERb]]'\
             ],\
             'JOIN spatial':\
             [\
             'Returns the result of spatial join of Layer A and Layer B where relationship is true',\
             'http://workshops.boundlessgeo.com/postgis-intro/joins_exercises.html',\
-            ['LAYERa','LAYERb','SPATIALREL','SPATIALRELNOT','fieldsListA','fieldsListB'],\
-            'SELECT [[FIELDSET]] FROM "[[SCHEMA]]"."[[LAYERa]]" INNER JOIN "[[SCHEMA]]"."[[LAYERb]]" ON [[SPATIALREL]]("[[LAYERa]]".[[GEOMETRYFIELD]],"[[LAYERb]]".[[GEOMETRYFIELD]]) [[WHERE]] [[ORDERBY]]',\
+            ['LAYERa','SCHEMAb','LAYERb','SPATIALREL','SPATIALRELNOT','fieldsListA','fieldsListB'],\
+            'SELECT [[FIELDSET]] FROM "[[SCHEMA]]"."[[LAYERa]]" INNER JOIN "[[SCHEMAb]]"."[[LAYERb]]" ON [[SPATIALREL]]("[[LAYERa]]".[[GEOMETRYFIELD]],"[[LAYERb]]".[[GEOMETRYFIELD]]) [[WHERE]] [[ORDERBY]]',\
             '_spatial_join_of_[[LAYERa]]_and_[[LAYERb]]'\
             ],\
             }
@@ -148,7 +148,7 @@ class querySet():
         self.fieldSet = list
     
     def resetParameters(self):
-        self.parameters = {"VIEWNAME":"","LAYERa":"","LAYERb":"","GEOMETRYFIELDa":None,"GEOMETRYFIELDb":None,\
+        self.parameters = {"VIEWNAME":"","LAYERa":"","SCHEMAb":"","LAYERb":"","GEOMETRYFIELDa":None,"GEOMETRYFIELDb":None,\
                            "GEOMETRYFIELD":"the_geom","KEYFIELD":"ogc_fid","BUFFERRADIUS":"","FIELD":"","SIMPLEFIELD":"","FIELDb":"","JOIN":"",\
                            "ORDERBY":"","WHERE":"","OPERATOR":"","CONDITION":"","SPATIALREL":None,"SPATIALFROM":"",\
                            "SPATIALRELNOT":" ","FIDFIELD":"","FIELDSET":"","GROUPBYSET":"", "ONLYGEOMSET":"", "MATERIALIZED":"","DISTANCEOP":"","DISTANCE":"","SCHEMA":""}
