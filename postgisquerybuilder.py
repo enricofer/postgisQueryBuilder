@@ -508,6 +508,7 @@ class postgisQueryBuilder:
             self.querySet.setFIDFIELD()
         self.addListToFieldTable(self.dlg.fieldsListA,self.PSQL.getFieldsContent(self.dlg.LAYERa.currentText()),True, exclude=autoGeometry)
         self.populateFilterTable()
+        self.setSCHEMAb()
         
 
     def selectAllFields(self):
