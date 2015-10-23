@@ -794,6 +794,7 @@ class postgisQueryBuilder:
                 self.loadPSQLLayers()
         #clone dbschema in schemab
         self.populateComboBox(self.dlg.SCHEMAb,[self.dlg.DBSchema.itemText(i) for i in range(self.dlg.DBSchema.count())],self.dlg.DBSchema.currentText(),True)
+        self.querySet.setParameter("SCHEMAb",self.dlg.SCHEMAb.currentText())
         self.populateComboBox(self.dlg.FILTERSCHEMA,[self.dlg.DBSchema.itemText(i) for i in range(self.dlg.DBSchema.count())],self.dlg.DBSchema.currentText(),True)
 
 

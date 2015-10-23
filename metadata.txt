@@ -12,7 +12,7 @@
 name=postgisQueryBuilder
 qgisMinimumVersion=2.0
 description=User friendly postgis query generation. Tutorial on website.
-version=1.7.0
+version=1.7.1
 author=Enrico Ferreguti
 email=enricofer@gmail.com
 about=The postgisQueryBuilder QGis plugin is aimed to to provide a friendly environment to perform spatial analysis in postgresql/postgis without having to deal with SQL code. It is not intented to replace the Qgis built-in DBManager that have a wide usage that covers all aspects of Qgis/Postgis interaction. It can be used in educational environments for a live analysis of the structure of the common spatial queries. The plugin can manage postgresql views and can be used for deploying spatial analysis frameworks based on chains of spatial relations.
@@ -23,7 +23,7 @@ about=The postgisQueryBuilder QGis plugin is aimed to to provide a friendly envi
 # Optional items:
 
 # Uncomment the following line and add your changelog entries:
-# changelog=v1.7.0 Alternate schema support in query definition, Alternate schema support in spatial filters, Fixed issue loading unique values in attribute filter slot
+# changelog=v1.7.0 Alternate schema support in query definition, Alternate schema support in spatial filters, Fixed issue loading unique values in attribute filter slot v1.7.1 can't refresh spatial filter layer list changing schema issue fixed
 
 # tags are comma separated with spaces allowed
 tags=postgis, help, view, views, query, builder, sql, spatial join, spatial filter, postgresql
