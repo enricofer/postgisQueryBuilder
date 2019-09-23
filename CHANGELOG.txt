@@ -57,4 +57,7 @@ Alternative schema support in spatial filters
 Fixed issue loading unique values in attribute filter slot
 
 v1.7.1
-can't refresh spatial filter layer list changing schema issue fixed
+Can't refresh spatial filter layer list changing schema issue fixed
+
+v1.7.2 
+Remove trailing spaces from autocomposed query name
