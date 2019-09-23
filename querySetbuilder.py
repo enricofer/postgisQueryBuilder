@@ -272,7 +272,7 @@ class querySet():
             q = q.replace("]]",")s")
             q = q % self.parameters
             q = q.replace("__","_")
-            return q
+            return q.strip()
         else:
             return ""
 
