@@ -20,13 +20,16 @@
  ***************************************************************************/
 """
 
-from PyQt4 import QtCore, QtGui
-from ui_move_dialog import Ui_moveDialog
+from qgis.PyQt import QtCore, QtGui, QtWidgets, uic
 
+import os
 
-class moveDialog(QtGui.QDialog, Ui_moveDialog):
+FORM_CLASS, _ = uic.loadUiType(os.path.join(
+    os.path.dirname(__file__), 'ui_move_dialog.ui'))
+
+class moveDialog(QtWidgets.QDialog, FORM_CLASS):
     def __init__(self):
-        QtGui.QDialog.__init__(self)
+        QtWidgets.QDialog.__init__(self)
         # Set up the user interface from Designer.
         # After setupUI you can access any designer object by doing
         # self.<objectname>, and you can use autoconnect slots - see

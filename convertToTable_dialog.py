@@ -19,20 +19,22 @@
  *                                                                         *
  ***************************************************************************/
 """
+from __future__ import print_function
 
 #from PyQt4 import QtCore, QtGui
 
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
-from ui_converttotabledialog import Ui_convertToTableDialog
+from qgis.PyQt import QtCore, QtGui, QtWidgets, uic
 
 import os
 # create the dialog for zoom to point
 
 
-class convertToTableDialog(QDialog, Ui_convertToTableDialog):
+FORM_CLASS, _ = uic.loadUiType(os.path.join(
+    os.path.dirname(__file__), 'ui_converttotabledialog.ui'))
+
+class convertToTableDialog(QtWidgets.QDialog, FORM_CLASS):
     def __init__(self,parent):
-        QDialog.__init__(self)
+        QtWidgets.QDialog.__init__(self)
         self.parent = parent
         # Set up the user interface from Designer.
         # After setupUI you can access any designer object by doing
@@ -60,7 +62,8 @@ class convertToTableDialog(QDialog, Ui_convertToTableDialog):
         tableName = self.tableNameString.text()
         schema = self.parent.PSQL.schema
         q = 'CREATE TABLE "%s"."%s" as (SELECT * FROM "%s"."%s");' % (schema,tableName,schema,self.viewName)
-        print q
+        # fix_print_with_import
+        print(q)
         res = self.parent.PSQL.submitCommand(q)
         if not (res == "" or res == None or res == " "):
             QMessageBox.information(None, "ERROR:", res)

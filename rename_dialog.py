@@ -20,13 +20,15 @@
  ***************************************************************************/
 """
 
-from PyQt4 import QtCore, QtGui
-from ui_rename_dialog import Ui_renameDialog
+from qgis.PyQt import QtCore, QtGui, QtWidgets, uic
+import os
 
+FORM_CLASS, _ = uic.loadUiType(os.path.join(
+    os.path.dirname(__file__), 'ui_rename_dialog.ui'))
 
-class renameDialog(QtGui.QDialog, Ui_renameDialog):
+class renameDialog(QtWidgets.QDialog, FORM_CLASS):
     def __init__(self):
-        QtGui.QDialog.__init__(self)
+        QtWidgets.QDialog.__init__(self)
         # Set up the user interface from Designer.
         # After setupUI you can access any designer object by doing
         # self.<objectname>, and you can use autoconnect slots - see

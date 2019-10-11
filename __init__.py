@@ -20,8 +20,14 @@
  ***************************************************************************/
  This script initializes the plugin, making it known to QGIS.
 """
+from __future__ import absolute_import
+import site
+import os
+
+site.addsitedir(os.path.dirname(__file__))
+site.addsitedir(os.path.join(os.path.dirname(__file__),'extlibs'))
 
 def classFactory(iface):
     # load postgisQueryBuilder class from file postgisQueryBuilder
-    from postgisquerybuilder import postgisQueryBuilder
+    from .postgisquerybuilder import postgisQueryBuilder
     return postgisQueryBuilder(iface)

@@ -20,14 +20,19 @@
  ***************************************************************************/
 """
 
-from PyQt4 import QtCore, QtGui
-from ui_askcredentialdialog import Ui_askcredentialdialog
+from qgis.PyQt import QtCore, QtGui, QtWidgets, uic
+
+import os
+
+FORM_CLASS, _ = uic.loadUiType(os.path.join(
+    os.path.dirname(__file__), 'ui_askcredentialdialog.ui'))
+
 # create the dialog for db credential
 
 
-class askCredentialDialog(QtGui.QDialog, Ui_askcredentialdialog):
+class askCredentialDialog(QtWidgets.QDialog, FORM_CLASS):
     def __init__(self):
-        QtGui.QDialog.__init__(self)
+        QtWidgets.QDialog.__init__(self)
         # Set up the user interface from Designer.
         # After setupUI you can access any designer object by doing
         # self.<objectname>, and you can use autoconnect slots - see

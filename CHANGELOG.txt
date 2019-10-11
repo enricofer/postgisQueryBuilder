@@ -62,5 +62,5 @@ Can't refresh spatial filter layer list changing schema issue fixed
 v1.7.2 
 Remove trailing spaces from autocomposed query name
 
-v1.7.3 
-Remove trailing spaces from 2 layer union query definition
+v2.0.0
+QGIS3 migration

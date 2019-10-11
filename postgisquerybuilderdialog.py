@@ -20,14 +20,17 @@
  ***************************************************************************/
 """
 
-from PyQt4 import QtCore, QtGui
-from ui_postgisquerybuilder import Ui_postgisQueryBuilder
+import os
+from qgis.PyQt import QtCore, QtGui, QtWidgets, uic
+from .TableSet import tableSet
 # create the dialog for zoom to point
 
+FORM_CLASS1, _ = uic.loadUiType(os.path.join(
+    os.path.dirname(__file__), 'ui_postgisquerybuilder.ui'))
 
-class postgisQueryBuilderDialog(QtGui.QDialog, Ui_postgisQueryBuilder):
+class postgisQueryBuilderDialog(QtWidgets.QDialog, FORM_CLASS1):
     def __init__(self):
-        QtGui.QDialog.__init__(self)
+        QtWidgets.QDialog.__init__(self)
         # Set up the user interface from Designer.
         # After setupUI you can access any designer object by doing
         # self.<objectname>, and you can use autoconnect slots - see

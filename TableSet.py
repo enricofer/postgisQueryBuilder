@@ -20,15 +20,18 @@
  ***************************************************************************/
 """
 
-from PyQt4 import QtGui, QtCore
+from builtins import str
+from builtins import range
+from PyQt5 import QtGui, QtCore, QtWidgets
 
-class tableSet(QtGui.QTableWidget):
+class tableSet(QtWidgets.QTableWidget):
 
     def __init__(self,parent = None):
-        #QtGui.QTableWidget.__init__(param)
         super (tableSet,self).__init__(parent)
         self.signalMapper = QtCore.QSignalMapper()
-        self.signalMapper.mapped[QtGui.QWidget].connect(self.on_signalMapper_mapped)
+        #signals = self.signalMapper.mapped
+        #print(signals)
+        #signals[QtWidgets.QWidget].connect(self.on_signalMapper_mapped) #
         self.rowSize = 20
         self.opSlotSize = 75
         self.conditionalOptions = ('=','>','<','>=','<=','<>','IS NULL','IS NOT NULL')
@@ -83,13 +86,13 @@ class tableSet(QtGui.QTableWidget):
             
             self.setCellWidget(row,1,self.layerLoad(row,1))
             self.setCellWidget(row,2,self.filtersLoad())
-            self.setItem(row,3,QtGui.QTableWidgetItem(""))
+            self.setItem(row,3,QtWidgets.QTableWidgetItem(""))
             self.setCellWidget(row,4,self.layerLoad(row,4))
         #print self.cellWidget(19,1)
         #print self.cellWidget(19,4).row,self.cellWidget(19,4).column
 
     def layerLoad(self):
-        layerItem=QtGui.QComboBox()
+        layerItem=QtWidgets.QComboBox()
         for layer in self.layerList:
             layerItem.addItem(layer)
         layerItem.insertItem(0,"Select")
@@ -102,32 +105,32 @@ class tableSet(QtGui.QTableWidget):
         return layerItem
 
     def fieldsLoad(self,row,col):
-        fieldItem=QtGui.QComboBox()
+        fieldItem=QtWidgets.QComboBox()
         for field in self.layerQueryFields:
             fieldItem.addItem(field)
         fieldItem.insertItem(0,"Select")
         fieldItem.setCurrentIndex(0)
-        fieldItem.activated.connect(self.signalMapper.map)
+        fieldItem.activated.connect(lambda state,wdgt=fieldItem: self.on_signalMapper_mapped(state, wdgt))
         fieldItem.row=row
         fieldItem.column=col
         #print layerItem.row,layerItem.column,layerItem
-        self.signalMapper.setMapping(fieldItem, fieldItem)
+        #self.signalMapper.setMapping(fieldItem, fieldItem)
         return fieldItem
 
 
     def attributefiltersLoad(self,row,col):
-        filterItem=QtGui.QComboBox()
+        filterItem=QtWidgets.QComboBox()
         filterItem.addItems(self.conditionalOptions)
         filterItem.insertItem(0,"Select")
         filterItem.setCurrentIndex(0)
-        filterItem.activated.connect(self.signalMapper.map)
+        filterItem.activated.connect(lambda state,wdgt=filterItem: self.on_signalMapper_mapped(state, wdgt))
         filterItem.row=row
         filterItem.column=col
-        self.signalMapper.setMapping(filterItem, filterItem)
+        #self.signalMapper.setMapping(filterItem, filterItem)
         return filterItem
 
     def spatialfiltersLoad(self):
-        filterItem=QtGui.QComboBox()
+        filterItem=QtWidgets.QComboBox()
         filterItem.addItem("ST_Within")
         filterItem.addItem("ST_Contains")
         filterItem.addItem("ST_Covers")
@@ -146,7 +149,7 @@ class tableSet(QtGui.QTableWidget):
         pass
 
     def actionCell(self,row,col):
-        controlItem=QtGui.QComboBox()
+        controlItem=QtWidgets.QComboBox()
         controlItem.addItem("")
         controlItem.addItem("Attrib  filter")
         controlItem.addItem("Spatial filter")
@@ -160,15 +163,15 @@ class tableSet(QtGui.QTableWidget):
         controlItem.addItem("Delete")
         controlItem.addItem("Insert")
         controlItem.setCurrentIndex(0)
-        controlItem.activated.connect(self.signalMapper.map)
+        controlItem.activated.connect(lambda state,wdgt=controlItem: self.on_signalMapper_mapped(state, wdgt))
         controlItem.setMaxVisibleItems(20)
         controlItem.row=row
         controlItem.column=col
-        self.signalMapper.setMapping(controlItem, controlItem)
+        #self.signalMapper.setMapping(controlItem, controlItem)
         return controlItem
 
     def actionFilterCell(self,row,col):
-        controlItem=QtGui.QComboBox()
+        controlItem=QtWidgets.QComboBox()
         controlItem.addItem("")
         controlItem.addItem("Attrib  filter")
         controlItem.addItem("Spatial filter")
@@ -179,14 +182,14 @@ class tableSet(QtGui.QTableWidget):
         controlItem.addItem("Insert")
         controlItem.insertItem(0,"Select filter")
         controlItem.setCurrentIndex(0)
-        controlItem.activated.connect(self.signalMapper.map)
+        controlItem.activated.connect(lambda state,wdgt=controlItem: self.on_signalMapper_mapped(state, wdgt))
         controlItem.row=row
         controlItem.column=col
-        self.signalMapper.setMapping(controlItem, controlItem)
+        #self.signalMapper.setMapping(controlItem, controlItem)
         return controlItem
 
     def actionBoolCell(self,row,col):
-        controlItem=QtGui.QComboBox()
+        controlItem=QtWidgets.QComboBox()
         controlItem.addItem("")
         controlItem.addItem("AND")
         controlItem.addItem("OR")
@@ -196,14 +199,14 @@ class tableSet(QtGui.QTableWidget):
         controlItem.addItem("Insert")
         controlItem.insertItem(0,"Select filter")
         controlItem.setCurrentIndex(0)
-        controlItem.activated.connect(self.signalMapper.map)
+        controlItem.activated.connect(lambda state,wdgt=controlItem: self.on_signalMapper_mapped(state, wdgt))
         controlItem.row=row
         controlItem.column=col
-        self.signalMapper.setMapping(controlItem, controlItem)
+        #self.signalMapper.setMapping(controlItem, controlItem)
         return controlItem
         
     def groupFilterCell(self,row,col):
-        controlItem=QtGui.QComboBox()
+        controlItem=QtWidgets.QComboBox()
         controlItem.addItem("")
         controlItem.addItem("Attrib  filter")
         controlItem.addItem("Spatial filter")
@@ -213,15 +216,15 @@ class tableSet(QtGui.QTableWidget):
         controlItem.addItem("Delete")
         controlItem.insertItem(0,"Select filter")
         controlItem.setCurrentIndex(0)
-        controlItem.activated.connect(self.signalMapper.map)
+        controlItem.activated.connect(lambda state,wdgt=controlItem: self.on_signalMapper_mapped(state, wdgt))
         controlItem.row=row
         controlItem.column=col
-        self.signalMapper.setMapping(controlItem, controlItem)
+        #self.signalMapper.setMapping(controlItem, controlItem)
         return controlItem
 
 
     def boolLoad(self,predef):
-        boolItem=QtGui.QComboBox()
+        boolItem=QtWidgets.QComboBox()
         boolItem.addItem("AND")
         boolItem.addItem("OR")
         boolItem.addItem(")")
@@ -233,7 +236,7 @@ class tableSet(QtGui.QTableWidget):
         return boolItem
 
     def groupLoad(self,predef):
-        groupItem=QtGui.QComboBox()
+        groupItem=QtWidgets.QComboBox()
         groupItem.addItem("NOT")
         groupItem.addItem("(")
         if groupItem.findText(predef) == -1:
@@ -244,7 +247,7 @@ class tableSet(QtGui.QTableWidget):
         return groupItem
 
     def oneValueLoad(self,value):
-        item = QtGui.QComboBox()
+        item = QtWidgets.QComboBox()
         item.addItem(value)
         item.setCurrentIndex(0)
         if value == "":
@@ -253,7 +256,7 @@ class tableSet(QtGui.QTableWidget):
         return item
 
     def valueLoad(self):
-        valueItem = QtGui.QComboBox()
+        valueItem = QtWidgets.QComboBox()
         valueItem.setEditable(True)
         return valueItem
         
@@ -263,7 +266,7 @@ class tableSet(QtGui.QTableWidget):
         for value in uniqueValueList:
             try :
                 #valueItem.addItem(value.encode('utf8','ignore'))
-                valueItem.addItem(unicode(value))
+                valueItem.addItem(str(value))
             except:
                 valueItem.addItem(str(value))
         valueItem.insertItem(0,"Select or type")
@@ -442,8 +445,8 @@ class tableSet(QtGui.QTableWidget):
 
 
 
-    @QtCore.pyqtSlot(QtGui.QWidget)
-    def on_signalMapper_mapped(self,cbox):
+    #@QtCore.pyqtSlot(QtWidgets.QWidget) #
+    def on_signalMapper_mapped(self,idx,cbox):
         #print "row: {0} column: {1} text: {2}".format(cbox.row,cbox.column,cbox.currentText())
         #print cbox.currentText()
         #print "ROWS:",self.rowCount()

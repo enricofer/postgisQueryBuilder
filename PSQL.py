@@ -19,16 +19,22 @@
  *                                                                         *
  ***************************************************************************/
 """
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
-from PyQt4.QtSql import *
-from qgis.core import *
-from askcredentialdialog import askCredentialDialog
+from __future__ import print_function
+from __future__ import absolute_import
+from builtins import str
+from builtins import range
+from builtins import object
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+from PyQt5.QtSql import *
+from PyQt5.QtWidgets import *
+from qgis import core
+from .askcredentialdialog import askCredentialDialog
 
 import os.path
 import datetime
 
-class PSQL:
+class PSQL(object):
 
     def __init__(self,iface):
         self.iface = iface
@@ -64,7 +70,8 @@ class PSQL:
         self.db.setUserName(self.PSQLUsername)
         self.db.setPassword(self.PSQLPassword)
         while not self.db.open():
-            print self.db.lastError().text()
+            # fix_print_with_import
+            print(self.db.lastError().text())
             if self.db.lastError().text()[:11] == "fe_sendauth" or self.db.lastError().text()[:11] == "FATAL:  pas":
                 accepted,user,password = askCredentialDialog.form(self.PSQLUsername,self.PSQLPassword,msg = self.db.lastError().text())
                 if accepted:
@@ -186,13 +193,13 @@ class PSQL:
         query = self.db.exec_(sql)
         fields=[]
         while (query.next()):
-            fields.append(unicode(query.value(0)))
+            fields.append(str(query.value(0)))
         if fields==[]:
             sql="SELECT attname, typname ,relname FROM pg_attribute a JOIN pg_class c on a.attrelid = c.oid JOIN pg_type t on a.atttypid = t.oid WHERE relname = '%s' and attnum >= 1;" % layer
             #print sql
             query = self.db.exec_(sql)
             while (query.next()):
-                fields.append(unicode(query.value(0)))
+                fields.append(str(query.value(0)))
             #print fields
         return fields
 
@@ -202,7 +209,7 @@ class PSQL:
         query = self.db.exec_(sql)
         fields=[]
         while (query.next()):
-            fields.append(unicode(query.value(0)))
+            fields.append(str(query.value(0)))
         #print fields
         return fields
 
@@ -212,7 +219,7 @@ class PSQL:
         #sql='SELECT distinct(SRID(autoGeom)) as srid FROM "%s"."%s" group by srid;' % (autoGeom,self.schema,layer)
         query = self.db.exec_(sql)
         query.next()
-        res = unicode(query.value(0))
+        res = str(query.value(0))
         #print res
         return res
 
@@ -221,7 +228,7 @@ class PSQL:
         sql='''SELECT ST_GeometryType(%s) FROM "%s"."%s";''' % (autoGeom,self.schema,layer)
         query = self.db.exec_(sql)
         query.next()
-        res = unicode(query.value(0))
+        res = str(query.value(0))
         #print res
         return res
 
@@ -229,7 +236,7 @@ class PSQL:
         sql='select count(*) from "%s"."%s";' % (self.schema,layer)
         query = self.db.exec_(sql)
         query.next()
-        res = unicode(query.value(0))
+        res = str(query.value(0))
         #print res
         return res
 
@@ -237,7 +244,7 @@ class PSQL:
         sql = "SELECT typname FROM pg_attribute a JOIN pg_class c on a.attrelid = c.oid JOIN pg_type t on a.atttypid = t.oid WHERE relname = '%s' and attname = '%s'" % (layer,field)
         query = self.db.exec_(sql)
         query.next()
-        res = unicode(query.value(0))
+        res = str(query.value(0))
         #print res
         return res
 
@@ -299,7 +306,8 @@ class PSQL:
 
     def getUniqeValues(self,layer,field,range):
         sql = 'SELECT DISTINCT "%s" FROM "%s"."%s" ORDER BY "%s"' % (field,self.schema,layer,field)
-        print sql
+        # fix_print_with_import
+        print(sql)
         query = self.db.exec_(sql)
         values = []
         conta = 0
@@ -317,7 +325,8 @@ class PSQL:
         schemas=[]
         while (query.next()):
             schemas.append(query.value(0))
-        print schemas
+        # fix_print_with_import
+        print(schemas)
         return schemas
 
 
@@ -340,11 +349,11 @@ class PSQL:
                 query.value(count)
                 for k in range(0,query.record().count()):
                     try:
-                        fields.append(unicode(query.value(k), errors='replace'))
+                        fields.append(str(query.value(k), errors='replace'))
                     except TypeError:
                         fields.append(query.value(k))
                     except AttributeError:
-                        fields.append(unicode(query.value(k)))
+                        fields.append(str(query.value(k)))
                     if rows[0] == []:
                         fieldNames=[]
                         for n in range(0,query.record().count()):
@@ -366,7 +375,8 @@ class PSQL:
                 self.queryLogger("SQL_COMMAND",sql)
             return None
         else:
-            print "ERROR TYPE: ",query.lastError().type(),"QUERY:",sql
+            # fix_print_with_import
+            print("ERROR TYPE: ",query.lastError().type(),"QUERY:",sql)
             return query.lastError().text()
 
     def isTable(self,tName):
@@ -403,14 +413,15 @@ class PSQL:
 
     def loadedLayerList(self):
         postgislayers = []
-        for layer in self.iface.legendInterface().layers():
-            if layer.type() == QgsMapLayer.VectorLayer and layer.dataProvider().name() == "postgres":
+        for layer_id,layer in core.QgsProject.instance().mapLayers().items():
+            if layer.type() == core.QgsMapLayer.VectorLayer and layer.dataProvider().name() == "postgres":
                 postgislayers.append(layer.name())
-        print postgislayers
+        # fix_print_with_import
+        print(postgislayers)
         return postgislayers
 
     def layerRefFromName(self,layerName):
-        for layer in self.iface.legendInterface().layers():
+        for layer_id,layer in core.QgsProject.instance().mapLayers().items():
             if layer.name() == layerName:
                 return layer
 
@@ -427,12 +438,12 @@ class PSQL:
             return #test if layer has been already loaded
         autoGeom = self.guessGeometryField(layer,GeomField)
         autoKey = self.guessKeyField(layer,suggestion=KeyField)
-        uri = QgsDataSourceURI()
+        uri = core.QgsDataSourceUri()
         uri.setConnection(self.PSQLHost,self.PSQLPort,self.PSQLDatabase,self.PSQLUsername,self.PSQLPassword)
         uri.setDataSource(self.schema,layer,autoGeom,"",autoKey)
-        vlayer = QgsVectorLayer(uri.uri(), layer, "postgres")
+        vlayer = core.QgsVectorLayer(uri.uri(), layer, "postgres")
         if vlayer.isValid():
-            QgsMapLayerRegistry.instance().addMapLayer(vlayer,True)
+            core.QgsProject.instance().addMapLayer(vlayer,True)
             #self.queryLogger(layerName,"VIEW LOAD")
         else:
             sqlerror = self.submitCommand(self.getViewDef(layer),log = None)
@@ -445,12 +456,12 @@ class PSQL:
         autoGeom = self.guessGeometryField("__tmp",suggestion=GeomField)
         autoKey = self.guessKeyField("__tmp",suggestion=KeyField)
         self.deleteLayer("__tmp")
-        uri = QgsDataSourceURI()
+        uri = core.QgsDataSourceUri()
         uri.setConnection(self.PSQLHost,self.PSQLPort,self.PSQLDatabase,self.PSQLUsername,self.PSQLPassword)
         uri.setDataSource("","("+sql+")",autoGeom,"",autoKey)
-        vlayer = QgsVectorLayer(uri.uri(), layerName, "postgres")
+        vlayer = core.QgsVectorLayer(uri.uri(), layerName, "postgres")
         if vlayer.isValid():
-            QgsMapLayerRegistry.instance().addMapLayer(vlayer,True)
+            core.QgsProject.instance().addMapLayer(vlayer,True)
             self.queryLogger(layerName,sql)
         else:
             sqlerror = self.submitCommand(sql,log = None)
@@ -471,10 +482,11 @@ class PSQL:
         else:
             return None
         sql = "SELECT definition FROM pg_%sviews WHERE %sviewname = '%s' AND schemaname = '%s'" % (viewType,viewType,view,self.schema)
-        print sql
+        # fix_print_with_import
+        print(sql)
         query = self.db.exec_(sql)
         query.next()
-        res = unicode(query.value(0))
+        res = str(query.value(0))
         #print res
         return res
 
@@ -499,7 +511,7 @@ class PSQL:
             for column in range(0,len(tab[0])):
                 for row in range(1,len(tab)):
                     try:
-                        item = unicode(tab[row][column])
+                        item = str(tab[row][column])
                     except:
                         item = tab[row][column]
                     if item != None:

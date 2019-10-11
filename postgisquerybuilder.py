@@ -19,30 +19,36 @@
  *                                                                         *
  ***************************************************************************/
 """
+from __future__ import print_function
+from __future__ import absolute_import
 # Import the PyQt and QGIS libraries
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
-from PyQt4.QtSql import *
-from PyQt4.QtSvg import *
+from builtins import str
+from builtins import range
+from builtins import object
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
+from PyQt5.QtSql import *
+from PyQt5.QtSvg import *
 from qgis.core import *
-from PyQt4 import uic
+from qgis.PyQt import uic
 # Initialize Qt resources from file resources.py
-import resources_rc
+from . import resources_rc
 # Import the code for the dialog
-from postgisquerybuilderdialog import postgisQueryBuilderDialog
-from querySetbuilder import querySet
-from TableSet import tableSet
-from convertToTable_dialog import convertToTableDialog
-from rename_dialog import renameDialog
-from move_dialog import moveDialog
-from PSQL import PSQL
-from PyQt4 import QtGui
+from .postgisquerybuilderdialog import postgisQueryBuilderDialog
+from .querySetbuilder import querySet
+from .TableSet import tableSet
+from .convertToTable_dialog import convertToTableDialog
+from .rename_dialog import renameDialog
+from .move_dialog import moveDialog
+from .PSQL import PSQL
+from qgis.PyQt import QtGui
 
 import os.path
 import webbrowser
 
 
-class postgisQueryBuilder:
+class postgisQueryBuilder(object):
 
     def __init__(self, iface):
         # Save reference to the QGIS interface
@@ -100,6 +106,7 @@ class postgisQueryBuilder:
         self.dlg.LayerList.itemSelectionChanged.connect(self.saveForQuery)
         self.dlg.schemaAdd.clicked.connect(self.addNewSchema)
         self.dlg.HelpLink.clicked.connect(self.helpLinkOpen)
+        self.dlg.reloadButton.clicked.connect(self.populateLayerMenu)
 
     def eventsDisconnect(self):
         self.dlg.QueryType.activated.disconnect(self.setQueryType)
@@ -136,6 +143,7 @@ class postgisQueryBuilder:
         self.dlg.LayerList.itemSelectionChanged.disconnect(self.saveForQuery)
         self.dlg.schemaAdd.clicked.disconnect(self.addNewSchema)
         self.dlg.HelpLink.clicked.disconnect(self.helpLinkOpen)
+        self.dlg.reloadButton.clicked.disconnect(self.populateLayerMenu)
 
     def initGui(self):
         # Create action that will start plugin configuration
@@ -163,6 +171,7 @@ class postgisQueryBuilder:
         self.dlg.USERFIELDLabel.hide()
         self.dlg.PASSWORDFIELD.hide()
         self.dlg.PASSWORDFIELDLabel.hide()
+        self.dlg.reloadButton.setIcon(QIcon(os.path.join(self.plugin_dir,"svg","reload.svg")))
         #init
         self.getPSQLConnections()
         self.populateGui()
@@ -188,7 +197,8 @@ class postgisQueryBuilder:
 #        self.uncheckList(self.dlg.LayerList)
 
     def layerForQuery(self,listItem):
-        print listItem
+        # fix_print_with_import
+        print(listItem)
 
 
     def layerContextMenu(self,listItem):
@@ -331,11 +341,13 @@ class postgisQueryBuilder:
                         if result:
                             QMessageBox.information(None, "ERROR:", result)
                         else:
-                            print "CASCADE DELETED", self.selectedLayer
+                            # fix_print_with_import
+                            print("CASCADE DELETED", self.selectedLayer)
                 else:
                     QMessageBox.information(None, "ERROR:", result)
             else:
-                print "DELETED", self.selectedLayer
+                # fix_print_with_import
+                print("DELETED", self.selectedLayer)
                 pass
         self.populateLayerMenu()
 
@@ -400,7 +412,8 @@ class postgisQueryBuilder:
             self.queryGen()
 
     def helpDialog(self):
-        print "called help"
+        # fix_print_with_import
+        print("called help")
         if self.dlg.QueryType.currentText() != "Select query type":
             QDesktopServices.openUrl(QUrl(self.querySet.getHelp()))
             #webbrowser.open_new(self.querySet.getHelp())
@@ -466,7 +479,7 @@ class postgisQueryBuilder:
         predefInList = None
         for elem in list:
             try:
-                item = QStandardItem(unicode(elem))
+                item = QStandardItem(str(elem))
             except TypeError:
                 item = QStandardItem(str(elem))
             model.appendRow(item)
@@ -486,7 +499,7 @@ class postgisQueryBuilder:
     def loadSVG(self,svgName):
         self.dlg.DiagPanel.show()
         svgFile = os.path.join( os.path.dirname( os.path.abspath( __file__ ) ), "svg",svgName + ".svg")
-        #print svgFile
+        print (svgFile)
         item = QGraphicsSvgItem(svgFile)
         scene= QGraphicsScene()
         scene.addItem(item)
@@ -572,10 +585,10 @@ class postgisQueryBuilder:
     def setFieldsList(self):
         # procedure to resume selected fields to SELECT statements
         items = []
-        for index in xrange(self.dlg.fieldsListA.count()):
+        for index in range(self.dlg.fieldsListA.count()):
              if self.dlg.fieldsListA.item(index).checkState() == Qt.Checked:
                 items.append('"'+self.dlg.LAYERa.currentText()+'"."'+self.dlg.fieldsListA.item(index).text()+'"')
-        for index in xrange(self.dlg.fieldsListB.count()):
+        for index in range(self.dlg.fieldsListB.count()):
              if self.dlg.fieldsListB.item(index).checkState() == Qt.Checked:
                 items.append('"'+self.dlg.LAYERb.currentText()+'"."'+self.dlg.fieldsListB.item(index).text()+'"')
         #print "SELECTED FIELDS",items
@@ -676,6 +689,7 @@ class postgisQueryBuilder:
         theQ = self.dlg.QueryType.currentText()
         if theQ[:6] == "Select":
             return
+        print (theQ)
         self.loadSVG(theQ.replace(" ","_"))
         #self.querySet.resetParameters()
         self.resetDialog()
@@ -840,7 +854,8 @@ class postgisQueryBuilder:
                 if self.dlg.checkCreateView.checkState():
                     self.PSQL.submitQuery(self.dlg.QueryName.text(),self.dlg.QueryResult.toPlainText())
                     sql = 'SELECT * FROM "%s"."%s"' % (self.PSQL.getSchema(),self.dlg.QueryName.text())
-                    print sql
+                    # fix_print_with_import
+                    print(sql)
                     rows = self.PSQL.tableResultGen(self.dlg.LAYERa.currentText(),sql,self.dlg.TableResult)
                     self.PSQL.loadedLayerRefresh(self.dlg.QueryName.text())
                 else:

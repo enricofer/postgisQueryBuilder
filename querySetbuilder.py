@@ -19,9 +19,11 @@
  *                                                                         *
  ***************************************************************************/
 """
+from __future__ import absolute_import
+from builtins import object
 from sqlparse import format
 
-class querySet():
+class querySet(object):
 
     def __init__(self):
         self.isView = None
@@ -156,7 +158,7 @@ class querySet():
         self.fieldSet = []
     
     def getSpatialRelationships(self):
-        return self.spatialRel.keys()
+        return list(self.spatialRel.keys())
 
     def resetQueryParametersCheckList(self):
         self.QueryParametersCheckList = {}
@@ -172,7 +174,7 @@ class querySet():
         if self.currentQuery == "":
             return None
         res = True
-        for key,value in self.QueryParametersCheckList.iteritems():
+        for key,value in self.QueryParametersCheckList.items():
             #print key,value
             res = res and value
         #print res
@@ -182,7 +184,7 @@ class querySet():
         return self.parameters[par]
 
     def getQueryLabels(self):
-        return self.querySet.keys()
+        return list(self.querySet.keys())
     
     def getDescription(self):
         return self.querySet[self.currentQuery][0]
