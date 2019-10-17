@@ -57,7 +57,7 @@ class querySet(object):
             'Returns a geometry that represents the point set union of geomA and geomB.',\
             'http://postgis.refractions.net/documentation/manual-svn/ST_Union.html',\
             ['LAYERa','SCHEMAb','LAYERb','fieldsListA'],\
-            'SELECT [[ONLYGEOMSET]],ST_Union("[[LAYERa]]".[[GEOMETRYFIELDa]],"[[LAYERb]]".[[GEOMETRYFIELDb]]) AS [[GEOMETRYFIELD]] FROM "[[SCHEMA]]"."[[LAYERa]]","[[SCHEMAb]]"."[[LAYERb]]" [[WHERE]] [[ORDERBY]]"',\
+            'SELECT [[ONLYGEOMSET]],ST_Union("[[LAYERa]]".[[GEOMETRYFIELDa]],"[[LAYERb]]".[[GEOMETRYFIELDb]]) AS [[GEOMETRYFIELD]] FROM "[[SCHEMA]]"."[[LAYERa]]","[[SCHEMAb]]"."[[LAYERb]]" [[WHERE]] [[ORDERBY]]',\
             '_Union_of_[[LAYERa]]_and_[[LAYERb]]'\
             ],\
             'ST_Union 1 layer':\
