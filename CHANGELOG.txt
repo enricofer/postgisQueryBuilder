@@ -64,3 +64,6 @@ Remove trailing spaces from autocomposed query name
 
 v1.7.3 
 Remove trailing spaces from 2 layer union query definition
+
+v1.7.4
+Remove trailing quote from autocomposed 2 layer union query
