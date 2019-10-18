@@ -63,4 +63,7 @@ v1.7.2
 Remove trailing spaces from autocomposed query name
 
 v2.0.0
-QGIS3 migration
+QGIS3 migrationv
+
+v2.0.1
+Remove trailing quote from autocomposed 2 layer union query
